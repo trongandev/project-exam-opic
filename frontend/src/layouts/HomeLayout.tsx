@@ -1,5 +1,6 @@
-import CHeader from "@/components/etc/CHeader"
-import { Outlet } from "react-router-dom"
+import CFooter from '@/components/etc/CFooter'
+import CHeader from '@/components/etc/CHeader'
+import { Outlet } from 'react-router-dom'
 
 export default function HomeLayout() {
     return (
@@ -8,6 +9,7 @@ export default function HomeLayout() {
             <main className="my-20">
                 <Outlet />
             </main>
+            <CFooter />
         </div>
     )
 }
