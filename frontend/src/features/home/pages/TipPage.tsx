@@ -1,8 +1,8 @@
-import QuestionCard from "@/components/etc/QuestionCard"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { GENERIC_TIPS } from "@/config/etcConfig"
-import { opicInfo, sampleQuestions } from "@/config/opicData"
-import { BookOpen } from "lucide-react"
+import QuestionCard from '@/features/home/components/QuestionCard'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { GENERIC_TIPS } from '@/config/etcConfig'
+import { opicInfo, sampleQuestions } from '@/config/opicData'
+import { BookOpen } from 'lucide-react'
 
 export default function TipPage() {
     return (
@@ -48,7 +48,7 @@ export default function TipPage() {
             <div className="mt-20">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">👤 Giới thiệu bản thân</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {sampleQuestions["self-introduction"].map((question, index) => (
+                    {sampleQuestions['self-introduction'].map((question, index) => (
                         <QuestionCard key={question.id} question={question} index={index} />
                     ))}
                 </div>

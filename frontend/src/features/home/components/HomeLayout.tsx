@@ -1,5 +1,5 @@
-import CFooter from '@/components/etc/CFooter'
-import CHeader from '@/components/etc/CHeader'
+import CFooter from '@/features/home/components/CFooter'
+import CHeader from '@/features/home/components/CHeader'
 import { Outlet } from 'react-router-dom'
 
 export default function HomeLayout() {

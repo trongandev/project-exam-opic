@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { opicInfo } from "@/config/opicData"
-import { Award } from "lucide-react"
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { opicInfo } from '@/config/opicData'
+import { Award } from 'lucide-react'
 
-export default function HomePages() {
+export default function HomePage() {
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto">
             {/* Header */}
@@ -29,7 +29,7 @@ export default function HomePages() {
                         {opicInfo.scoreRange.levels.map((level, index) => (
                             <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                                 <div className="flex items-center justify-between mb-2">
-                                    <Badge className={`${index < 2 ? "bg-red-100 text-red-600" : index < 4 ? "bg-yellow-100 text-yellow-600" : "bg-green-100 text-green-600"}`}>{level.level}</Badge>
+                                    <Badge className={`${index < 2 ? 'bg-red-100 text-red-600' : index < 4 ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>{level.level}</Badge>
                                     <span className="text-sm font-mono text-gray-600">{level.score}</span>
                                 </div>
                                 <p className="text-sm text-gray-700">{level.description}</p>

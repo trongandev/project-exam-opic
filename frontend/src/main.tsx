@@ -1,13 +1,14 @@
-import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
-import "./index.css"
-import App from "./App.tsx"
-import { BrowserRouter } from "react-router-dom"
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { routes } from './router/index.tsx'
 
-createRoot(document.getElementById("root")!).render(
+// Tạo router instance từ mảng routes
+const router = createBrowserRouter(routes)
+
+createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <RouterProvider router={router} />
     </StrictMode>
 )
