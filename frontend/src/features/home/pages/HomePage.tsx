@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { opicInfo } from '@/config/opicData'
-import { Award, ChevronFirst, ChevronRight } from 'lucide-react'
+import { Award, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function HomePage() {

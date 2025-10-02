@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import Loading from '@/components/ui/Loading'
+import LoadingIcon from '@/components/ui/loading-icon'
 
 export default function RegisterPage() {
     const navigate = useNavigate()
@@ -116,7 +116,7 @@ export default function RegisterPage() {
                         )}
 
                         <Button type="submit" disabled={loading}>
-                            {loading && <Loading />}
+                            {loading && <LoadingIcon />}
                             Đăng ký
                         </Button>
                     </form>

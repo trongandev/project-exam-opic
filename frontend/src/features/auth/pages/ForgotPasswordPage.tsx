@@ -2,13 +2,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { ForgotPasswordRequest } from '@/services/authService'
-import { ChevronLeft, CircleCheckBig, Info, Mail, Phone } from 'lucide-react'
+import { ChevronLeft, CircleCheckBig, Info, Mail } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import authService from '@/services/authService'
-import Loading from '@/components/ui/Loading'
+import LoadingIcon from '@/components/ui/loading-icon'
 export default function LoginPage() {
     const navigate = useNavigate()
     const [errorMessage, setErrorMessage] = useState('')
@@ -31,7 +31,7 @@ export default function LoginPage() {
             setLoading(true)
 
             // Call login API
-            const response = await authService.forgotPassword(values)
+            await authService.forgotPassword(values)
 
             setIsSendSuccessForgetPassword(true)
 
@@ -97,7 +97,7 @@ export default function LoginPage() {
                             )}
                             <div className="flex justify-between items-center gap-3 md:gap-0">
                                 <Button type="submit" disabled={loading}>
-                                    {loading ? <Loading /> : <Mail />}
+                                    {loading ? <LoadingIcon /> : <Mail />}
                                     Đặt lại mật khẩu mới
                                 </Button>
                                 <Link to="/auth/login" className="text-xs text-gray-500 hover:underline pr-5">

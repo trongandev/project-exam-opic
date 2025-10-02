@@ -3,11 +3,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/contexts/AuthContext'
 import { Edit, Info, Lock, Mail, Save, Trash } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import authService, { type ChangePasswordRequest } from '@/services/authService'
-import Loading from '@/components/ui/Loading'
+import LoadingIcon from '@/components/ui/loading-icon'
 import { toast } from 'sonner'
 export default function ProfilePage() {
     const { user } = useAuth()
@@ -126,7 +126,7 @@ export default function ProfilePage() {
                                 Đóng
                             </Button>
                             <Button type="submit" disabled={loading} onClick={formik.submitForm}>
-                                {loading ? <Loading /> : <Save />}
+                                {loading ? <LoadingIcon /> : <Save />}
                                 Lưu thay đổi
                             </Button>
                         </div>

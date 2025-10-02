@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import authService from '@/services/authService'
 import type { LoginRequest } from '@/services/authService'
-import Loading from '@/components/ui/Loading'
+import LoadingIcon from '@/components/ui/loading-icon'
 
 export default function LoginPage() {
     const navigate = useNavigate()
@@ -100,7 +100,7 @@ export default function LoginPage() {
 
                         <div className="flex justify-between items-center">
                             <Button type="submit" disabled={loading}>
-                                {loading && <Loading />}
+                                {loading && <LoadingIcon />}
                                 Đăng nhập
                             </Button>
                             <Link to={`/auth/forgot-password?email=${formik.values.email}`} className="text-xs text-gray-500 hover:underline pr-5">

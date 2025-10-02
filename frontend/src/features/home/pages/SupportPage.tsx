@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Mail } from 'lucide-react'
-import React from 'react'
 
 export default function SupportPage() {
     return (

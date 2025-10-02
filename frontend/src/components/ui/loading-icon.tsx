@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-export default function Loading({ className }: { className?: string }) {
+export default function LoadingIcon({ className }: { className?: string }) {
     return (
         <div role="status">
             <svg

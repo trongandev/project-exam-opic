@@ -7,7 +7,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Separator } from '@/components/ui/separator'
 export default function CHeader() {
     const { user, logout } = useAuth()
-    const [isOpenUserMenu, setIsOpenUserMenu] = useState(false)
     const [isOpenNavBar, setIsOpenNavBar] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
