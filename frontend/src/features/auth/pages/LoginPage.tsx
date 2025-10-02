@@ -14,15 +14,7 @@ export default function LoginPage() {
                         <ChevronLeft />
                     </Button>
                 </div>
-                <div className="absolute bottom-5 left-5 text-xs text-gray-500 flex gap-2 items-center">
-                    <Phone size={16} />
-                    <span>
-                        Hỗ trợ:{' '}
-                        <a href="tel:03887616331" className="text-blue-500 hover:underline">
-                            0388 761 6331
-                        </a>
-                    </span>
-                </div>
+
                 <div className="p-5 flex-1 w-full">
                     <h1 className="text-3xl font-medium text-primary mb-5 text-center">Đăng nhập</h1>
                     <form className="space-y-5">
@@ -43,6 +35,15 @@ export default function LoginPage() {
                             <Link to="/auth/forgot-password" className="text-xs text-gray-500 hover:underline pr-5">
                                 Quên mật khẩu?
                             </Link>
+                        </div>
+                        <div className=" text-xs text-gray-500 flex gap-2 items-center">
+                            <Phone size={16} />
+                            <span>
+                                Hỗ trợ:{' '}
+                                <a href="tel:03887616331" className="text-blue-500 hover:underline">
+                                    0388 761 6331
+                                </a>
+                            </span>
                         </div>
                     </form>
                 </div>
