@@ -6,7 +6,7 @@ export default function HomeLayout() {
     return (
         <div className="">
             <CHeader />
-            <main className="my-20">
+            <main className="">
                 <Outlet />
             </main>
             <CFooter />

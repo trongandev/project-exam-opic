@@ -1,9 +1,9 @@
 import type { RouteObject } from 'react-router-dom'
 import { lazy } from 'react'
 import { authGuard, userLoader } from './guards'
-
-// App wrapper với NProgress
-const App = lazy(() => import('../App'))
+import RegisterPage from '@/features/auth/pages/RegisterPage'
+import ProfilePage from '@/features/home/pages/ProfilePage'
+import SupportPage from '@/features/home/pages/SupportPage'
 const AuthLayout = lazy(() => import('@/features/auth/pages/AuthLayout'))
 const HomeLayout = lazy(() => import('@/features/home/components/HomeLayout'))
 const TipPage = lazy(() => import('@/features/home/pages/TipPage'))
@@ -21,65 +21,71 @@ const NotFound = lazy(() => import('../features/not-found/NotFound'))
 export const routes: RouteObject[] = [
     {
         path: '/',
-        element: <App />, // Root element với NProgress
+        element: <HomeLayout />,
         children: [
             {
-                path: '/',
-                element: <HomeLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <HomePage />,
-                    },
-                    {
-                        path: 'tip',
-                        element: <TipPage />,
-                    },
-                    {
-                        path: 'topic',
-                        element: <SyntheticTopicPage />,
-                    },
-                ],
-                errorElement: <div>Something went wrong!</div>,
+                index: true,
+                element: <HomePage />,
             },
             {
-                path: 'auth',
-                element: <AuthLayout />,
-                children: [
-                    {
-                        index: true,
-                        path: 'login',
-                        element: <LoginPage />,
-                    },
-                    {
-                        path: 'forgot-password',
-                        element: <ForgotPasswordPage />,
-                    },
-                ],
+                path: 'tip',
+                element: <TipPage />,
             },
             {
-                path: 'dashboard',
-                element: <DashboardLayout />,
-                // Sử dụng loader để bảo vệ toàn bộ các route con của dashboard
-                loader: authGuard,
-                children: [
-                    {
-                        index: true, // path: "/dashboard"
-                        element: <DashboardHomePage />,
-                    },
-                    {
-                        path: 'users/:userId', // path: "/dashboard/users/:userId"
-                        element: <UserDetailPage />,
-                        // Sử dụng loader để fetch dữ liệu cho route này
-                        loader: userLoader,
-                        errorElement: <div>Could not find user!</div>, // Error boundary riêng cho route này
-                    },
-                ],
+                path: 'topic',
+                element: <SyntheticTopicPage />,
             },
             {
-                path: '*',
-                element: <NotFound />,
+                path: 'profile',
+                element: <ProfilePage />,
+            },
+            {
+                path: 'help-center',
+                element: <SupportPage />,
             },
         ],
+        errorElement: <div>Something went wrong!</div>,
+    },
+    {
+        path: 'auth',
+        element: <AuthLayout />,
+        children: [
+            {
+                index: true,
+                path: 'login',
+                element: <LoginPage />,
+            },
+            {
+                path: 'register',
+                element: <RegisterPage />,
+            },
+            {
+                path: 'forgot-password',
+                element: <ForgotPasswordPage />,
+            },
+        ],
+    },
+    {
+        path: 'dashboard',
+        element: <DashboardLayout />,
+        // Sử dụng loader để bảo vệ toàn bộ các route con của dashboard
+        loader: authGuard,
+        children: [
+            {
+                index: true, // path: "/dashboard"
+                element: <DashboardHomePage />,
+            },
+            {
+                path: 'users/:userId', // path: "/dashboard/users/:userId"
+                element: <UserDetailPage />,
+                // Sử dụng loader để fetch dữ liệu cho route này
+                loader: userLoader,
+                errorElement: <div>Could not find user!</div>, // Error boundary riêng cho route này
+            },
+        ],
+    },
+    {
+        path: '*',
+        element: <NotFound />,
     },
 ]

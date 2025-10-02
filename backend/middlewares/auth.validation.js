@@ -122,41 +122,6 @@ const validateOTP = (req, res, next) => {
     next()
 }
 
-// Validation cho đổi mật khẩu
-const validateChangePassword = (req, res, next) => {
-    const { old_password, new_password } = req.body
-    const errors = []
-
-    // Kiểm tra mật khẩu cũ
-    if (!old_password || old_password.length === 0) {
-        errors.push('Mật khẩu cũ không được để trống')
-    }
-
-    // Kiểm tra mật khẩu mới
-    if (!new_password || new_password.length === 0) {
-        errors.push('Mật khẩu mới không được để trống')
-    } else if (new_password.length < 6) {
-        errors.push('Mật khẩu mới phải có ít nhất 6 ký tự')
-    } else if (new_password.length > 150) {
-        errors.push('Mật khẩu mới không được quá 150 ký tự')
-    }
-
-    // Kiểm tra mật khẩu mới không trùng với mật khẩu cũ
-    if (old_password === new_password) {
-        errors.push('Mật khẩu mới phải khác mật khẩu cũ')
-    }
-
-    if (errors.length > 0) {
-        return res.status(400).json({
-            success: false,
-            message: 'Dữ liệu không hợp lệ',
-            errors: errors,
-        })
-    }
-
-    next()
-}
-
 // Validation cho refresh token
 const validateRefreshToken = (req, res, next) => {
     const { refreshToken } = req.body
@@ -183,6 +148,5 @@ module.exports = {
     validateLogin,
     validateForgetPassword,
     validateOTP,
-    validateChangePassword,
     validateRefreshToken,
 }

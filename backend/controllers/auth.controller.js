@@ -16,6 +16,8 @@ class AuthController {
 
         return SuccessResponse.created(res, result.message, {
             user: result.user,
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken,
         })
     })
 
@@ -46,12 +48,11 @@ class AuthController {
 
     // [POST] /api/auth/change-password
     changePassword = catchAsync(async (req, res, next) => {
-        const { old_password, new_password } = req.body
+        const { password } = req.body
 
         const result = await AuthService.changePassword({
             userId: req.user.id,
-            oldPassword: old_password,
-            newPassword: new_password,
+            password: password,
         })
 
         return SuccessResponse.ok(res, result.message)

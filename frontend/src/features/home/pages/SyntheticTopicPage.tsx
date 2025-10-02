@@ -1,37 +1,37 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { opicCategories } from "@/config/opicData"
-import { Check, BookOpen } from "lucide-react"
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { opicCategories } from '@/config/opicData'
+import { Check, BookOpen } from 'lucide-react'
 export default function SyntheticTopicPage() {
     const getDifficultyColor = (difficulty: string) => {
         switch (difficulty) {
-            case "beginner":
-                return "bg-green-100 text-green-600"
-            case "intermediate":
-                return "bg-yellow-100 text-yellow-600"
-            case "advanced":
-                return "bg-red-100 text-red-600"
+            case 'beginner':
+                return 'bg-green-100 text-green-600'
+            case 'intermediate':
+                return 'bg-yellow-100 text-yellow-600'
+            case 'advanced':
+                return 'bg-red-100 text-red-600'
             default:
-                return "bg-gray-100 text-gray-600"
+                return 'bg-gray-100 text-gray-600'
         }
     }
 
     const getDifficultyText = (difficulty: string) => {
         switch (difficulty) {
-            case "beginner":
-                return "Cơ bản"
-            case "intermediate":
-                return "Trung cấp"
-            case "advanced":
-                return "Nâng cao"
+            case 'beginner':
+                return 'Cơ bản'
+            case 'intermediate':
+                return 'Trung cấp'
+            case 'advanced':
+                return 'Nâng cao'
             default:
-                return "Không xác định"
+                return 'Không xác định'
         }
     }
     return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto">
+        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20">
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">Tổng hợp các câu hỏi hay gặp</h1>
                 <p className="text-gray-600">Tham khảo các câu hỏi hay ra trong đề OPIc</p>

@@ -6,7 +6,7 @@ import { BookOpen } from 'lucide-react'
 
 export default function TipPage() {
     return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto">
+        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20">
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">Tip trả lời</h1>
                 <p className="text-gray-600">Tham khảo các cách trả lời hiệu quả, đạt điểm cao</p>

@@ -33,13 +33,6 @@ const authenticateToken = async (req, res, next) => {
             })
         }
 
-        if (!user.isActive) {
-            return res.status(401).json({
-                success: false,
-                message: 'Tài khoản đã bị khóa',
-            })
-        }
-
         // Gán thông tin user vào req
         req.user = {
             id: user._id.toString(),
@@ -89,8 +82,7 @@ const checkRoleAdminOrCollab = (req, res, next) => {
     } else {
         res.status(403).json({
             success: false,
-            message:
-                'Bạn không có quyền truy cập (yêu cầu quyền admin hoặc cộng tác viên)',
+            message: 'Bạn không có quyền truy cập (yêu cầu quyền admin hoặc cộng tác viên)',
         })
     }
 }
@@ -117,9 +109,7 @@ const checkRole = (allowedRoles) => {
         } else {
             res.status(403).json({
                 success: false,
-                message: `Bạn không có quyền truy cập (yêu cầu quyền: ${allowedRoles.join(
-                    ', '
-                )})`,
+                message: `Bạn không có quyền truy cập (yêu cầu quyền: ${allowedRoles.join(', ')})`,
             })
         }
     }

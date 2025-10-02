@@ -1,11 +1,16 @@
-import { FileQuestionMark, GalleryVerticalEnd, Home, Menu } from 'lucide-react'
+import { FileQuestionMark, GalleryVerticalEnd, Home, LogOut, Menu, PhoneCall, User } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-
+import { useAuth } from '@/contexts/AuthContext'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Separator } from '@/components/ui/separator'
 export default function CHeader() {
+    const { user, logout } = useAuth()
+    const [isOpenUserMenu, setIsOpenUserMenu] = useState(false)
     const [isOpenNavBar, setIsOpenNavBar] = useState(false)
     const location = useLocation()
+    const navigate = useNavigate()
     const pathname = location.pathname
     const linkData = [
         { name: 'Trang chủ', icon: <Home size={20} />, href: '/' },
@@ -41,8 +46,8 @@ export default function CHeader() {
                     ))}
                 </nav>
             </div>
-            <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm h-14 md:h-16 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20 ">
-                <div className="font-extrabold text-2xl text-white flex items-center gap-2 ">
+            <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm py-2 md:py-4 mx-auto rounded-full flex items-center px-4 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
+                <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                     <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
                     <h1>EXAM OPIc</h1>
                 </div>
@@ -50,18 +55,69 @@ export default function CHeader() {
                 <ul className="gap-10 h-full md:flex hidden ">
                     {linkData.map((link) => (
                         <li key={link.name}>
-                            <a href={link.href} className={`flex gap-1 items-center justify-center  h-full hover:text-sky-100 transition-colors ${pathname === link.href ? 'text-sky-50' : ''}`}>
+                            <Link to={link.href} className={`flex gap-1 items-center justify-center  h-full hover:text-sky-100 transition-colors ${pathname === link.href ? 'text-sky-50' : ''}`}>
                                 {link.icon} {link.name}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
                 <div className="">
-                    <Link to={'/auth/login'}>
-                        <Button className="" variant={'secondary'}>
-                            Đăng nhập
-                        </Button>
-                    </Link>
+                    {user ? (
+                        <div>
+                            <div className="hidden md:block">
+                                <span className="text-sm md:text-base text-white mr-3">
+                                    Xin chào,{' '}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger className="font-semibold hover:underline cursor-pointer">{user.displayName}</DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={() => navigate('/profile')}>
+                                                <User /> Thông tin chi tiết
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => navigate('/help-center')}>
+                                                <PhoneCall /> Trung tâm Trợ giúp
+                                            </DropdownMenuItem>
+                                            <Separator />
+                                            <DropdownMenuItem variant="destructive" className=" cursor-pointer " onClick={() => logout()}>
+                                                <LogOut className="text-destructive" /> Đăng xuất
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </span>
+                            </div>
+                            <div className="flex items-center  w-10 h-10 justify-center md:hidden bg-gradient-to-tr from-sky-700 to-purple-700 rounded-full text-white">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="font-semibold hover:underline cursor-pointer">
+                                        {user.displayName
+                                            .split(' ')
+                                            .map((n) => n[0])
+                                            .join('')}
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem onClick={() => navigate('/profile')}>
+                                            <User /> Thông tin chi tiết
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => navigate('/help-center')}>
+                                            <PhoneCall /> Trung tâm Trợ giúp
+                                        </DropdownMenuItem>
+                                        <Separator />
+                                        <DropdownMenuItem variant="destructive" className=" cursor-pointer " onClick={() => logout()}>
+                                            <LogOut className="text-destructive" /> Đăng xuất
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </div>
+                    ) : (
+                        <Link to={'/auth/login'}>
+                            <Button className="" variant={'secondary'}>
+                                Đăng nhập
+                            </Button>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
