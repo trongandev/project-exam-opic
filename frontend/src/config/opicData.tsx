@@ -32,12 +32,12 @@ export const opicInfo = {
     scoreRange: {
         title: 'Thang điểm OPIc',
         levels: [
-            { level: 'NH', desc: '(Novice High)', score: '1', description: 'Người mới bắt đầu' },
-            { level: 'IL', desc: '(Intermediate Low)', score: '2', description: 'Trung cấp thấp' },
-            { level: 'IM', desc: '(Intermediate Mid)', score: '3', description: 'Trung cấp' },
-            { level: 'IH', desc: '(Intermediate High)', score: '4', description: 'Trung cấp cao' },
-            { level: 'AL', desc: '(Advanced Low)', score: '5', description: 'Cao cấp thấp' },
-            { level: 'AM', desc: '(Advanced Mid)', score: '6', description: 'Cao cấp' },
+            { level: 'NH', desc: '(Novice High)', score: '1', description: 'Người mới bắt đầu', explain: 'Có khả năng giao tiếp cơ bản và sử dụng từ vựng đơn giản.', isPopular: false },
+            { level: 'IL', desc: '(Intermediate Low)', score: '2', description: 'Trung cấp thấp', explain: 'Có khả năng giao tiếp trong các tình huống quen thuộc.', isPopular: false },
+            { level: 'IM', desc: '(Intermediate Mid)', score: '3', description: 'Trung cấp', explain: 'Có khả năng giao tiếp hiệu quả trong nhiều tình huống.', isPopular: true },
+            { level: 'IH', desc: '(Intermediate High)', score: '4', description: 'Trung cấp cao', explain: 'Có khả năng giao tiếp tự tin và linh hoạt.', isPopular: false },
+            { level: 'AL', desc: '(Advanced Low)', score: '5', description: 'Cao cấp thấp', explain: 'Có khả năng giao tiếp trôi chảy và chính xác.', isPopular: false },
+            { level: 'AM', desc: '(Advanced Mid)', score: '6', description: 'Cao cấp', explain: 'Có khả năng giao tiếp tự nhiên và phong phú.', isPopular: false },
         ],
     },
 

@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="[LINK_REPO_CỦA_BẠN]">
-    <img src="./frontend/public/images/thumbnail.png" alt="Logo" width="500" >
+    <img src="./images-for-README/thumbnail.png" alt="Logo" width="500" >
   </a>
 </p>
 
@@ -16,21 +16,16 @@
   <br />
 </p>
 
-<!-- BADGES -->
-<p align="center">
-  ![Build Status](https://github.com/trongandev/project-exam-opic/workflows/CI/badge.svg)
-  ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-</p>
-
 <!-- MỤC LỤC -->
 
 ## Mục lục
 
 <br>
 <div align="center" style="display: flex; justify-content: center; flex-wrap: wrap;">
-    <a href="#về-dự-án"><kbd> <br> VỀ DỰ ÁN <br> </kbd></a>&ensp;&ensp;
-    <a href="#tính-năng"><kbd> <br> TÍNH NĂNG <br> </kbd></a>&ensp;&ensp;
-    <a href="#LICENSE"><kbd> <br> GIẤY PHÉP <br> </kbd></a>&ensp;&ensp;
+    <a href="#về-dự-án"><kbd style="padding: 5px 20px"> <b> VỀ DỰ ÁN </b> </kbd></a>&ensp;&ensp;
+    <a href="#tính-năng"><kbd style="padding: 5px 20px"> <b> TÍNH NĂNG </b> </kbd></a>&ensp;&ensp;
+    <a href="#database"><kbd style="padding: 5px 20px"> <b> DATABASE </b> </kbd></a>&ensp;&ensp;
+    <a href="#LICENSE"><kbd style="padding: 5px 20px"> <b> GIẤY PHÉP </b> </kbd></a>&ensp;&ensp;
 </div>
 <br>
 
@@ -50,6 +45,12 @@ Dự án này được tạo ra nhằm giúp người học luyện tập và th
 -   Ghi âm và phát lại câu trả lời của bạn
 -   Nhận phản hồi và đánh giá từ hệ thống
 -   Lưu lịch sử thi và tiến trình học tập
+
+## Database
+
+Dữ liệu câu hỏi OPIc được lưu trữ trong một cơ sở dữ liệu MongoDB. Dưới đây là cấu trúc của các bộ sưu tập chính:
+
+ <img src="./images-for-README/db.png" alt="Logo" width="500" style="display: block; margin-left: auto; margin-right: auto;" >
 
 ## LICENSE
 

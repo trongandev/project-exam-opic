@@ -60,7 +60,7 @@ export default function RegisterPage() {
         }
     }
     return (
-        <div className="h-screen flex items-center justify-center  px-5 xl:px-0">
+        <div className="h-screen my-20 md:my-0 flex items-center justify-center  px-5 xl:px-0">
             <div className="w-full xl:max-w-4xl  mx-auto shadow-md rounded-xl border border-gray-200 flex flex-col-reverse xl:flex-row overflow-hidden items-center relative">
                 <div className="absolute left-5 top-5">
                     <Button variant={'outline'} onClick={() => navigate(-1)}>

@@ -26,19 +26,29 @@ export default function HomePage() {
                 </CardHeader>
                 <CardContent>
                     <img src="https://josephenglishyhc.wordpress.com/wp-content/uploads/2019/11/opic-fi.jpg" alt="" className="mx-auto mb-3" />
-                    <h1 className="mt-10 mb-3 text-center text-2xl font-medium">Lựa chọn level bạn muốn đạt được</h1>
+                </CardContent>
+            </Card>
+            <Card className="mb-8">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2  text-primary text-xl">
+                        <Award className="w-6 h-6" />
+                        Lựa chọn level bạn muốn đạt được
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {opicInfo.scoreRange.levels.map((level, index) => (
-                            <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary bg-sky-50 relative' : 'border-gray-300'}`}>
+                                {level.isPopular && <Badge className="absolute top-3 right-3 bg-sky-200 text-primary">Phổ biến</Badge>}
                                 <div className="flex items-center justify-between mb-2">
-                                    <Badge className={`${index < 2 ? 'bg-red-100 text-red-600' : index < 4 ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
-                                        {level.level + ' ' + level.desc}
-                                    </Badge>
+                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.level + ' ' + level.desc}</Badge>
                                     <span className="text-sm font-mono text-gray-600">{level.score}</span>
                                 </div>
                                 <p className="text-sm text-gray-700 ">{level.description}</p>
-                                <Link to={`/practice/${level.level.toLowerCase()}`}>
-                                    <Button variant={'link'} className="mt-3">
+                                <p className="text-sm text-gray-500 italic ">{level.explain}</p>
+
+                                <Link to={`${level.isPopular ? `/intro-im` : '#'}`} className="block text-right">
+                                    <Button variant={level.isPopular ? 'default' : 'link'} className="mt-3">
                                         Xem chi tiết <ChevronRight />
                                     </Button>
                                 </Link>
