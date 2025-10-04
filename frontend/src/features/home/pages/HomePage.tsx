@@ -48,12 +48,30 @@ export default function HomePage() {
                                 <p className="text-sm text-gray-500 italic ">{level.explain}</p>
 
                                 <Link to={`${level.isPopular ? `/intro-im` : '#'}`} className="block text-right">
-                                    <Button variant={level.isPopular ? 'default' : 'link'} className="mt-3">
+                                    <Button variant={level.isPopular ? 'default' : 'link'} disabled={!level.isPopular} className="mt-3">
                                         Xem chi tiết <ChevronRight />
                                     </Button>
                                 </Link>
                             </div>
                         ))}
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* TTS Demo Card */}
+            <Card className="mb-8 border-2 border-dashed border-blue-300 bg-blue-50">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-blue-700 text-xl">🎙️ TTS Demo - Text to Speech</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-gray-700 mb-4">Hệ thống phát âm thông minh giúp bạn luyện tập phát âm tiếng Anh chuẩn xác. Hỗ trợ nhiều giọng nói từ các quốc gia khác nhau.</p>
+                    <div className="flex gap-3">
+                        <Link to="/tts-demo">
+                            <Button variant="default" className="bg-blue-600 hover:bg-blue-700">
+                                Thử ngay TTS Demo <ChevronRight className="w-4 h-4 ml-1" />
+                            </Button>
+                        </Link>
+                        <Badge variant="secondary">Tính năng mới</Badge>
                     </div>
                 </CardContent>
             </Card>

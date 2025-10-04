@@ -7,7 +7,7 @@ export const TOPICDATA = [
             {
                 text: "Let's start the interview now, tell me a little bit about yourself.",
                 note: 'Giới thiệu bản thân 1 cách ngắn gọn xúc tích, Nêu tên, tuổi, nghề nghiệp, nơi làm việc, Nơi học tập, chuyên ngành Sở thích cá nhân, Tính cách bản thân',
-                answer: 'My name is [Your Name], and I am [Your Age] years old. I work as a [Your Profession] at [Company/Organization Name]. I graduated from [Your University] with a degree in [Your Major]. In my free time, I enjoy [Your Hobbies], which helps me relax and stay creative. I would describe myself as a friendly and motivated person who loves to learn new things and take on challenges.',
+                answer: 'My name is An, and I am 21 years old. I work as a TDS at TAEWANG VINA. I graduated from DNTU with a degree in Information Technology. In my free time, I enjoy coding and learning new programming languages, which helps me relax and stay creative. I would describe myself as a friendly and motivated person who loves to learn new things and take on challenges.',
             },
         ],
     },

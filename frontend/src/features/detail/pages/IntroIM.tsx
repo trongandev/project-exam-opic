@@ -2,17 +2,25 @@ import { Button } from '@/components/ui/button'
 import { TOPICDATA } from '@/config/templateData'
 import { ArrowLeft, Info, MoveDown } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import SpeakButton from '@/components/SpeakButton'
+import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 export default function IntroIM() {
     const navigate = useNavigate()
     const params = useLocation()
+
     return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
-            <Button variant={'ghost'} onClick={() => navigate('/')}>
-                <ArrowLeft /> Quay lại
-            </Button>
+        <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
+            <div className="flex justify-between items-center">
+                <Button variant={'ghost'} onClick={() => navigate('/')}>
+                    <ArrowLeft /> Quay lại
+                </Button>
+                <VoiceSelectionModal>
+                    <Button>Chọn giọng nói</Button>
+                </VoiceSelectionModal>
+            </div>
             <div className="space-y-2 mt-5">
-                <h1 className="text-xl font-medium ">Giới thiệu về IM (Intermediate Mid)</h1>
-                <p className="">
+                <h1 className="text-xl font-medium  px-4 xl:px-0">Giới thiệu về IM (Intermediate Mid)</h1>
+                <p className=" px-4 xl:px-0">
                     Để chuẩn bị cho kỳ thi OPIc ở mức Trung cấp (Intermediate Mid), bạn nên tập trung vào các chủ đề phổ biến thường xuất hiện trong đề thi. Dưới đây là một số chủ đề thường gặp:
                 </p>
                 <div className="flex gap-10 ">
@@ -37,6 +45,7 @@ export default function IntroIM() {
                                                                 {index + 1}
                                                             </div>
                                                             <div className="flex-1 text-justify  font-medium text-xl">{quest?.text}</div>
+                                                            <SpeakButton text={quest.text} id={'custom'} />
                                                         </div>
                                                         <div className="text-justify">{quest?.note}</div>
                                                         <MoveDown className="mx-auto my-2 " />
@@ -54,10 +63,12 @@ export default function IntroIM() {
                         {TOPICDATA.map((topic, index) => (
                             <a
                                 href={`#topic-${index}`}
-                                className={`block relative transition-all hover:bg-gray-200  px-3 py-1 ${params.hash === `#topic-${index}` ? 'text-primary' : 'text-gray-700'}`}
+                                className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md ${
+                                    params.hash === `#topic-${index}` ? 'text-primary bg-sky-100' : 'text-gray-700'
+                                }`}
                                 key={index}
                             >
-                                {params.hash === `#topic-${index}` && <div className="absolute w-0.5 h-5 bg-primary rounded-sm -translate-x-3.5 translate-y-0.5 transition-all duration-300"></div>}
+                                {params.hash === `#topic-${index}` && <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>}
                                 <p>
                                     {index + 1}. {topic.title}
                                 </p>
@@ -79,7 +90,7 @@ export default function IntroIM() {
                     Hoặc click vào đây để xem full
                 </a>
 
-                <iframe src="https://app.xmind.com/embed/znTFN2kw?sheet-id=b6a2b210-e0a2-4ce9-a062-bc4387716f33" className="w-full h-[80vh]" allow="fullscreen"></iframe>
+                {/* <iframe src="https://app.xmind.com/embed/znTFN2kw?sheet-id=b6a2b210-e0a2-4ce9-a062-bc4387716f33" className="w-full h-[80vh]" allow="fullscreen"></iframe> */}
             </div>
         </div>
     )

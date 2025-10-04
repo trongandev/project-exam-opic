@@ -46,7 +46,7 @@ export default function CHeader() {
                         ))}
                     </nav>
                 </div>
-                <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm py-1.5 md:py-4 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
+                <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm h-12 md:h-14 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
                     <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                         <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
                         <h1>EXAM OPIc</h1>
@@ -55,7 +55,7 @@ export default function CHeader() {
                     <ul className="gap-10 h-full md:flex hidden ">
                         {linkData.map((link) => (
                             <li key={link.name}>
-                                <Link to={link.href} className={`flex gap-1 items-center justify-center  h-full hover:text-sky-100 transition-colors ${pathname === link.href ? 'text-sky-50' : ''}`}>
+                                <Link to={link.href} className={`flex gap-1 items-center justify-center   h-full hover:text-sky-100 transition-colors ${pathname === link.href ? 'text-sky-50' : ''}`}>
                                     {React.createElement(link.icon, { size: 20 })} {link.name}
                                 </Link>
                             </li>
