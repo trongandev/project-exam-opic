@@ -31,7 +31,7 @@ function SpeakButton({ text, id, variant = 'outline', size = 'sm', className = '
         >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPlaying ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
 
-            {size !== 'icon' && <span className="ml-2">{isLoading ? 'Đang tải...' : isPlaying ? 'Tắt' : 'Phát âm'}</span>}
+            {size !== 'icon' && <span className="ml-2">{isLoading ? 'Loading...' : isPlaying ? 'Off' : 'Speak'}</span>}
         </Button>
     )
 }

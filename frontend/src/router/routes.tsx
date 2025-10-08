@@ -5,6 +5,7 @@ import RegisterPage from '@/features/auth/pages/RegisterPage'
 import ProfilePage from '@/features/home/pages/ProfilePage'
 import SupportPage from '@/features/home/pages/SupportPage'
 import IntroIM from '@/features/detail/pages/IntroIM'
+import ExamPage from '@/features/home/pages/ExamPage'
 
 // Lazy Loading các components
 const RootLayout = lazy(() => import('../layouts/RootLayout'))
@@ -78,6 +79,10 @@ export const routes: RouteObject[] = [
             {
                 path: 'intro-im',
                 element: <IntroIM />,
+            },
+            {
+                path: 'exam',
+                element: <ExamPage />,
             },
             {
                 path: 'dashboard',
