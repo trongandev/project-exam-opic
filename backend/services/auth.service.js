@@ -104,7 +104,7 @@ class AuthService {
         })
 
         // TODO: Gửi mật khẩu mới qua email
-        await sendNewPasswordMail(user, new_password)
+        // await sendNewPasswordMail(user, new_password)
 
         return {
             message: 'Mật khẩu mới đã được gửi đến email của bạn',

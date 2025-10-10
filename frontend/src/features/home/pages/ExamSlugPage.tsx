@@ -2,24 +2,28 @@ import SpeakButton from '@/components/SpeakButton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { GENERIC_TIPS } from '@/config/etcConfig'
-import { TOPICDATA } from '@/config/templateData'
 import { ChevronLeft, ChevronRight, Eye, EyeOff, LogOut, Mic, Play } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { format, formatDate } from 'date-fns'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import { shuffleArray } from '@/lib/utils'
-export default function ExamPage() {
+import topicService from '@/services/topicService'
+import type { Quest, Topic } from '@/types/topic'
+import AvatarCircle from '@/components/etc/AvatarCircle'
+export default function ExamSlugPage() {
+    const params = useParams()
+    const [dataExam, setDataExam] = useState<Topic>()
     const [isStartExam, setIsStartExam] = useState(true)
     const [isRecording, setIsRecording] = useState(false)
     const [isShowScript, setIsShowScript] = useState(false)
     const [isShuffleData, setIsShuffleData] = useState(false)
     const [confidence, setConfidence] = useState(0)
-    const [newData, setNewData] = useState<any>([])
+    const [newData, setNewData] = useState<Quest[]>([])
     const [volume, setVolume] = useState(0)
     const [currentIndex, setCurrentIndex] = useState(0)
     const [countDown, setCountDown] = useState(60) // Thời gian ghi âm 60 giây
@@ -31,18 +35,28 @@ export default function ExamPage() {
     const { transcript, resetTranscript } = useSpeechRecognition()
 
     useEffect(() => {
-        if (isShuffleData) {
-            // Shuffle the data
-            const flattenedData = TOPICDATA.flatMap((item) => item.quests)
-            setNewData(shuffleArray(flattenedData))
-            toast.info('Shuffle mode is on. Questions are randomized.', { duration: 5000, position: 'top-center' })
-        } else {
-            const flattenedData = TOPICDATA.flatMap((item) => item.quests)
-            setNewData(flattenedData)
+        const fetchAPI = async () => {
+            const res = await topicService.getTopicBySlug(params.slug as string)
+            console.log(res.data)
+            setDataExam(res.data)
+        }
+        fetchAPI()
+    }, [])
+
+    useEffect(() => {
+        if (dataExam) {
+            const flattenedData = dataExam?.data.flatMap((item) => item.quests)
+            if (isShuffleData) {
+                // Shuffle the data
+
+                setNewData(shuffleArray(flattenedData))
+                toast.info('Shuffle mode is on. Questions are randomized.', { duration: 5000, position: 'top-center' })
+            } else {
+                console.log(flattenedData)
+                setNewData(flattenedData)
+            }
         }
     }, [isShuffleData])
-
-    // LCS function to find the longest common subsequence
 
     // const compareText = (original: string, spoken: string) => {
     //     const originalWords = original.split(' ')
@@ -150,7 +164,7 @@ export default function ExamPage() {
                         </Button>
                     </div>
                     <h1 className="w-full border-b-2 pb-2 border-gray-100 text-2xl font-medium">
-                        Question {currentIndex + 1} or {TOPICDATA.reduce((acc, curr) => acc + curr.quests.length, 0)}
+                        Question {currentIndex + 1} or {dataExam?.data.reduce((acc, curr) => acc + curr.quests.length, 0)}
                     </h1>
                     <div className="flex gap-5">
                         <div className="pl-5 pt-5 flex gap-5  w-[350px]">
@@ -168,7 +182,18 @@ export default function ExamPage() {
                                         </>
                                     )}
                                 </Button>
-                                {isShowScript && <p className="text-gray-500 italic">{newData[currentIndex]?.text}</p>}
+                                {isShowScript && <p className="text-gray-500 italic">{newData[currentIndex]?.answer}</p>}
+                                <div className="flex gap-3 items-center text-gray-700 mt-5">
+                                    <AvatarCircle user={dataExam?.userId} />
+                                    <p>
+                                        Cảm ơn{' '}
+                                        <Link to={`/profile/${dataExam?.userId._id}`} className="font-medium">
+                                            {dataExam?.userId.displayName}
+                                        </Link>{' '}
+                                        đã chia sẻ Topic "{dataExam?.name}"
+                                    </p>
+                                </div>
+                                <p className="text-gray-500">Ngày tạo topic: {formatDate(dataExam?.createdAt || new Date(), 'dd/MM/yyyy')}</p>
                             </div>
                             <div className="flex flex-col gap-3 justify-center items-center">
                                 <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">

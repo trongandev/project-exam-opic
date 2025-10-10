@@ -9,6 +9,7 @@ import { useFormik } from 'formik'
 import authService, { type ChangePasswordRequest } from '@/services/authService'
 import LoadingIcon from '@/components/ui/loading-icon'
 import { toast } from 'sonner'
+import AvatarCircle from '@/components/etc/AvatarCircle'
 export default function ProfilePage() {
     const { user } = useAuth()
     const [isEditPassword, setIsEditPassword] = useState(false)
@@ -57,12 +58,8 @@ export default function ProfilePage() {
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto space-y-7 h-screen flex  flex-col justify-center">
             <div className="border border-gray-300  p-5 rounded-xl  flex gap-10 items-center">
-                <div className="flex items-center  w-32 h-32 justify-center bg-gradient-to-tr from-sky-700 to-purple-700 rounded-full text-white text-3xl">
-                    {user?.displayName
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
-                </div>
+                {user && <AvatarCircle user={user} className="h-32 w-32 text-3xl" />}
+
                 <div className="">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Xin chào, {user?.displayName}</h1>
                     <p className="text-gray-600 flex items-center gap-1">

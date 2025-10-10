@@ -53,10 +53,11 @@ export default function useSpeakWord() {
             const parsedVoices = savedVoices ? JSON.parse(savedVoices) : {}
 
             parsedVoices[languageCode] = newVoiceId
+            console.log('Updating voice for', languageCode, 'to', newVoiceId)
             localStorage.setItem('defaultVoices', JSON.stringify(parsedVoices))
             setSelectedVoice(newVoiceId)
 
-            console.log('Voice updated to:', newVoiceId)
+            console.log('Voice updated to:', selectedVoice)
             toast.success('Đã cập nhật giọng nói', {
                 description: `Giọng mới sẽ được sử dụng cho các lần phát âm tiếp theo`,
                 duration: 2000,

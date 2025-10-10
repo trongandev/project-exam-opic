@@ -2,14 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const TopicController = require('../controllers/topic.controller')
-const {
-    validateCreateTopic,
-    validateUpdateTopic,
-    validateAddQuestion,
-    validateUpdateQuestion,
-    validateTopicId,
-    validateQuestionId,
-} = require('../middlewares/topic.validation')
+const { validateCreateTopic, validateUpdateTopic, validateAddQuestion, validateUpdateQuestion, validateTopicId, validateQuestionId } = require('../middlewares/topic.validation')
 const { authenticateToken } = require('../middlewares/auth.middleware')
 
 // Public routes - không cần xác thực
@@ -24,55 +17,12 @@ router.get('/:id', validateTopicId, TopicController.getTopicById)
 
 // Protected routes - cần xác thực
 // [POST] /api/topics - Tạo topic mới (chỉ admin)
-router.post(
-    '/',
-    authenticateToken,
-    validateCreateTopic,
-    TopicController.createTopic
-)
+router.post('/', authenticateToken, validateCreateTopic, TopicController.createTopic)
 
 // [PUT] /api/topics/:id - Cập nhật topic (chỉ admin)
-router.put(
-    '/:id',
-    authenticateToken,
-    validateTopicId,
-    validateUpdateTopic,
-    TopicController.updateTopic
-)
+router.patch('/:id', authenticateToken, validateTopicId, validateUpdateTopic, TopicController.updateTopic)
 
 // [DELETE] /api/topics/:id - Xóa topic (chỉ admin)
-router.delete(
-    '/:id',
-    authenticateToken,
-    validateTopicId,
-    TopicController.deleteTopic
-)
-
-// Question routes
-// [POST] /api/topics/:id/questions - Thêm câu hỏi vào topic (chỉ admin)
-router.post(
-    '/:id/questions',
-    authenticateToken,
-    validateTopicId,
-    validateAddQuestion,
-    TopicController.addQuestionToTopic
-)
-
-// [PUT] /api/topics/:topicId/questions/:questionId - Cập nhật câu hỏi (chỉ admin)
-router.put(
-    '/:topicId/questions/:questionId',
-    authenticateToken,
-    validateQuestionId,
-    validateUpdateQuestion,
-    TopicController.updateQuestion
-)
-
-// [DELETE] /api/topics/:topicId/questions/:questionId - Xóa câu hỏi (chỉ admin)
-router.delete(
-    '/:topicId/questions/:questionId',
-    authenticateToken,
-    validateQuestionId,
-    TopicController.deleteQuestion
-)
+router.delete('/:id', authenticateToken, validateTopicId, TopicController.deleteTopic)
 
 module.exports = router

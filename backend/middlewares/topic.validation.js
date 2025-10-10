@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 // Validation cho tạo topic
 const validateCreateTopic = (req, res, next) => {
-    const { name, slug, description, questions } = req.body
+    const { name, desc, data } = req.body
     const errors = []
 
     // Kiểm tra name
@@ -15,31 +15,11 @@ const validateCreateTopic = (req, res, next) => {
         errors.push('Tên chủ đề không được quá 100 ký tự')
     }
 
-    // Kiểm tra slug
-    if (!slug || slug.trim().length === 0) {
-        errors.push('Slug không được để trống')
-    } else if (slug.trim().length < 3) {
-        errors.push('Slug phải có ít nhất 3 ký tự')
-    } else if (slug.trim().length > 100) {
-        errors.push('Slug không được quá 100 ký tự')
-    } else if (!/^[a-z0-9-]+$/.test(slug.trim())) {
-        errors.push('Slug chỉ được chứa chữ thường, số và dấu gạch ngang')
+    if (!desc || desc.trim().length === 0) {
+        errors.push('Mô tả không được để trống')
     }
-
-    // Kiểm tra description (tùy chọn)
-    if (description && description.length > 500) {
+    if (desc && desc.length > 500) {
         errors.push('Mô tả không được quá 500 ký tự')
-    }
-
-    // Kiểm tra questions (tùy chọn)
-    if (questions && Array.isArray(questions)) {
-        questions.forEach((question, index) => {
-            const questionErrors = validateQuestion(
-                question,
-                `Câu hỏi ${index + 1}`
-            )
-            errors.push(...questionErrors)
-        })
     }
 
     if (errors.length > 0) {
@@ -55,7 +35,7 @@ const validateCreateTopic = (req, res, next) => {
 
 // Validation cho cập nhật topic
 const validateUpdateTopic = (req, res, next) => {
-    const { name, slug, description, isActive, questions } = req.body
+    const { name, slug, desc, isActive, data } = req.body
     const errors = []
 
     // Kiểm tra name (tùy chọn)
@@ -82,8 +62,8 @@ const validateUpdateTopic = (req, res, next) => {
         }
     }
 
-    // Kiểm tra description (tùy chọn)
-    if (description !== undefined && description.length > 500) {
+    // Kiểm tra desc (tùy chọn)
+    if (desc !== undefined && desc.length > 500) {
         errors.push('Mô tả không được quá 500 ký tự')
     }
 
@@ -92,16 +72,13 @@ const validateUpdateTopic = (req, res, next) => {
         errors.push('Trạng thái hoạt động phải là boolean')
     }
 
-    // Kiểm tra questions (tùy chọn)
-    if (questions !== undefined && Array.isArray(questions)) {
-        questions.forEach((question, index) => {
-            const questionErrors = validateQuestion(
-                question,
-                `Câu hỏi ${index + 1}`
-            )
-            errors.push(...questionErrors)
-        })
-    }
+    // // Kiểm tra data (tùy chọn)
+    // if (data !== undefined && Array.isArray(data)) {
+    //     data.forEach((item, index) => {
+    //         const itemErrors = validateDataItem(item, `Dữ liệu ${index + 1}`)
+    //         errors.push(...itemErrors)
+    //     })
+    // }
 
     if (errors.length > 0) {
         return res.status(400).json({
@@ -156,9 +133,7 @@ const validateUpdateQuestion = (req, res, next) => {
     if (type !== undefined) {
         const validTypes = ['general', 'specific', 'role-play']
         if (!validTypes.includes(type)) {
-            errors.push(
-                'Loại câu hỏi không hợp lệ. Chỉ chấp nhận: general, specific, role-play'
-            )
+            errors.push('Loại câu hỏi không hợp lệ. Chỉ chấp nhận: general, specific, role-play')
         }
     }
 
@@ -188,10 +163,7 @@ const validateUpdateQuestion = (req, res, next) => {
             errors.push('Từ khóa phải là một mảng')
         } else {
             keywords.forEach((keyword, index) => {
-                if (
-                    typeof keyword !== 'string' ||
-                    keyword.trim().length === 0
-                ) {
+                if (typeof keyword !== 'string' || keyword.trim().length === 0) {
                     errors.push(`Từ khóa ${index + 1} phải là chuỗi không rỗng`)
                 } else if (keyword.length > 50) {
                     errors.push(`Từ khóa ${index + 1} không được quá 50 ký tự`)
@@ -244,83 +216,6 @@ const validateQuestionId = (req, res, next) => {
     }
 
     next()
-}
-
-// Helper function để validate question
-function validateQuestion(question, prefix = 'Câu hỏi') {
-    const errors = []
-    const { questionText, type, hints, sampleAnswer, keywords } = question
-
-    // Kiểm tra questionText (bắt buộc)
-    if (!questionText || questionText.trim().length === 0) {
-        errors.push(`${prefix}: Nội dung câu hỏi không được để trống`)
-    } else if (questionText.trim().length < 10) {
-        errors.push(`${prefix}: Nội dung câu hỏi phải có ít nhất 10 ký tự`)
-    } else if (questionText.trim().length > 1000) {
-        errors.push(`${prefix}: Nội dung câu hỏi không được quá 1000 ký tự`)
-    }
-
-    // Kiểm tra type (tùy chọn, mặc định là 'general')
-    if (type) {
-        const validTypes = ['general', 'specific', 'role-play']
-        if (!validTypes.includes(type)) {
-            errors.push(
-                `${prefix}: Loại câu hỏi không hợp lệ. Chỉ chấp nhận: general, specific, role-play`
-            )
-        }
-    }
-
-    // Kiểm tra hints (tùy chọn)
-    if (hints) {
-        if (!Array.isArray(hints)) {
-            errors.push(`${prefix}: Gợi ý phải là một mảng`)
-        } else {
-            hints.forEach((hint, index) => {
-                if (typeof hint !== 'string' || hint.trim().length === 0) {
-                    errors.push(
-                        `${prefix}: Gợi ý ${index + 1} phải là chuỗi không rỗng`
-                    )
-                } else if (hint.length > 200) {
-                    errors.push(
-                        `${prefix}: Gợi ý ${index + 1} không được quá 200 ký tự`
-                    )
-                }
-            })
-        }
-    }
-
-    // Kiểm tra sampleAnswer (tùy chọn)
-    if (sampleAnswer && sampleAnswer.length > 2000) {
-        errors.push(`${prefix}: Câu trả lời mẫu không được quá 2000 ký tự`)
-    }
-
-    // Kiểm tra keywords (tùy chọn)
-    if (keywords) {
-        if (!Array.isArray(keywords)) {
-            errors.push(`${prefix}: Từ khóa phải là một mảng`)
-        } else {
-            keywords.forEach((keyword, index) => {
-                if (
-                    typeof keyword !== 'string' ||
-                    keyword.trim().length === 0
-                ) {
-                    errors.push(
-                        `${prefix}: Từ khóa ${
-                            index + 1
-                        } phải là chuỗi không rỗng`
-                    )
-                } else if (keyword.length > 50) {
-                    errors.push(
-                        `${prefix}: Từ khóa ${
-                            index + 1
-                        } không được quá 50 ký tự`
-                    )
-                }
-            })
-        }
-    }
-
-    return errors
 }
 
 module.exports = {

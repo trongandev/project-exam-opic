@@ -4,7 +4,7 @@ import { ArrowLeft, Info, MoveDown } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import SpeakButton from '@/components/SpeakButton'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
-export default function IntroIM() {
+export default function DetailTopicDefaultPage() {
     const navigate = useNavigate()
     const params = useLocation()
 

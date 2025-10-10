@@ -30,6 +30,14 @@ class AuthController {
             password,
         })
 
+        res.cookie('cookie', result.accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000, // 15 minutes
+            path: '/',
+        })
+
         return SuccessResponse.ok(res, result.message, {
             user: result.user,
             accessToken: result.accessToken,

@@ -1,9 +1,9 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { opicInfo } from '@/config/opicData'
-import { Award, ChevronRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { opicInfo, sampleQuestions } from '@/config/opicData'
+import { Award, BookOpen, Check } from 'lucide-react'
+import QuestionCard from '../components/QuestionCard'
+import { GENERIC_TIPS } from '@/config/etcConfig'
 
 export default function HomePage() {
     return (
@@ -32,47 +32,96 @@ export default function HomePage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2  text-primary text-xl">
                         <Award className="w-6 h-6" />
-                        Lựa chọn level bạn muốn đạt được
+                        Các level trong OPIc và mức thưởng tại TKG
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-600 ">
                         {opicInfo.scoreRange.levels.map((level, index) => (
-                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary bg-sky-50 relative' : 'border-gray-300'}`}>
-                                {level.isPopular && <Badge className="absolute top-3 right-3 bg-sky-200 text-primary">Phổ biến</Badge>}
+                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary/20 bg-sky-50 relative' : 'border-gray-300/50'}`}>
                                 <div className="flex items-center justify-between mb-2">
-                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.level + ' ' + level.desc}</Badge>
-                                    <span className="text-sm font-mono text-gray-600">{level.score}</span>
+                                    <span className="text-sm  text-gray-700 font-medium">Level: {level.level}</span>
+                                    {level.isPopular && <Badge className=" bg-sky-200 text-primary">Phổ biến</Badge>}
+                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.claim}</Badge>
                                 </div>
-                                <p className="text-sm text-gray-700 ">{level.description}</p>
+                                <p className="text-sm font-medium ">{level.description}</p>
                                 <p className="text-sm text-gray-500 italic ">{level.explain}</p>
-
-                                <Link to={`${level.isPopular ? `/intro-im` : '#'}`} className="block text-right">
-                                    <Button variant={level.isPopular ? 'default' : 'link'} disabled={!level.isPopular} className="mt-3">
-                                        Xem chi tiết <ChevronRight />
-                                    </Button>
-                                </Link>
+                                <div className="mt-3 italic">
+                                    {level.descArr.map((desc, idx) => (
+                                        <p key={idx} className="text-xs  flex items-center gap-1">
+                                            <Check size={14} /> {desc}
+                                        </p>
+                                    ))}
+                                </div>
                             </div>
                         ))}
                     </div>
                 </CardContent>
             </Card>
-
-            {/* TTS Demo Card */}
-            <Card className="mb-8 border-2 border-dashed border-blue-300 bg-blue-50">
+            <Card className="mb-8">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-blue-700 text-xl">🎙️ TTS Demo - Text to Speech</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                        <BookOpen className="w-6 h-6 text-primary" />
+                        {opicInfo.strategies.title}
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-700 mb-4">Hệ thống phát âm thông minh giúp bạn luyện tập phát âm tiếng Anh chuẩn xác. Hỗ trợ nhiều giọng nói từ các quốc gia khác nhau.</p>
-                    <div className="flex gap-3">
-                        <Link to="/tts-demo">
-                            <Button variant="default" className="bg-blue-600 hover:bg-blue-700">
-                                Thử ngay TTS Demo <ChevronRight className="w-4 h-4 ml-1" />
-                            </Button>
-                        </Link>
-                        <Badge variant="secondary">Tính năng mới</Badge>
+                    <p className="text-gray-600 mb-6">{opicInfo.strategies.description}</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {opicInfo.strategies.list.map((strategy, index) => (
+                            <div key={index} className="border-l-4 border-primary px-6 py-4 bg-sky-50 rounded-r-lg">
+                                <h3 className="font-semibold text-gray-900 mb-2">
+                                    {index + 1}. {strategy.name}
+                                </h3>
+                                <p className="text-gray-600 mb-3">{strategy.description}</p>
+                                <div className="bg-white rounded-md p-3 border">
+                                    <span className="text-xs text-gray-500 font-medium block mb-1">Ví dụ:</span>
+                                    <code className="text-sm text-primary font-mono">{strategy.example}</code>
+                                </div>
+                            </div>
+                        ))}
                     </div>
+
+                    <div className="mt-8 p-6 bg-gradient-to-r from-sky-50 to-purple-50 rounded-lg text-primary">
+                        <h3 className="font-semibold text-lg mb-2 ">💡 Lời khuyên quan trọng</h3>
+                        <p className="">
+                            Hãy luyện tập kết hợp nhiều chiến lược trong một câu trả lời để tạo ra đoạn văn liên kết tự nhiên và ấn tượng. Điều này sẽ giúp bạn đạt được điểm số cao trong bài thi OPIc.
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">🪖 Thực chiến</h2>
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {sampleQuestions['self-introduction'].map((question, index) => (
+                            <QuestionCard key={question.id} question={question} index={index} />
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Self Introduction Section */}
+            {/* General Tips */}
+            <Card className="mt-8 bg-gradient-to-r from-sky-50 to-purple-50 ">
+                <CardHeader>
+                    <CardTitle className="text-xl text-gray-900">💡 Mẹo tổng quát khi trả lời</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                    {GENERIC_TIPS.map((tip) => (
+                        <div key={tip.id} className="flex items-start gap-3">
+                            <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">{tip.id}</span>
+                            <p className="text-gray-700">
+                                <strong>{tip.textBold}</strong>
+                                {tip.text}
+                            </p>
+                        </div>
+                    ))}
                 </CardContent>
             </Card>
         </div>

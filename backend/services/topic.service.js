@@ -9,10 +9,7 @@ class TopicService {
 
         // Tìm kiếm theo tên hoặc mô tả
         if (search) {
-            query.$or = [
-                { name: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } },
-            ]
+            query.$or = [{ name: { $regex: search, $options: 'i' } }, { description: { $regex: search, $options: 'i' } }]
         }
 
         // Lọc theo trạng thái active
@@ -21,11 +18,7 @@ class TopicService {
         }
 
         const [topics, total] = await Promise.all([
-            TopicModel.find(query)
-                .skip(skip)
-                .limit(limit)
-                .sort({ createdAt: -1 })
-                .lean(),
+            TopicModel.find(query).populate('userId', '_id displayName email').skip(skip).limit(limit).sort({ createdAt: -1 }).lean(),
             TopicModel.countDocuments(query),
         ])
 
@@ -34,7 +27,7 @@ class TopicService {
         const hasPrevPage = page > 1
 
         return {
-            topics,
+            data: topics,
             pagination: {
                 currentPage: page,
                 totalPages,
@@ -54,42 +47,26 @@ class TopicService {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
 
+        await TopicModel.findByIdAndUpdate(topic._id, { $inc: { viewCount: 1 } })
+
         return topic
     }
 
     // Lấy topic theo slug
     async getTopicBySlug(slug) {
-        const topic = await TopicModel.findOne({ slug, isActive: true }).lean()
-
+        const topic = await TopicModel.findOne({ slug }).populate('userId', '_id displayName email').lean()
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
+
+        await TopicModel.findByIdAndUpdate(topic._id, { $inc: { viewCount: 1 } })
 
         return topic
     }
 
     // Tạo topic mới
-    async createTopic({ name, slug, description, questions = [] }) {
-        // Kiểm tra xem tên hoặc slug đã tồn tại chưa
-        const existingTopic = await TopicModel.findOne({
-            $or: [{ name: name }, { slug: slug }],
-        })
-
-        if (existingTopic) {
-            if (existingTopic.name === name) {
-                throw new ErrorResponse('Tên chủ đề đã tồn tại', 400)
-            }
-            if (existingTopic.slug === slug) {
-                throw new ErrorResponse('Slug chủ đề đã tồn tại', 400)
-            }
-        }
-
-        const topic = new TopicModel({
-            name,
-            slug: slug.toLowerCase(),
-            description,
-            questions,
-        })
+    async createTopic(data) {
+        const topic = new TopicModel(data)
 
         await topic.save()
 
@@ -97,54 +74,20 @@ class TopicService {
     }
 
     // Cập nhật topic
-    async updateTopic(id, { name, slug, description, isActive, questions }) {
+    async updateTopic(id, dataTopic) {
+        const { name, slug, desc, isActive, data } = dataTopic
         const topic = await TopicModel.findById(id)
 
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
 
-        // Kiểm tra trùng lặp tên hoặc slug (ngoại trừ chính nó)
-        if (name || slug) {
-            const query = { _id: { $ne: id } }
-            if (name) query.name = name
-            if (slug) query.slug = slug.toLowerCase()
-
-            const existingTopic = await TopicModel.findOne({
-                _id: { $ne: id },
-                $or: [],
-            })
-
-            if (name) {
-                existingTopic?.$or?.push({ name: name })
-            }
-            if (slug) {
-                existingTopic?.$or?.push({ slug: slug.toLowerCase() })
-            }
-
-            if (
-                name &&
-                (await TopicModel.findOne({ _id: { $ne: id }, name: name }))
-            ) {
-                throw new ErrorResponse('Tên chủ đề đã tồn tại', 400)
-            }
-            if (
-                slug &&
-                (await TopicModel.findOne({
-                    _id: { $ne: id },
-                    slug: slug.toLowerCase(),
-                }))
-            ) {
-                throw new ErrorResponse('Slug chủ đề đã tồn tại', 400)
-            }
-        }
-
         // Cập nhật các trường
         if (name !== undefined) topic.name = name
-        if (slug !== undefined) topic.slug = slug.toLowerCase()
-        if (description !== undefined) topic.description = description
+        if (slug !== undefined) topic.slug = slug
+        if (desc !== undefined) topic.desc = desc
         if (isActive !== undefined) topic.isActive = isActive
-        if (questions !== undefined) topic.questions = questions
+        if (data !== undefined) topic.data = data
 
         await topic.save()
 
@@ -193,15 +136,11 @@ class TopicService {
         }
 
         // Cập nhật các trường
-        if (questionData.questionText !== undefined)
-            question.questionText = questionData.questionText
+        if (questionData.questionText !== undefined) question.questionText = questionData.questionText
         if (questionData.type !== undefined) question.type = questionData.type
-        if (questionData.hints !== undefined)
-            question.hints = questionData.hints
-        if (questionData.sampleAnswer !== undefined)
-            question.sampleAnswer = questionData.sampleAnswer
-        if (questionData.keywords !== undefined)
-            question.keywords = questionData.keywords
+        if (questionData.hints !== undefined) question.hints = questionData.hints
+        if (questionData.sampleAnswer !== undefined) question.sampleAnswer = questionData.sampleAnswer
+        if (questionData.keywords !== undefined) question.keywords = questionData.keywords
 
         await topic.save()
 
