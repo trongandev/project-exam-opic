@@ -5,7 +5,7 @@ const questionSchema = new Schema(
     {
         _id: { type: String, required: true },
         text: { type: String, required: true },
-        note: { type: String, required: true },
+        note: { type: String },
         answer: { type: String, required: true },
     },
     { _id: false }
