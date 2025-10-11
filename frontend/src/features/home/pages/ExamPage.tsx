@@ -2,7 +2,6 @@ import SpeakButton from '@/components/SpeakButton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { GENERIC_TIPS } from '@/config/etcConfig'
-import { TOPICDATA } from '@/config/templateData'
 import { ChevronLeft, ChevronRight, Eye, EyeOff, LogOut, Mic, Play } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +12,7 @@ import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import { shuffleArray } from '@/lib/utils'
+import { TOPICDATA } from '@/config/templateData'
 export default function ExamPage() {
     const [isStartExam, setIsStartExam] = useState(true)
     const [isRecording, setIsRecording] = useState(false)

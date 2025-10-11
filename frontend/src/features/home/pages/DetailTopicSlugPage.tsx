@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Info, Play } from 'lucide-react'
+import { ArrowLeft, Info, MessageCircleMore, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -8,13 +8,21 @@ import type { Topic } from '@/types/topic'
 import topicService from '@/services/topicService'
 import LoadingScreen from '@/components/etc/LoadingScreen'
 import RatingComponent from '../components/RatingComponent'
+import AvatarCircle from '@/components/etc/AvatarCircle'
+import { formatDistance } from 'date-fns'
+import { vi } from 'date-fns/locale/vi'
+import { toast } from 'sonner'
+import { useAuth } from '@/contexts/AuthContext'
 export default function DetailTopicSlugPage() {
     const navigate = useNavigate()
     const location = useLocation()
     const params = useParams()
     const [topicDetailData, setTopicDetailData] = useState<Topic>()
     const [loading, setLoading] = useState(false)
-
+    const [score, setScore] = useState(0)
+    const [comment, setComment] = useState('')
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+    const { user } = useAuth()
     useEffect(() => {
         const fetchTopicDetail = async () => {
             setLoading(true)
@@ -25,13 +33,50 @@ export default function DetailTopicSlugPage() {
         fetchTopicDetail()
     }, [params.slug])
 
+    const handleSubmitReview = async () => {
+        if (score === 0) {
+            toast.error('Vui lòng chọn số sao đánh giá!')
+            return
+        }
+        if (!comment) {
+            toast.error('Vui lòng nhập nhận xét!')
+            return
+        }
+
+        setIsSubmittingReview(true)
+        try {
+            const res = await topicService.rateTopic(params.slug as string, { score, comment })
+            console.log('Đánh giá gửi thành công:', res.data)
+
+            setScore(0)
+            setComment('')
+            toast.success('Cảm ơn bạn đã đánh giá!')
+            // Cập nhật lại danh sách đánh giá
+            const newRating = {
+                _id: new Date(),
+                userId: user,
+                score,
+                comment,
+                createdAt: new Date(),
+            }
+            setTopicDetailData((prev) => {
+                if (!prev) return prev
+                return { ...prev, rating: [newRating, ...prev.rating] }
+            })
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setIsSubmittingReview(false)
+        }
+    }
+
     if (loading || !topicDetailData) {
         return <LoadingScreen />
     }
     return (
         <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
             <div className="flex justify-between items-center">
-                <Button variant={'ghost'} onClick={() => navigate(-1)}>
+                <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại
                 </Button>
                 <VoiceSelectionModal>
@@ -76,13 +121,40 @@ export default function DetailTopicSlugPage() {
                     <p className="">Các chủ đề trên được cộng đồng chia sẻ, mang tính chất tham khảo, bạn có thể mở rộng thêm các chủ đề khác phù hợp với khả năng và sở thích của mình.</p>
                     <p>
                         Hoặc{' '}
-                        <a href="/create-topic" className="underline text-primary">
+                        <a href="create-topic" className="underline text-primary">
                             click vào đây
                         </a>{' '}
                         để tạo chủ đề cho riêng mình
                     </p>
                 </div>
-                <RatingComponent />
+                <RatingComponent score={score} setScore={setScore} comment={comment} setComment={setComment} isSubmittingReview={isSubmittingReview} handleSubmitReview={handleSubmitReview} />
+                <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
+                        <MessageCircleMore size={18} className="text-primary" /> Bình luận và đánh giá của những người khác
+                    </h3>
+                    {topicDetailData.rating.length === 0 && <p className="text-gray-500">Chưa có đánh giá nào</p>}
+                    <div className="space-y-5">
+                        {topicDetailData.rating.map((item) => (
+                            <div key={item._id} className="flex gap-4 border border-gray-200 rounded-lg p-4">
+                                <Link to={`/profile/${item.userId._id}`}>
+                                    <AvatarCircle user={item.userId} className="h-14 w-14" />
+                                </Link>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <h4 className="font-medium">{item.userId.displayName}</h4>
+                                            <p className="ml-2 text-sm text-gray-600 flex gap-1 items-center">
+                                                ({item.score}/5 <Star size={14} />)
+                                            </p>
+                                        </div>
+                                        <div className="text-xs text-gray-500">{formatDistance(new Date(item.createdAt), new Date(), { addSuffix: true, locale: vi })}</div>
+                                    </div>
+                                    <p className="mt-1 text-gray-700">{item.comment}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     )

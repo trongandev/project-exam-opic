@@ -3,7 +3,7 @@ const ErrorResponse = require('../core/error')
 
 class TopicService {
     // Lấy danh sách topics với phân trang và tìm kiếm
-    async getAllTopics({ page = 1, limit = 10, search, isActive }) {
+    async getAllTopics({ page = 1, limit = 6, search, isActive }) {
         const skip = (page - 1) * limit
         const query = {}
 
@@ -13,12 +13,10 @@ class TopicService {
         }
 
         // Lọc theo trạng thái active
-        if (isActive !== undefined) {
-            query.isActive = isActive
-        }
+        query.isActive = true
 
         const [topics, total] = await Promise.all([
-            TopicModel.find(query).populate('userId', '_id displayName email').skip(skip).limit(limit).sort({ createdAt: -1 }).lean(),
+            TopicModel.find(query).populate('userId', '_id displayName email').populate('rating.userId', '_id').skip(skip).limit(limit).sort({ createdAt: -1 }).lean(),
             TopicModel.countDocuments(query),
         ])
 
@@ -41,7 +39,7 @@ class TopicService {
 
     // Lấy topic theo ID
     async getTopicById(id) {
-        const topic = await TopicModel.findById(id).lean()
+        const topic = await TopicModel.findById(id).populate('userId', '_id displayName email').populate('rating.userId', '_id displayName email').lean()
 
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
@@ -54,12 +52,30 @@ class TopicService {
 
     // Lấy topic theo slug
     async getTopicBySlug(slug) {
-        const topic = await TopicModel.findOne({ slug }).populate('userId', '_id displayName email').lean()
+        const topic = await TopicModel.findOne({ slug }).populate('userId', '_id displayName email').populate('rating.userId', '_id displayName email').lean()
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
 
         await TopicModel.findByIdAndUpdate(topic._id, { $inc: { viewCount: 1 } })
+
+        return topic
+    }
+
+    // Lấy topic theo slug
+    async getTopicByIdToEdit(userId, id) {
+        const topic = await TopicModel.findById(id).populate('userId', '_id')
+        if (!topic) {
+            throw new ErrorResponse('Không tìm thấy chủ đề', 404)
+        }
+
+        if (!topic.isActive) {
+            throw new ErrorResponse('Chủ đề đã bị vô hiệu hóa', 400)
+        }
+
+        if (topic.userId._id.toString() !== userId.toString()) {
+            throw new ErrorResponse('Bạn không có quyền chỉnh sửa chủ đề này', 403)
+        }
 
         return topic
     }
@@ -164,6 +180,19 @@ class TopicService {
         await topic.save()
 
         return { message: 'Đã xóa câu hỏi thành công' }
+    }
+
+    async ratingTopic(topicSlug, data) {
+        const topic = await TopicModel.findOne({ slug: topicSlug })
+
+        if (!topic) {
+            throw new ErrorResponse('Không tìm thấy chủ đề', 404)
+        }
+
+        topic.rating.push(data)
+        await topic.save()
+
+        return topic
     }
 }
 

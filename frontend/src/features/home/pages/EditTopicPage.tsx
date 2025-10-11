@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, FileQuestion, Save } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import type { DataTopic, TopicCreate } from '@/types/topic'
 import InlineEdit from '@/components/InlineEdit'
 import { closestCenter, DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
@@ -11,11 +11,10 @@ import topicService from '@/services/topicService'
 import { toast } from 'sonner'
 import LoadingIcon from '@/components/ui/loading-icon'
 import ToastLogManyErrror from '@/components/etc/ToastLogManyErrror'
-
-export default function CreateTopicPage() {
+export default function EditTopicPage() {
     const navigate = useNavigate()
+    const params = useParams()
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
-
     const [topicDetailData, setTopicDetailData] = useState<TopicCreate>({
         name: '',
         desc: '',
@@ -24,28 +23,22 @@ export default function CreateTopicPage() {
     const defaultQuestionList: DataTopic = {
         _id: new Date().toISOString(),
         icon: '🐎',
-        title: 'Giới thiệu bản thân',
-        desc: 'Mô tả về bản thân, sở thích, công việc, v.v.',
+        title: '',
+        desc: '',
         quests: [],
     }
-
-    const defaultQuestionTemplateList: DataTopic = {
-        _id: new Date().toISOString(),
-        icon: '🐎',
-        title: 'Giới thiệu bản thân',
-        desc: 'Mô tả về bản thân, sở thích, công việc, v.v.',
-        quests: [
-            {
-                _id: new Date().toISOString(),
-                text: 'Can you introduce yourself?',
-                note: 'Mô tả ngắn gọn về bản thân bạn',
-                answer: 'Hello, I am a software developer with a passion for learning new technologies and building innovative applications.',
-            },
-        ],
-    }
-
-    const [questionList, setQuestionList] = useState<DataTopic[]>([defaultQuestionTemplateList])
+    const [questionList, setQuestionList] = useState<DataTopic[]>([defaultQuestionList])
     const [loadingCreateTopic, setLoadingCreateTopic] = useState(false)
+
+    useEffect(() => {
+        const fetchTopicDetail = async () => {
+            const res = await topicService.getTopicByIdToEdit(params._id as string)
+            setTopicDetailData(res.data)
+            setQuestionList(res.data.data.length > 0 ? res.data.data : [defaultQuestionList])
+            console.log(res)
+        }
+        fetchTopicDetail()
+    }, [params._id])
 
     const createQuestion = () => {
         setQuestionList([{ ...defaultQuestionList, _id: new Date().toISOString() }, ...questionList])
@@ -100,7 +93,7 @@ export default function CreateTopicPage() {
         }
         try {
             setLoadingCreateTopic(true)
-            const res = await topicService.createTopic(newDataTopic)
+            const res = await topicService.updateTopic(params._id as string, newDataTopic)
             toast.success(res.message)
             navigate(`/topic/${res.data.slug}`)
         } catch (error: any) {

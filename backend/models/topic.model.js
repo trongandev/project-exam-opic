@@ -13,7 +13,7 @@ const questionSchema = new Schema(
 
 const ratingSchema = new Schema(
     {
-        userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        userId: { type: Schema.Types.ObjectId, ref: 'UserModel', required: true },
         score: { type: Number, required: true },
         comment: { type: String, required: true },
     },

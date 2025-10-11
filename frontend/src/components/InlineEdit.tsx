@@ -12,6 +12,7 @@ interface InlineEditProps extends UseInlineEditProps {
     inputClassName?: string
     displayClassName?: string
     multiline?: boolean
+    isEmoji?: boolean
     showButtons?: boolean
     editIcon?: React.ReactNode
     saveIcon?: React.ReactNode
@@ -27,6 +28,7 @@ export default function InlineEdit({
     inputClassName = '',
     displayClassName = '',
     multiline = false,
+    isEmoji = false,
     showButtons = false,
     editIcon = <Edit size={14} />,
     saveIcon = <Check size={14} />,
@@ -44,6 +46,8 @@ export default function InlineEdit({
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    maxLength={isEmoji ? 1 : undefined}
+                    minLength={isEmoji ? 1 : undefined}
                     onBlur={showButtons ? undefined : handleBlur}
                     placeholder={computedPlaceholder}
                     className={cn('flex-1', multiline && 'min-h-[80px] resize-none', inputClassName)}

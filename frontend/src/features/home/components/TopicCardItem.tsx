@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Clock, Eye, Star } from 'lucide-react'
+import { Clock, Edit2, Eye, Settings, Star, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Badge } from '@/components/ui/badge'
@@ -9,7 +9,10 @@ import AvatarCircle from '@/components/etc/AvatarCircle'
 import { formatDate, formatDistance } from 'date-fns'
 import type { Topic } from '@/types/topic'
 import { vi } from 'date-fns/locale/vi'
-export default function TopicCardItem({ topic }: { topic: Topic }) {
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import LoadingIcon from '@/components/ui/loading-icon'
+
+export default function TopicCardItem({ topic, idUser, loadingDelete, handleDeleteTopic }: { topic: Topic; idUser?: string; loadingDelete: boolean; handleDeleteTopic: any }) {
     return (
         <Card className="bg-white border-primary/20 hover:shadow-lg shadow-primary/10 transition-all duration-300 relative group" key={topic._id}>
             <CardHeader className="">
@@ -25,7 +28,7 @@ export default function TopicCardItem({ topic }: { topic: Topic }) {
             <CardContent>
                 <div className="mb-5">
                     <p>Các chủ đề có trong topic:</p>
-                    <div className="flex flex-wrap gap-3 mt-1">
+                    <div className="flex flex-wrap gap-1 mt-1">
                         {topic.data.map((item) => (
                             <Badge variant={'secondary'} key={item._id} className="mr-2 mb-2">
                                 {item.title}
@@ -50,19 +53,52 @@ export default function TopicCardItem({ topic }: { topic: Topic }) {
                             </div>
                             <div className="flex items-center gap-1 flex-1 ">
                                 <Star size={14} className="fill-yellow-500 stroke-yellow-500" />
-                                <p>{topic.rating.length > 0 ? topic.rating : '5.0'}</p>
+                                <p>{topic.rating.length > 0 ? topic.rating.reduce((acc, curr) => acc + curr.score, 0) / topic.rating.length : '5.0'}</p>
+                                <p>{topic.rating.length ? `(${topic.rating.length})` : ''}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="gap-2">
                 <Link to={`/topic/${topic.slug}`} className="block w-full">
                     <Button className="w-full bg-primary hover:bg-primary/90 text-white group-hover:shadow-md transition-all">
                         <Eye />
                         Xem chi tiết
                     </Button>
                 </Link>
+                {idUser === topic.userId._id && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Button variant={'outline'}>
+                                <Settings />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>Tính năng</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <Link to={`edit-topic/${topic._id}`}>
+                                <DropdownMenuItem>
+                                    <Edit2 />
+                                    Chỉnh sửa
+                                </DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuItem variant="destructive" onClick={() => handleDeleteTopic(topic._id)} disabled={loadingDelete}>
+                                {loadingDelete ? (
+                                    <>
+                                        <LoadingIcon />
+                                        Đang xóa...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Trash2 />
+                                        Xóa
+                                    </>
+                                )}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </CardFooter>
         </Card>
     )

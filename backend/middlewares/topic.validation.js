@@ -1,6 +1,21 @@
 const validator = require('validator')
 const mongoose = require('mongoose')
 
+const validateDataItem = (item, prefix = 'Dữ liệu') => {
+    const errors = []
+    if (!item || typeof item !== 'object') {
+        errors.push(`${prefix} phải là một đối tượng`)
+        return errors
+    }
+    if (!item.title) {
+        errors.push(`${prefix} tiêu đề không được để trống`)
+    }
+    if (!item.desc) {
+        errors.push(`${prefix} mô tả không được để trống`)
+    }
+    return errors
+}
+
 // Validation cho tạo topic
 const validateCreateTopic = (req, res, next) => {
     const { name, desc, data } = req.body
@@ -22,6 +37,14 @@ const validateCreateTopic = (req, res, next) => {
         errors.push('Mô tả không được quá 500 ký tự')
     }
 
+    // Kiểm tra data (tùy chọn)
+    if (data !== undefined && Array.isArray(data)) {
+        data.forEach((item, index) => {
+            const itemErrors = validateDataItem(item, `Câu hỏi ${index + 1}`)
+            errors.push(...itemErrors)
+        })
+    }
+
     if (errors.length > 0) {
         return res.status(400).json({
             success: false,
@@ -35,7 +58,8 @@ const validateCreateTopic = (req, res, next) => {
 
 // Validation cho cập nhật topic
 const validateUpdateTopic = (req, res, next) => {
-    const { name, slug, desc, isActive, data } = req.body
+    const { name, slug, desc, data } = req.body
+    console.log(req.body)
     const errors = []
 
     // Kiểm tra name (tùy chọn)
@@ -67,18 +91,44 @@ const validateUpdateTopic = (req, res, next) => {
         errors.push('Mô tả không được quá 500 ký tự')
     }
 
-    // Kiểm tra isActive (tùy chọn)
-    if (isActive !== undefined && typeof isActive !== 'boolean') {
-        errors.push('Trạng thái hoạt động phải là boolean')
+    // Kiểm tra data (tùy chọn)
+    if (data !== undefined && Array.isArray(data)) {
+        data.forEach((item, index) => {
+            const itemErrors = validateDataItem(item, `Dữ liệu ${index + 1}`)
+            errors.push(...itemErrors)
+        })
     }
 
-    // // Kiểm tra data (tùy chọn)
-    // if (data !== undefined && Array.isArray(data)) {
-    //     data.forEach((item, index) => {
-    //         const itemErrors = validateDataItem(item, `Dữ liệu ${index + 1}`)
-    //         errors.push(...itemErrors)
-    //     })
-    // }
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'Dữ liệu không hợp lệ',
+            errors: errors,
+        })
+    }
+
+    next()
+}
+
+const validateRating = (req, res, next) => {
+    const { score, comment } = req.body
+    const errors = []
+
+    // Kiểm tra score
+    if (score === undefined) {
+        errors.push('Điểm không được để trống')
+    } else if (typeof score !== 'number' || score < 1 || score > 5) {
+        errors.push('Điểm phải là một số từ 1 đến 5')
+    }
+
+    // Kiểm tra comment
+    if (comment === undefined) {
+        errors.push('Nội dung đánh giá không được để trống')
+    } else if (typeof comment !== 'string' || comment.trim().length === 0) {
+        errors.push('Nội dung đánh giá phải là một chuỗi không rỗng')
+    } else if (comment.length > 500) {
+        errors.push('Nội dung đánh giá không được quá 500 ký tự')
+    }
 
     if (errors.length > 0) {
         return res.status(400).json({
@@ -183,46 +233,10 @@ const validateUpdateQuestion = (req, res, next) => {
     next()
 }
 
-// Validation cho ID params
-const validateTopicId = (req, res, next) => {
-    const { id } = req.params
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({
-            success: false,
-            message: 'ID chủ đề không hợp lệ',
-        })
-    }
-
-    next()
-}
-
-// Validation cho question ID params
-const validateQuestionId = (req, res, next) => {
-    const { topicId, questionId } = req.params
-
-    if (!mongoose.Types.ObjectId.isValid(topicId)) {
-        return res.status(400).json({
-            success: false,
-            message: 'ID chủ đề không hợp lệ',
-        })
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(questionId)) {
-        return res.status(400).json({
-            success: false,
-            message: 'ID câu hỏi không hợp lệ',
-        })
-    }
-
-    next()
-}
-
 module.exports = {
     validateCreateTopic,
     validateUpdateTopic,
     validateAddQuestion,
     validateUpdateQuestion,
-    validateTopicId,
-    validateQuestionId,
+    validateRating,
 }

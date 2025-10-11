@@ -1,0 +1,250 @@
+[
+    {
+        "icon": "👤",
+        "title": "Giới thiệu bản thân",
+        "desc": "Thông tin cá nhân, sở thích, công việc, học vấn.",
+        "quests": [
+            {
+                "text": "Let's start the interview now, tell me a little bit about yourself.",
+                "note": "Giới thiệu bản thân 1 cách ngắn gọn xúc tích, Nêu tên, tuổi, nghề nghiệp, nơi làm việc, Nơi học tập, chuyên ngành Sở thích cá nhân, Tính cách bản thân",
+                "answer": "My name is An, and I am 21 years old. I work as a TDS at TAEWANG VINA. I graduated from DNTU with a degree in Information Technology. In my free time, I enjoy coding and learning new programming languages, which helps me relax and stay creative. I would describe myself as a friendly and motivated person who loves to learn new things and take on challenges."
+            }
+        ]
+    },
+    {
+        "icon": "🎵",
+        "title": "Âm nhạc & Hòa nhạc",
+        "desc": "Thể loại âm nhạc yêu thích, nhạc cụ, buổi hòa nhạc đã tham gia.",
+        "quests": [
+            {
+                "text": "What kind of musical devices do you use when you listen to music?\nWhat kind of music do you enjoy listening to?\nWho are your favorite musicians or composers?\nWhen and where do you listen to music using them?",
+                "note": "Hỏi về thiết bị nghe nhạc, thích nghe nhạc gì, ca sĩ yêu thích, hay nghe ở đâu và khi nào",
+                "answer": "I usually use my smartphone or a portable music player to listen to music. I enjoy a variety of music genres, including pop, rock, and classical music. Some of my favorite musicians are [Favorite Musicians]. I often listen to music while commuting, exercising, or relaxing at home. Music helps me unwind and stay motivated throughout the day."
+            },
+            {
+                "text": "You indicated in th survay that you like listening to music.How has your tast in music changed throughout the years?",
+                "note": "Âm nhạc mà bạn thích có thay đổi theo thời gian không",
+                "answer": "In the past, I used to listen to more rock and alternative music, but over the years, my taste has shifted towards pop and electronic music. I think this change reflects my evolving personality and the influence of my friends and the media I consume."
+            },
+
+            {
+                "text": "I would like to know about a concert you have been recently\nWhich concert was it?\nWhere was it held\nWho did you go with?\nWas there anything particulary memorable about it? Pelase describe in detail",
+                "note": "Miểu tả buổi hòa nhạc, đi với ai, địa điểm, kỷ niệm đáng nhớ",
+                "answer": "Recently, I attended a concert by my favorite band, and it was an unforgettable experience. The concert was held at a large outdoor venue, and I went with a group of friends. We sang along to all the songs and even made some new friends in the crowd. One of the most memorable moments was when the lead singer invited a fan on stage to sing a duet, and it was truly magical."
+            }
+        ]
+    },
+    {
+        "icon": "👨‍👩‍👧‍👦",
+        "title": "Gia đình và bạn bè",
+        "desc": "Mô tả người thân, mối quan hệ với bạn bè, các hoạt động chung, kỷ niệm đáng nhớ.",
+        "quests": [
+            {
+                "text": "Have you visited friends or relative recently?\nWhat did you do during the visit?. Please explain in detail",
+                "note": "Mô tả chuyến thăm bạn bè hoặc người thân gần đây, làm gì trong chuyến thăm",
+                "answer": "Yes, I recently visited my cousin who lives in a nearby city. During the visit, we spent quality time catching up on each other's lives, sharing stories, and reminiscing about our childhood memories. We also went out for dinner at a local restaurant and explored some of the city's attractions. It was a wonderful experience that strengthened our bond and created new memories together."
+            }
+        ]
+    },
+    {
+        "icon": "🚶",
+        "title": "Đi bộ",
+        "desc": "Nơi đi bộ yêu thích, tần suất, lợi ích của việc đi bộ, lần đáng nhớ",
+        "quests": [
+            {
+                "text": "You indicated that you walk, Please describle for me the place you usually walk, Is it near your house? Why do you like that place?",
+                "note": "Mô tả nơi bạn thường đi bộ, có gần nhà không, tại sao thích nơi đó",
+                "answer": "I usually walk in a park that is located near my house. I like this place because it is peaceful and surrounded by nature, which helps me relax and clear my mind. The park has well-maintained walking paths, beautiful scenery, and plenty of trees that provide shade. I also enjoy seeing people walking their dogs or exercising, which creates a friendly and lively atmosphere."
+            },
+            {
+                "text": "Why did you start jogging? What has changed since you started jogging? Tell me everythig in detail",
+                "note": "Tại sao bạn bắt đầu đi bộ, những thay đổi kể từ khi bắt đầu, mô tả chi tiết",
+                "answer": "I started jogging as a way to improve my physical fitness and overall health. Since I began jogging, I have noticed several positive changes in my life. I have more energy throughout the day, my mood has improved, and I feel more confident in my body. Additionally, jogging has helped me manage stress and clear my mind, allowing me to focus better on my work and personal life. Overall, it has become an essential part of my daily routine."
+            },
+            {
+                "text": "How often do you go walking? When and where do you walk? Tell me about it in as much detail as possible. Have you had any walking expericence that is memorable?",
+                "note": "Bạn đi bộ bao lâu một lần, khi nào và ở đâu, có kỷ niệm đáng nhớ nào không",
+                "answer": "I go walking about three to four times a week, usually in the evenings after work. I prefer to walk in the park near my house, as it is a safe and pleasant environment. One memorable walking experience I had was during a community event where we organized a charity walkathon. It was inspiring to see so many people come together for a good cause, and the sense of camaraderie and support made it a truly unforgettable experience."
+            }
+        ]
+    },
+    {
+        "icon": "🚶",
+        "title": "Đất nước & Văn hóa",
+        "desc": "Các món ăn phổ biến, thời tiết, trải nghiệm đáng nhớ, khác biệt xưa-nay",
+        "quests": [
+            {
+                "text": "Tell me about a traditional food in your country. Why is it significant? When do people usually eat it?",
+                "note": "Mô tả món ăn truyền thống, ý nghĩa, khi nào ăn",
+                "answer": "One traditional food in my country is [Traditional Food Name]. It is significant because it represents our cultural heritage and is often associated with special occasions and celebrations. People usually eat it during festivals, family gatherings, and holidays. The dish is made with a combination of local ingredients and spices, which gives it a unique flavor that reflects our culinary traditions."
+            },
+            {
+                "text": "Tell me about the weather in your country? What is the weather like in each season? Do people engage in different activities depending on the season?",
+                "note": "Miểu tả thời tiết theo mùa, hoạt động theo mùa",
+                "answer": "The weather in my country varies significantly throughout the year, with four distinct seasons: spring, summer, autumn, and winter. In spring, the weather is mild and pleasant, with blooming flowers and greenery. Summer is hot and humid, making it a popular time for outdoor activities like swimming and picnics. Autumn brings cooler temperatures and beautiful fall foliage, which is perfect for hiking and enjoying nature. Winter is cold and snowy in some regions, leading to activities like skiing and ice skating. People often adjust their activities based on the season to make the most of the weather conditions."
+            },
+            {
+                "text": "How has the weather changed over the years? What are the reasons for these climate changes? What was the weather like when you younger? How is it defferent now?",
+                "note": "Thời tiết thay đổi thế nào, nguyên nhân, khác biệt xưa-nay",
+                "answer": "Over the years, I have noticed that the weather has become more unpredictable and extreme. There are more frequent instances of heavy rainfall, heatwaves, and storms. The primary reasons for these climate changes are global warming and environmental pollution, which have led to shifts in weather patterns worldwide. When I was younger, the seasons were more consistent, and we rarely experienced such extreme weather events. Now, it seems that the climate is changing rapidly, affecting not only our daily lives but also the environment and ecosystems around us."
+            },
+            {
+                "text": "Have you ever had a memorable or unexpected experience because of unusual weather condition? When was it? What happened?",
+                "note": "Kể về trải nghiệm đáng nhớ do thời tiết bất thường, khi nào, chuyện gì đã xảy ra",
+                "answer": "Yes, I once had a memorable experience during a sudden snowstorm while I was traveling in a region that typically does not receive much snow. It happened unexpectedly, and I was caught off guard without proper winter clothing. The snowstorm caused significant disruptions, including road closures and flight cancellations. However, it also led to a unique opportunity to experience the beauty of a snowy landscape and bond with fellow travelers who were also stranded. We shared stories, food, and warmth, turning an inconvenient situation into a memorable adventure."
+            },
+            {
+                "text": "What kind of clothes do people in your country usually wear? Do they wear differnt clothes when they go to work and when they relaxing? Describe the local attire in as much detail as possible",
+                "note": "Mô tả trang phục thường ngày, trang phục đi làm và khi thư giãn",
+                "answer": "In my country, people typically wear a variety of clothing styles depending on the occasion and setting. For everyday wear, casual clothing such as t-shirts, jeans, and comfortable shoes are common. When going to work, many people opt for more formal attire, such as dress shirts, blouses, slacks, and closed-toe shoes. In some industries, uniforms may be required. During leisure time, especially on weekends, people often dress more casually, wearing comfortable and relaxed clothing. Traditional attire is also worn during cultural events and celebrations, showcasing the rich heritage and diversity of our country. This may include colorful dresses, embroidered garments, and unique accessories that reflect local customs and traditions."
+            },
+            {
+                "text": "Do you encounter any sort of housing problem is your country? What are some solutions ofr it? Please tell me about the issues with your housing over the years and whether it caused you any trouble",
+                "note": "Mô tả vấn đề về nhà ở, giải pháp, ảnh hưởng",
+                "answer": "Yes, housing affordability is a significant issue in my country, especially in urban areas where property prices and rental rates have been rising steadily. This has made it challenging for many people, particularly young professionals and low-income families, to find suitable and affordable housing. Some solutions to address this problem include government initiatives to increase the supply of affordable housing, rent control measures, and incentives for developers to build more low-cost housing units. Over the years, I have personally experienced difficulties in finding affordable housing, which has caused stress and financial strain. However, I have managed to overcome these challenges by being flexible with my living arrangements and seeking support from family and friends when needed."
+            }
+        ]
+    },
+    {
+        "icon": "✈️",
+        "title": "Du lịch",
+        "desc": "Địa điểm yêu thích, hoạt động khi đi du lịch, kỷ niệm đáng nhớ, kế hoạch tương lai.",
+        "quests": [
+            {
+                "text": "Tell me about one of the recent business trips you took? Where did you go and who did you go with? How long was the trip?",
+                "note": "Mô tả chuyến công tác gần đây, đi đâu, đi với ai, bao lâu",
+                "answer": "Recently, I took a business trip to [Destination] for a conference. I went with a few colleagues from my company, and the trip lasted for three days. During the trip, we attended various sessions, networked with industry professionals, and discussed potential collaborations. It was a productive and enjoyable experience that allowed us to gain new insights and strengthen our professional relationships."
+            }
+        ]
+    },
+    {
+        "icon": "🍽️",
+        "title": "Đồ gia dụng",
+        "desc": "Các vấn đề của đồ gia dụng, cách giải quyết vấn đề của bạn",
+        "quests": [
+            {
+                "text": "Have you ever had a problem with the furniture in your home? Was it broken or just a stain? Tell me about the problem and how you solved it",
+                "note": "Mô tả vấn đề với đồ gia dụng, cách giải quyết",
+                "answer": "Yes, I once had a problem with my sofa when one of the legs broke. It was quite inconvenient as it made the sofa unstable and uncomfortable to sit on. To solve the issue, I first tried to fix it myself by using some wood glue and clamps, but it didn't hold up well. Eventually, I decided to take it to a professional furniture repair shop. They were able to replace the broken leg and reinforce the structure, making it as good as new. The experience taught me the importance of proper maintenance and seeking professional help when needed."
+            }
+        ]
+    },
+    {
+        "icon": "🏠",
+        "title": "Nhà ở",
+        "desc": "Giới thiệu nhà, phòng yêu thích, công việc hay làm trong nhà, so sánh nhà hồi bé và hiện tại, ngày thường - cuối tuần ở nhà làm gì",
+        "quests": [
+            {
+                "text": "Please tell me about your house. What's your favorite room? What does it look like? Why do you like that room?",
+                "note": "Mô tả ngôi nhà, phòng yêu thích, tại sao thích",
+                "answer": "I live in a cozy apartment that has a modern design and plenty of natural light. My favorite room is the living room because it is spacious and comfortable, making it the perfect place to relax and entertain guests. The room features a large sofa, a coffee table, and a big window that offers a beautiful view of the city. I also have a bookshelf filled with my favorite books and decorative items that add a personal touch to the space. I like this room because it feels warm and inviting, and it is where I spend most of my time when I am at home."
+            },
+            {
+                "text": "Tell me about where you live now. Can you tell me about the diffrent things you have to do at home? Who is in charge of what? How do you handle household chores?",
+                "note": "Mô tả nơi ở hiện tại, công việc nhà, phân chia công việc, xử lý việc nhà",
+                "answer": "I currently live in a shared apartment with two roommates. We have a system in place to manage household chores and responsibilities. Each of us is in charge of specific tasks, such as cleaning the common areas, taking out the trash, and grocery shopping. We also have a rotating schedule for cooking meals, so everyone gets a chance to contribute. To handle household chores efficiently, we communicate regularly and make sure to address any issues or concerns promptly. This approach helps maintain a clean and organized living environment while fostering a sense of teamwork and cooperation among us."
+            },
+            {
+                "text": "Tell me about the house or apartment you grew up in? What was your childhood house like and what is your house you are living now? How has it changed?",
+                "note": "So sánh nhà hồi bé và hiện tại, những thay đổi",
+                "answer": "I grew up in a small house in a suburban neighborhood. The house had a cozy living room, a modest kitchen, and two bedrooms. It was surrounded by a beautiful garden where I spent a lot of time playing with my siblings. In contrast, the apartment I live in now is more modern and located in the city center. It has an open-concept design with a spacious living area and updated appliances. The main difference is the location and size; my childhood home was more spacious and had a yard, while my current apartment is more compact but offers easy access to amenities and public transportation. Overall, both living spaces have their unique charm and advantages."
+            },
+            {
+                "text": "What things do you ususally do on the weeked?  Do you watch TV? Do you catch up on sleep? What else do you do on the weeked?",
+                "note": "Làm gì vào cuối tuần, xem TV, ngủ bù, hoạt động khác",
+                "answer": "On weekends, I usually like to relax and unwind from the busy workweek. I often catch up on sleep and enjoy watching my favorite TV shows or movies. Additionally, I like to spend time outdoors, whether it's going for a walk in the park, hiking, or meeting up with friends for brunch. I also use weekends to catch up on household chores and errands that I couldn't get to during the week. Overall, weekends are a time for me to recharge and enjoy activities that bring me joy and relaxation."
+            }
+        ]
+    },
+    {
+        "icon": "🎓",
+        "title": "Công viên",
+        "desc": "Sự cố ngoài ý muốn khi đi công viên",
+        "quests": [
+            {
+                "text": "How often do you go to a park? Where do you usually go? Who do you go with? Has anything unexprected happend at a park? Tell me in detail what happend and why was that experience memorable",
+                "note": "Tần suất đi công viên, đi đâu, đi với ai, sự cố ngoài ý muốn, mô tả chi tiết",
+                "answer": "I usually go to the park about once a week, often on weekends. My favorite park is [Park Name], which is located near my home. I typically go with friends or family members, as it's a great place to socialize and enjoy nature together. One unexpected incident that happened at the park was when a sudden rainstorm caught us off guard during a picnic. We had to quickly pack up our belongings and find shelter under a large tree. Despite the inconvenience, it turned into a fun and memorable experience as we laughed and made the best of the situation. The rain eventually stopped, and we continued our picnic, appreciating the beauty of the park even more after the storm."
+            }
+        ]
+    },
+    {
+        "icon": "🎬",
+        "title": "Phim ảnh",
+        "desc": "Phim yêu thích, diễn viên thích, lần xem phim gần nhất, đáng nhớ nhất, hay rủ ai đi xem phim, thường làm gì trước, trong và sau khi xem",
+        "quests": [
+            {
+                "text": "Tell me about the TV shows or movies you like to watch What do you like about them?",
+                "note": "Phim yêu thích, diễn viên, lý do thích",
+                "answer": "I enjoy watching a variety of TV shows and movies, but my favorite genre is drama. I particularly like shows that have complex characters and engaging storylines that keep me hooked. One of my favorite actors is [Favorite Actor], who always delivers outstanding performances. I appreciate the way they bring depth and authenticity to their roles, making the stories more relatable and impactful. Overall, I enjoy watching films and shows that evoke strong emotions and provide thought-provoking content."
+            },
+            {
+                "text": "Tell me about your favorite actor Why do you like him/her What you seen a movie with a him/her recently or heard news about him/her",
+                "note": "Diễn viên yêu thích, lý do thích, xem phim gần đây hay nghe tin tức",
+                "answer": "My favorite actor is [Favorite Actor] because of their incredible talent and versatility. They have the ability to portray a wide range of characters convincingly, which makes their performances captivating to watch. I recently saw a movie starring [Favorite Actor] called [Movie Title], and I was thoroughly impressed by their portrayal of the lead role. The film received positive reviews, and I also heard that [Favorite Actor] is working on an upcoming project that has generated a lot of excitement among fans. Their dedication to their craft and consistent delivery of high-quality performances are some of the reasons why I admire them so much."
+            },
+            {
+                "text": "Tell me about the last time you went to the movies Tell me everything that happended that day, including what you did before and after the movie",
+                "note": "Lần xem phim gần nhất, làm gì trước và sau khi xem",
+                "answer": "The last time I went to the movies was a couple of weeks ago with a group of friends. We decided to watch a highly anticipated film that had just been released. Before heading to the theater, we grabbed some dinner at a nearby restaurant, where we chatted and caught up on each other's lives. After dinner, we made our way to the cinema, bought our tickets and snacks, and found our seats just in time for the movie to start. The film was fantastic, and we all enjoyed it thoroughly. After the movie, we went to a café to discuss our favorite scenes and share our thoughts about the plot. It was a fun and memorable day spent with good company and great entertainment."
+            },
+            {
+                "text": "Let talk about the activities you usually do at the movie theater. What kinds of thing do you do before duing and after the movie Tell me the detail from begining to end",
+                "note": "Hoạt động thường làm ở rạp chiếu phim, làm gì trước, trong và sau khi xem",
+                "answer": "Before the movie, I usually arrive early to find good seats and buy snacks. I like to get popcorn and a drink to enjoy during the film. Sometimes, I meet up with friends beforehand, and we chat about the movie we are about to see. During the movie, I try to stay focused on the screen and avoid distractions like checking my phone. After the movie, I often discuss it with my friends, sharing our thoughts on the plot, characters, and any standout moments. It’s a fun way to reflect on the experience and hear different perspectives."
+            },
+            {
+                "text": "How often do you go to the movies? Who do you go to the movies with? Why do you like watching movie?",
+                "note": "Tần suất đi xem phim, đi với ai, lý do thích xem phim",
+                "answer": "I try to go to the movies at least once a month, but it often depends on the film releases and my schedule. I usually go with friends or family, as it’s a great way to spend time together and enjoy a shared experience. I love watching movies because they allow me to escape into different worlds and stories. It’s fascinating to see how filmmakers bring their visions to life, and I appreciate the artistry involved in creating a film. Plus, it’s always fun to discuss the movie afterward with my companions."
+            }
+        ]
+    },
+    {
+        "icon": "🌍",
+        "title": "Role Play - Đóng vai",
+        "desc": "Một số tính huống như mở thẻ ngân hàng, rủ đi chơi công viên, có người bạn diễn violon, có người bạn nước ngoài, hủy kế hoạch du lịch, gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, nói về nấu ăn",
+        "quests": [
+            {
+                "text": "I'd like to give you a situation and ask you to act it out. You want to open a new bank account. Visit the bank and ask the banker three or four questions about how to open a new account.",
+                "note": "Mô tả tình huống mở thẻ ngân hàng, hỏi 3-4 câu hỏi về cách mở thẻ",
+                "answer": "Sure! Here are some questions I would ask the banker:\n1. What types of bank accounts do you offer?\n2. What documents do I need to bring to open a new account?\n3. Are there any fees associated with opening or maintaining the account?\n4. What is the minimum deposit required to open the account?"
+            },
+            {
+                "text": "Your friend wants to go to the park tomorrow. Call your friend and ask three or four questions about going to the park",
+                "note": "Mô tả tình huống rủ đi chơi công viên, hỏi 3-4 câu hỏi",
+                "answer": "Sure! Here are some questions I would ask my friend:\n1. What time do you want to go to the park?\n2. Which park do you want to visit?\n3. Should we bring any food or drinks for a picnic?\n4. Do you want to invite anyone else to join us?"
+            },
+            {
+                "text": "I play the violin in an orchestra. Ask me three or four questions about this activity",
+                "note": "Mô tả tình huống có người bạn diễn violon, hỏi 3-4 câu hỏi",
+                "answer": "Sure! Here are some questions you could ask me:\n1. How long have you been playing the violin?\n2. What pieces do you enjoy playing the most?\n3. How often do you practice with the orchestra?\n4. What do you find most challenging about playing in an orchestra?"
+            },
+            {
+                "text": "You have a foreign friend. Ask him or her three or four questions about his/her country",
+                "note": "Mô tả tình huống có người bạn nước ngoài, hỏi 3-4 câu hỏi",
+                "answer": "Sure! Here are some questions I would ask my foreign friend:\n1. What is the capital city of your country?\n2. What are some traditional dishes from your country?\n3. How do people celebrate holidays in your country?\n4. What languages are spoken in your country?"
+            },
+            {
+                "text": "I'm sorry. There's a problem you need to resolve. You were planning to travel, but a day before traveling day, you have an urgent task and you can't go, call your friend, explain the situation, and suggest two or three alternatives.",
+                "note": "Mô tả tình huống hủy kế hoạch du lịch, giải thích lý do và đề xuất 2-3 phương án thay thế",
+                "answer": "Sure! Here's how I would explain the situation and suggest alternatives:\n\"Hi [Friend's Name], I'm really sorry, but I have an urgent task that came up, and I won't be able to go on our trip as planned. I feel terrible about this. However, we could reschedule our trip for another weekend, or we could plan a day trip to a nearby location instead. Alternatively, we could also consider going on a shorter trip during the week if that works for you. Let me know what you think!\""
+            },
+            {
+                "text": "Here's a situation for you to act out. You received an item you purchased online, but it's not what you ordered. Call customer service, explain the situation, and ask for a solution.",
+                "note": "Mô tả tình huống gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, hỏi cách giải quyết",
+                "answer": "Sure! Here's how I would explain the situation and ask for a solution:\n\"Hello, I recently ordered an item from your online store, but when I received it, it was not what I ordered. The item I received is [describe the incorrect item], but I had ordered [describe the correct item]. I would like to know how we can resolve this issue. Can I return the incorrect item and get a replacement, or is there another solution you can offer? Thank you for your assistance.\""
+            },
+            {
+                "text": "I'm sorry, but there is a problem that need to be solved. The repairperson is not available to come and repair your window until next week. Call the repairperson again and offer 2-3 solutions to this problem",
+                "note": "Mô tả tình huống gọi điện nhờ sửa đồ, đề xuất 2-3 giải pháp",
+                "answer": "Sure! Here's how I would explain the situation and offer solutions:\n\"Hello, I understand that the repairperson is not available until next week. However, I really need to get my window fixed as soon as possible. Would it be possible to schedule the repair for the earliest available time next week? Alternatively, if there is another repairperson available sooner, I would be open to that option as well. Thank you for your understanding.\""
+            },
+            {
+                "text": "I also like cooking. Ask me threee or four questions about my favorite kind of food",
+                "note": "Mô tả tình huống nói về nấu ăn, hỏi 3-4 câu hỏi",
+                "answer": "Sure! Here are some questions you could ask me:\n1. What is your favorite type of cuisine to cook?\n2. Do you have a signature dish that you enjoy making?\n3. How did you learn to cook? Did someone teach you or did you learn on your own?\n4. What ingredients do you always keep in your kitchen for cooking?"
+            }
+        ]
+    }
+]

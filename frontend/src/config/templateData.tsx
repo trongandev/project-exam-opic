@@ -2,7 +2,7 @@ export const TOPICDATA = [
     {
         icon: '👤',
         title: 'Giới thiệu bản thân',
-        description: 'Thông tin cá nhân, sở thích, công việc, học vấn.',
+        desc: 'Thông tin cá nhân, sở thích, công việc, học vấn.',
         quests: [
             {
                 text: "Let's start the interview now, tell me a little bit about yourself.",
@@ -14,7 +14,7 @@ export const TOPICDATA = [
     {
         icon: '🎵',
         title: 'Âm nhạc & Hòa nhạc',
-        description: 'Thể loại âm nhạc yêu thích, nhạc cụ, buổi hòa nhạc đã tham gia.',
+        desc: 'Thể loại âm nhạc yêu thích, nhạc cụ, buổi hòa nhạc đã tham gia.',
         quests: [
             {
                 text: 'What kind of musical devices do you use when you listen to music?\nWhat kind of music do you enjoy listening to?\nWho are your favorite musicians or composers?\nWhen and where do you listen to music using them?',
@@ -37,7 +37,7 @@ export const TOPICDATA = [
     {
         icon: '👨‍👩‍👧‍👦',
         title: 'Gia đình và bạn bè',
-        description: 'Mô tả người thân, mối quan hệ với bạn bè, các hoạt động chung, kỷ niệm đáng nhớ.',
+        desc: 'Mô tả người thân, mối quan hệ với bạn bè, các hoạt động chung, kỷ niệm đáng nhớ.',
         quests: [
             {
                 text: 'Have you visited friends or relative recently?\nWhat did you do during the visit?. Please explain in detail',
@@ -49,7 +49,7 @@ export const TOPICDATA = [
     {
         icon: '🚶',
         title: 'Đi bộ',
-        description: 'Nơi đi bộ yêu thích, tần suất, lợi ích của việc đi bộ, lần đáng nhớ',
+        desc: 'Nơi đi bộ yêu thích, tần suất, lợi ích của việc đi bộ, lần đáng nhớ',
         quests: [
             {
                 text: 'You indicated that you walk, Please describle for me the place you usually walk, Is it near your house? Why do you like that place?',
@@ -71,7 +71,7 @@ export const TOPICDATA = [
     {
         icon: '🚶',
         title: 'Đất nước & Văn hóa',
-        description: 'Các món ăn phổ biến, thời tiết, trải nghiệm đáng nhớ, khác biệt xưa-nay',
+        desc: 'Các món ăn phổ biến, thời tiết, trải nghiệm đáng nhớ, khác biệt xưa-nay',
         quests: [
             {
                 text: 'Tell me about a traditional food in your country. Why is it significant? When do people usually eat it?',
@@ -108,7 +108,7 @@ export const TOPICDATA = [
     {
         icon: '✈️',
         title: 'Du lịch',
-        description: 'Địa điểm yêu thích, hoạt động khi đi du lịch, kỷ niệm đáng nhớ, kế hoạch tương lai.',
+        desc: 'Địa điểm yêu thích, hoạt động khi đi du lịch, kỷ niệm đáng nhớ, kế hoạch tương lai.',
         quests: [
             {
                 text: 'Tell me about one of the recent business trips you took? Where did you go and who did you go with? How long was the trip?',
@@ -120,7 +120,7 @@ export const TOPICDATA = [
     {
         icon: '🍽️',
         title: 'Đồ gia dụng',
-        description: 'Các vấn đề của đồ gia dụng, cách giải quyết vấn đề của bạn',
+        desc: 'Các vấn đề của đồ gia dụng, cách giải quyết vấn đề của bạn',
         quests: [
             {
                 text: 'Have you ever had a problem with the furniture in your home? Was it broken or just a stain? Tell me about the problem and how you solved it',
@@ -132,7 +132,7 @@ export const TOPICDATA = [
     {
         icon: '🏠',
         title: 'Nhà ở',
-        description: 'Giới thiệu nhà, phòng yêu thích, công việc hay làm trong nhà, so sánh nhà hồi bé và hiện tại, ngày thường - cuối tuần ở nhà làm gì',
+        desc: 'Giới thiệu nhà, phòng yêu thích, công việc hay làm trong nhà, so sánh nhà hồi bé và hiện tại, ngày thường - cuối tuần ở nhà làm gì',
         quests: [
             {
                 text: "Please tell me about your house. What's your favorite room? What does it look like? Why do you like that room?",
@@ -159,7 +159,7 @@ export const TOPICDATA = [
     {
         icon: '🎓',
         title: 'Công viên',
-        description: 'Sự cố ngoài ý muốn khi đi công viên',
+        desc: 'Sự cố ngoài ý muốn khi đi công viên',
         quests: [
             {
                 text: 'How often do you go to a park? Where do you usually go? Who do you go with? Has anything unexprected happend at a park? Tell me in detail what happend and why was that experience memorable',
@@ -171,7 +171,7 @@ export const TOPICDATA = [
     {
         icon: '🎬',
         title: 'Phim ảnh',
-        description: 'Phim yêu thích, diễn viên thích, lần xem phim gần nhất, đáng nhớ nhất, hay rủ ai đi xem phim, thường làm gì trước, trong và sau khi xem',
+        desc: 'Phim yêu thích, diễn viên thích, lần xem phim gần nhất, đáng nhớ nhất, hay rủ ai đi xem phim, thường làm gì trước, trong và sau khi xem',
         quests: [
             {
                 text: 'Tell me about the TV shows or movies you like to watch What do you like about them?',
@@ -203,8 +203,7 @@ export const TOPICDATA = [
     {
         icon: '🌍',
         title: 'Role Play - Đóng vai',
-        description:
-            'Một số tính huống như mở thẻ ngân hàng, rủ đi chơi công viên, có người bạn diễn violon, có người bạn nước ngoài, hủy kế hoạch du lịch, gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, nói về nấu ăn',
+        desc: 'Một số tính huống như mở thẻ ngân hàng, rủ đi chơi công viên, có người bạn diễn violon, có người bạn nước ngoài, hủy kế hoạch du lịch, gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, nói về nấu ăn',
         quests: [
             {
                 text: "I'd like to give you a situation and ask you to act it out. You want to open a new bank account. Visit the bank and ask the banker three or four questions about how to open a new account.",

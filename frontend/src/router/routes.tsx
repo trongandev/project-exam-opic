@@ -9,6 +9,7 @@ import DetailTopicSlugPage from '@/features/home/pages/DetailTopicSlugPage'
 import ProfileIdPage from '@/features/home/pages/ProfileIdPage'
 import CreateTopicPage from '@/features/home/pages/CreateTopicPage'
 import ExamSlugPage from '@/features/home/pages/ExamSlugPage'
+import EditTopicPage from '@/features/home/pages/EditTopicPage'
 
 // Lazy Loading các components
 const RootLayout = lazy(() => import('../layouts/RootLayout'))
@@ -73,6 +74,10 @@ export const routes: RouteObject[] = [
             {
                 path: 'topic/create-topic',
                 element: <CreateTopicPage />,
+            },
+            {
+                path: 'topic/edit-topic/:_id',
+                element: <EditTopicPage />,
             },
             {
                 path: 'topic/:slug',

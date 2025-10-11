@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { UserModel } = require('../models/user.model')
+const { default: mongoose } = require('mongoose')
 
 const authenticateToken = async (req, res, next) => {
     try {
@@ -115,10 +116,25 @@ const checkRole = (allowedRoles) => {
     }
 }
 
+// Validation cho ID params
+const checkIdIsValid = (req, res, next) => {
+    const { id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            success: false,
+            message: 'ID không hợp lệ',
+        })
+    }
+
+    next()
+}
+
 module.exports = {
     authenticateToken,
     checkRoleAdmin,
     checkRoleAdminOrCollab,
     checkOwnerOrAdmin,
     checkRole,
+    checkIdIsValid,
 }

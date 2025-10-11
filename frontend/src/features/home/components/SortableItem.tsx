@@ -16,31 +16,27 @@ interface Props {
     removeQuestExample: any
 }
 export default function SortableItem({ item, index, handleTopicInfoChange, removeQuestion, createQuestExample, handleQuestExampleChange, removeQuestExample }: Props) {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id })
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id || new Date().toISOString() })
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        cursor: 'grab',
     }
 
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
-            <div key={item._id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
+            <div key={item.id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
                 {/* Question Header */}
                 <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-5">
                     <GripVertical {...listeners} className="cursor-grab hover:text-primary" />
+                    <p className="cursor-grab" {...listeners}>
+                        {index + 1}
+                    </p>
                     <div className="w-[80px] flex items-center justify-center text-2xl">
-                        {/* <InlineEdit
-                                            initialValue={item.icon}
-                                            onSave={(value) => handleTopicInfoChange(value, index, 'icon')}
-                                            placeholder="🐎"
-                                            inputClassName="text-center text-2xl w-16"
-                                        >
-                                            <span className="text-2xl cursor-pointer">{item.icon}</span>
-                                        </InlineEdit> */}
-                        {item.icon || '🐎'}
+                        <InlineEdit initialValue={item.icon} onSave={(value) => handleTopicInfoChange(value, index, 'icon')} isEmoji>
+                            <h3 className="font-medium text-lg text-primary cursor-pointer hover:bg-gray-50">{item.icon}</h3>
+                        </InlineEdit>
                     </div>
 
                     <div className="flex gap-5 items-center justify-between flex-1">
@@ -92,7 +88,7 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
 
                         <div className="space-y-3 mt-2">
                             {item.quests?.map((quest, questIndex) => (
-                                <div key={quest._id} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4">
+                                <div key={quest.id} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4">
                                     {/* Question Text */}
                                     <div className="flex  gap-3 items-center">
                                         <div className="w-10 h-10 hidden md:flex items-center justify-center text-gray-600 font-medium bg-gray-100 border text-sm rounded-lg">{questIndex + 1}</div>

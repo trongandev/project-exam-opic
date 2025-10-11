@@ -15,6 +15,7 @@ import { shuffleArray } from '@/lib/utils'
 import topicService from '@/services/topicService'
 import type { Quest, Topic } from '@/types/topic'
 import AvatarCircle from '@/components/etc/AvatarCircle'
+// import { lcs } from '@/lib/lcs'
 export default function ExamSlugPage() {
     const params = useParams()
     const [dataExam, setDataExam] = useState<Topic>()
@@ -37,7 +38,6 @@ export default function ExamSlugPage() {
     useEffect(() => {
         const fetchAPI = async () => {
             const res = await topicService.getTopicBySlug(params.slug as string)
-            console.log(res.data)
             setDataExam(res.data)
         }
         fetchAPI()
@@ -52,11 +52,10 @@ export default function ExamSlugPage() {
                 setNewData(shuffleArray(flattenedData))
                 toast.info('Shuffle mode is on. Questions are randomized.', { duration: 5000, position: 'top-center' })
             } else {
-                console.log(flattenedData)
                 setNewData(flattenedData)
             }
         }
-    }, [isShuffleData])
+    }, [isShuffleData, dataExam])
 
     // const compareText = (original: string, spoken: string) => {
     //     const originalWords = original.split(' ')
@@ -166,7 +165,7 @@ export default function ExamSlugPage() {
                     <h1 className="w-full border-b-2 pb-2 border-gray-100 text-2xl font-medium">
                         Question {currentIndex + 1} or {dataExam?.data.reduce((acc, curr) => acc + curr.quests.length, 0)}
                     </h1>
-                    <div className="flex gap-5">
+                    <div className="flex gap-5 flex-col md:flex-row ">
                         <div className="pl-5 pt-5 flex gap-5  w-[350px]">
                             <div className="space-y-3">
                                 <img src="/images/NewEuroAvatarCaptured.png" alt="" className="w-[350px]" />
@@ -183,7 +182,7 @@ export default function ExamSlugPage() {
                                     )}
                                 </Button>
                                 {isShowScript && <p className="text-gray-500 italic">{newData[currentIndex]?.answer}</p>}
-                                <div className="flex gap-3 items-center text-gray-700 mt-5">
+                                <div className="hidden md:flex  gap-3 items-center text-gray-700 mt-5">
                                     <AvatarCircle user={dataExam?.userId} />
                                     <p>
                                         Cảm ơn{' '}
