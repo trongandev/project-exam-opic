@@ -10,9 +10,7 @@ const validateDataItem = (item, prefix = 'Dữ liệu') => {
     if (!item.title) {
         errors.push(`${prefix} tiêu đề không được để trống`)
     }
-    if (!item.desc) {
-        errors.push(`${prefix} mô tả không được để trống`)
-    }
+
     return errors
 }
 
