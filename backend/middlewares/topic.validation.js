@@ -18,7 +18,7 @@ const validateDataItem = (item, prefix = 'Dữ liệu') => {
 
 // Validation cho tạo topic
 const validateCreateTopic = (req, res, next) => {
-    const { name, desc, data } = req.body
+    const { name, data } = req.body
     const errors = []
 
     // Kiểm tra name
@@ -28,13 +28,6 @@ const validateCreateTopic = (req, res, next) => {
         errors.push('Tên chủ đề phải có ít nhất 3 ký tự')
     } else if (name.trim().length > 100) {
         errors.push('Tên chủ đề không được quá 100 ký tự')
-    }
-
-    if (!desc || desc.trim().length === 0) {
-        errors.push('Mô tả không được để trống')
-    }
-    if (desc && desc.length > 500) {
-        errors.push('Mô tả không được quá 500 ký tự')
     }
 
     // Kiểm tra data (tùy chọn)
@@ -58,7 +51,7 @@ const validateCreateTopic = (req, res, next) => {
 
 // Validation cho cập nhật topic
 const validateUpdateTopic = (req, res, next) => {
-    const { name, slug, desc, data } = req.body
+    const { name, slug, data } = req.body
     console.log(req.body)
     const errors = []
 
@@ -84,11 +77,6 @@ const validateUpdateTopic = (req, res, next) => {
         } else if (!/^[a-z0-9-]+$/.test(slug.trim())) {
             errors.push('Slug chỉ được chứa chữ thường, số và dấu gạch ngang')
         }
-    }
-
-    // Kiểm tra desc (tùy chọn)
-    if (desc !== undefined && desc.length > 500) {
-        errors.push('Mô tả không được quá 500 ký tự')
     }
 
     // Kiểm tra data (tùy chọn)

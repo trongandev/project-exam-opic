@@ -36,7 +36,7 @@ const topicSchema = new Schema(
         userId: { type: Schema.Types.ObjectId, ref: 'UserModel', required: true },
         name: { type: String, required: true },
         slug: { type: String, required: true, lowercase: true },
-        desc: { type: String, required: true },
+        desc: { type: String },
         viewCount: { type: Number, default: 0 },
         rating: [ratingSchema],
         data: [dataSchema],
