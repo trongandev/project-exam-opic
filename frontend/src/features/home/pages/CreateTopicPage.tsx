@@ -48,7 +48,7 @@ export default function CreateTopicPage() {
     const [loadingCreateTopic, setLoadingCreateTopic] = useState(false)
 
     const createQuestion = () => {
-        setQuestionList([{ ...defaultQuestionList, _id: new Date().toISOString() }, ...questionList])
+        setQuestionList([...questionList, { ...defaultQuestionList, _id: new Date().toISOString() }])
     }
 
     const createQuestExample = (index: number) => {
