@@ -16,7 +16,7 @@ interface Props {
     removeQuestExample: any
 }
 export default function SortableItem({ item, index, handleTopicInfoChange, removeQuestion, createQuestExample, handleQuestExampleChange, removeQuestExample }: Props) {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id || new Date().toISOString() })
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id })
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const style = {
@@ -26,7 +26,7 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
 
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
-            <div key={item.id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
+            <div key={item._id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
                 {/* Question Header */}
                 <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-5">
                     <GripVertical {...listeners} className="cursor-grab hover:text-primary" />
@@ -88,7 +88,7 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
 
                         <div className="space-y-3 mt-2">
                             {item.quests?.map((quest, questIndex) => (
-                                <div key={quest.id} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4">
+                                <div key={quest._id} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4">
                                     {/* Question Text */}
                                     <div className="flex  gap-3 items-center">
                                         <div className="w-10 h-10 hidden md:flex items-center justify-center text-gray-600 font-medium bg-gray-100 border text-sm rounded-lg">{questIndex + 1}</div>
