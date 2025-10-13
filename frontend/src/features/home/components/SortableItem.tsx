@@ -33,16 +33,12 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
                     <p className="cursor-grab" {...listeners}>
                         {index + 1}
                     </p>
-                    <div className="w-[80px] flex items-center justify-center text-2xl">
-                        <InlineEdit initialValue={item.icon} onSave={(value) => handleTopicInfoChange(value, index, 'icon')} isEmoji>
-                            <h3 className="font-medium text-lg text-primary cursor-pointer hover:bg-gray-50">{item.icon}</h3>
-                        </InlineEdit>
-                    </div>
+                    <div className="w-[80px] flex items-center justify-center text-2xl">{item.icon}</div>
 
                     <div className="flex gap-5 items-center justify-between flex-1">
                         <div className="py-2.5 flex-1 w-full space-y-2">
                             <InlineEdit initialValue={item.title} onSave={(value) => handleTopicInfoChange(value, index, 'title')} placeholder="Không có tiêu đề">
-                                <h3 className="font-medium text-lg text-primary cursor-pointer hover:bg-gray-50">{item.title || 'Không có tiêu đề'}</h3>
+                                <h3 className="font-medium text-lg text-primary cursor-pointer hover:bg-gray-50">{item.title || 'Không có tiêu đề (*)'}</h3>
                             </InlineEdit>
 
                             <InlineEdit initialValue={item.desc} onSave={(value) => handleTopicInfoChange(value, index, 'desc')} placeholder="Không có mô tả..." multiline>
@@ -96,10 +92,10 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
                                             <InlineEdit
                                                 initialValue={quest.text}
                                                 onSave={(value) => handleQuestExampleChange(value, index, questIndex, 'text')}
-                                                placeholder="Chưa có câu hỏi..."
+                                                placeholder="Chưa có câu hỏi... (*)"
                                                 multiline
                                             >
-                                                <div className="text-justify font-medium text-xl cursor-pointer">{quest.text || 'Chưa có câu hỏi...'}</div>
+                                                <div className="text-justify font-medium text-xl cursor-pointer">{quest.text || 'Chưa có câu hỏi... (*)'}</div>
                                             </InlineEdit>
                                         </div>
                                         <div
@@ -124,10 +120,10 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
                                     <InlineEdit
                                         initialValue={quest.answer}
                                         onSave={(value) => handleQuestExampleChange(value, index, questIndex, 'answer')}
-                                        placeholder="Chưa có câu trả lời..."
+                                        placeholder="Chưa có câu trả lời... (*)"
                                         multiline
                                     >
-                                        <div className="text-justify border-l-4 border-gray-300 text-gray-500 pl-3 cursor-pointer">{quest.answer || 'Chưa có câu trả lời...'}</div>
+                                        <div className="text-justify border-l-4 border-gray-300 text-gray-500 pl-3 cursor-pointer">{quest.answer || 'Chưa có câu trả lời... (*)'}</div>
                                     </InlineEdit>
                                 </div>
                             ))}

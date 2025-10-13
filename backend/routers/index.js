@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-var slugify = require('slugify')
 const { generateSlug } = require('../utils/generateSlug')
 // ping check server is running
 router.use('/ping', (req, res) => {
@@ -14,6 +13,8 @@ router.use('/auth', require('./auth.router'))
 router.use('/profile', require('./profile.router'))
 // Topic routes
 router.use('/topics', require('./topic.router'))
+
+router.use('/categories', require('./category.router'))
 
 // Exam History routes
 // router.use('/exam-histories', require('./examHistory.router'))

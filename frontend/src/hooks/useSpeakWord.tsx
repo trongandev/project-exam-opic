@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, useEffect, useMemo } from 'react'
+import { useCallback, useState, useRef, useMemo } from 'react'
 import { EdgeSpeechTTS } from '@lobehub/tts'
 import { toast } from 'sonner'
 
@@ -23,41 +23,12 @@ export default function useSpeakWord() {
     const [selectedVoice, setSelectedVoice] = useState<string | null>(null)
     const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' }))
 
-    // Khởi tạo và đồng bộ với localStorage
-    useEffect(() => {
-        console.log('khởi tạo 1')
-        try {
-            const savedVoices = localStorage.getItem('defaultVoices')
-            if (savedVoices) {
-                const parsedVoices = JSON.parse(savedVoices)
-                const defaultVoice = parsedVoices['en-US'] || 'en-US-JennyNeural'
-                setSelectedVoice(defaultVoice)
-                console.log('Loaded voice from localStorage:', defaultVoice)
-            } else {
-                // Nếu chưa có trong localStorage, khởi tạo với voice mặc định
-                console.log('No voices in localStorage, setting default voice')
-                const defaultVoices = { 'en-US': 'en-US-JennyNeural' }
-                localStorage.setItem('defaultVoices', JSON.stringify(defaultVoices))
-            }
-        } catch (error) {
-            console.warn('LocalStorage not available, using default voice:', error)
-            setSelectedVoice('en-US-JennyNeural')
-        }
-    }, [])
     // Hàm để cập nhật voice và đồng bộ với localStorage
-    const updateSelectedVoice = useCallback((newVoiceId: string, languageCode: string = 'en-US') => {
-        console.log('khởi tạo updateSelectedVoice')
-
+    const updateSelectedVoice = useCallback((newVoiceId: string) => {
         try {
-            const savedVoices = localStorage.getItem('defaultVoices')
-            const parsedVoices = savedVoices ? JSON.parse(savedVoices) : {}
-
-            parsedVoices[languageCode] = newVoiceId
-            console.log('Updating voice for', languageCode, 'to', newVoiceId)
-            localStorage.setItem('defaultVoices', JSON.stringify(parsedVoices))
+            localStorage.setItem('defaultVoices', newVoiceId)
             setSelectedVoice(newVoiceId)
 
-            console.log('Voice updated to:', selectedVoice)
             toast.success('Đã cập nhật giọng nói', {
                 description: `Giọng mới sẽ được sử dụng cho các lần phát âm tiếp theo`,
                 duration: 2000,
@@ -91,6 +62,8 @@ export default function useSpeakWord() {
     const speakWord = useCallback(
         async (text: string, id?: string | number) => {
             try {
+                const savedVoices = localStorage.getItem('defaultVoices') || ''
+
                 // Nếu đang phát cùng text và id, thì dừng lại
                 if (state.isPlaying && state.currentText === text && state.currentId === id) {
                     stopCurrentAudio()
@@ -108,12 +81,11 @@ export default function useSpeakWord() {
                     currentId: id || null,
                     error: null,
                 }))
-                console.log('Selected voice:', selectedVoice)
 
                 const response = await tts.create({
                     input: text,
                     options: {
-                        voice: selectedVoice || 'en-US-JennyNeural',
+                        voice: savedVoices || 'en-US-JennyNeural',
                     },
                 })
 
@@ -179,11 +151,11 @@ export default function useSpeakWord() {
 
                 toast.error('Lỗi TTS', {
                     description: error instanceof Error ? error.message : 'Lỗi không xác định',
-                    duration: 3000,
+                    duration: 5000,
                 })
             }
         },
-        [state.isPlaying, state.currentText, state.currentId, selectedVoice, tts, stopCurrentAudio]
+        [state.isPlaying, state.currentText, state.currentId, tts, stopCurrentAudio]
     )
 
     // Toggle phát/dừng audio

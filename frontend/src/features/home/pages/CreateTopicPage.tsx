@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, FileQuestion, Save } from 'lucide-react'
+import { ArrowLeft, FileQuestion, Info, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import type { DataTopic, TopicCreate } from '@/types/topic'
@@ -24,15 +24,15 @@ export default function CreateTopicPage() {
     const defaultQuestionList: DataTopic = {
         _id: new Date().toISOString(),
         icon: '🐎',
-        title: 'Giới thiệu bản thân',
-        desc: 'Mô tả về bản thân, sở thích, công việc, v.v.',
-        quests: [],
+        title: '',
+        desc: '',
+        quests: [{ _id: new Date().toISOString(), text: '', note: '', answer: '' }],
     }
 
     const defaultQuestionTemplateList: DataTopic = {
         _id: new Date().toISOString(),
         icon: '🐎',
-        title: 'Giới thiệu bản thân',
+        title: 'Ví dụ về giới thiệu bản thân',
         desc: 'Mô tả về bản thân, sở thích, công việc, v.v.',
         quests: [
             {
@@ -48,7 +48,7 @@ export default function CreateTopicPage() {
     const [loadingCreateTopic, setLoadingCreateTopic] = useState(false)
 
     const createQuestion = () => {
-        setQuestionList([...questionList, { ...defaultQuestionList, _id: new Date().toISOString() }])
+        setQuestionList([{ ...defaultQuestionList, _id: new Date().toISOString() }, ...questionList])
     }
 
     const createQuestExample = (index: number) => {
@@ -129,24 +129,30 @@ export default function CreateTopicPage() {
                     <ArrowLeft /> Quay lại
                 </Button>
             </div>
+            <div className=" h-10 flex gap-3 bg-red-50 mt-1 items-center text-sm text-red-700">
+                <div className="h-10 w-10 flex items-center justify-center bg-red-100 ">
+                    <Info size={16} />
+                </div>
+                <p>Lưu ý: các trường có dấu (*) là bắt buộc</p>
+            </div>
 
-            <div className="space-y-4 mt-5">
+            <div className="space-y-4 mt-10">
                 {/* Topic Header */}
                 <InlineEdit
                     initialValue={topicDetailData.name}
                     onSave={(value) => setTopicDetailData({ ...topicDetailData, name: value })}
-                    placeholder="Tên tiêu đề"
+                    placeholder="Chưa có tên chủ đề (*)"
                     className="px-4 xl:px-0 "
                     inputClassName="w-64"
                 >
-                    <h1 className="text-xl font-medium">{topicDetailData.name || 'Tên tiêu đề'}</h1>
+                    <h1 className="text-xl font-medium">{topicDetailData.name || 'Chưa có tên chủ đề (*)'}</h1>
                 </InlineEdit>
 
                 {/* Topic Description */}
                 <InlineEdit
                     initialValue={topicDetailData.desc}
                     onSave={(value) => setTopicDetailData({ ...topicDetailData, desc: value })}
-                    placeholder="Mô tả..."
+                    placeholder="Chưa có mô tả..."
                     className="px-4 xl:px-0"
                     inputClassName="w-[500px]"
                     multiline
