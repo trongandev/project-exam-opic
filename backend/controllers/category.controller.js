@@ -22,12 +22,25 @@ class CategoryController {
         return SuccessResponse.ok(res, 'Tạo danh mục thành công', result)
     })
 
+    createManyCategory = catchAsync(async (req, res, next) => {
+        const dataCategory = req.body
+        await categoryService.createManyCategory(dataCategory)
+
+        return SuccessResponse.ok(res, 'Tạo nhiều danh mục thành công')
+    })
+
     updateCategory = catchAsync(async (req, res, next) => {
         const { id } = req.params
         const dataCategory = req.body
         const result = await categoryService.updateCategory(id, dataCategory)
 
         return SuccessResponse.ok(res, 'Cập nhật thông tin danh mục thành công', result)
+    })
+
+    deleteCategory = catchAsync(async (req, res, next) => {
+        const { id } = req.params
+        await categoryService.deleteCategory(id)
+        return SuccessResponse.ok(res, 'Xóa danh mục thành công')
     })
 }
 

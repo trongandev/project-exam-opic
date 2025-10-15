@@ -23,9 +23,7 @@ const ratingSchema = new Schema(
 const dataSchema = new Schema(
     {
         _id: { type: String, required: true },
-        icon: String,
-        title: String,
-        desc: String,
+        categoryId: { type: Schema.Types.ObjectId, ref: 'CategoryModel', required: true },
         quests: [questionSchema],
     },
     { _id: false }

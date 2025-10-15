@@ -1,15 +1,17 @@
 const express = require('express')
 
-const { authenticateToken } = require('../middlewares/auth.middleware.js')
+const { authenticateToken, checkRoleAdmin } = require('../middlewares/auth.middleware.js')
 const categoryController = require('../controllers/category.controller.js')
 
 const router = express.Router()
 
 // Public routes with validation
-router.get('', authenticateToken, categoryController.getAllCategories)
-router.get('/:id', authenticateToken, categoryController.getCategoryById)
+router.get('', categoryController.getAllCategories)
+router.get('/:id', categoryController.getCategoryById)
 
 router.post('', authenticateToken, categoryController.createCategory)
-router.patch('/:id', authenticateToken, categoryController.updateCategory)
+router.post('/many', authenticateToken, checkRoleAdmin, categoryController.createManyCategory)
+router.patch('/:id', authenticateToken, checkRoleAdmin, categoryController.updateCategory)
+router.delete('/:id', authenticateToken, checkRoleAdmin, categoryController.deleteCategory)
 
 module.exports = router

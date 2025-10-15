@@ -8,7 +8,7 @@ class TopicService {
         return response.data
     }
     async getTopicByIdToEdit(_id: string) {
-        const response = await axiosInstance.get<APIResponse<Topic>>(`/topics/${_id}/edit`)
+        const response = await axiosInstance.get<APIResponse<any>>(`/topics/${_id}/edit`)
         return response.data
     }
     async getTopicBySlug(slug: string) {

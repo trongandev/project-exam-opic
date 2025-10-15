@@ -20,3 +20,18 @@ export interface Voice {
     avatar: string
     sample: string
 }
+
+export interface Category {
+    _id: string
+    icon: string
+    title: string
+    desc: string
+    createdAt: string
+    updatedAt: string
+}
+
+export interface CategoryMin {
+    icon: string
+    title: string
+    desc: string
+}

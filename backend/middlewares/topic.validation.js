@@ -1,14 +1,18 @@
 const validator = require('validator')
 const mongoose = require('mongoose')
 
-const validateDataItem = (item, prefix = 'Dữ liệu') => {
+const validateQuestion = (item, prefix = 'Dữ liệu') => {
     const errors = []
     if (!item || typeof item !== 'object') {
         errors.push(`${prefix} phải là một đối tượng`)
         return errors
     }
-    if (!item.title) {
+    if (!item.text) {
         errors.push(`${prefix} tiêu đề không được để trống`)
+    }
+
+    if (!item.answer) {
+        errors.push(`${prefix} trả lời không được để trống`)
     }
 
     return errors
@@ -31,8 +35,10 @@ const validateCreateTopic = (req, res, next) => {
     // Kiểm tra data (tùy chọn)
     if (data !== undefined && Array.isArray(data)) {
         data.forEach((item, index) => {
-            const itemErrors = validateDataItem(item, `Câu hỏi ${index + 1}`)
-            errors.push(...itemErrors)
+            item.quests.forEach((quest, questIdx) => {
+                const itemErrors = validateQuestion(quest, `Câu hỏi ${questIdx + 1}`)
+                errors.push(...itemErrors)
+            })
         })
     }
 
@@ -80,8 +86,10 @@ const validateUpdateTopic = (req, res, next) => {
     // Kiểm tra data (tùy chọn)
     if (data !== undefined && Array.isArray(data)) {
         data.forEach((item, index) => {
-            const itemErrors = validateDataItem(item, `Dữ liệu ${index + 1}`)
-            errors.push(...itemErrors)
+            item.quests.forEach((quest, questIdx) => {
+                const itemErrors = validateQuestion(quest, `Câu hỏi ${questIdx + 1}`)
+                errors.push(...itemErrors)
+            })
         })
     }
 

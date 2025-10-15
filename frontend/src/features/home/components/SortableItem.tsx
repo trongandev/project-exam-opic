@@ -2,28 +2,38 @@ import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import type { DataTopic } from '@/types/topic'
-import { ChevronDown, ChevronUp, GripVertical, MoveDown, PlusCircle, Trash2 } from 'lucide-react'
+import type { DataTopicCreate } from '@/types/topic'
+import { ChevronDown, ChevronUp, Edit, GripVertical, MoveDown, PlusCircle, Trash2 } from 'lucide-react'
 import InlineEdit from '@/components/InlineEdit'
 import { Button } from '@/components/ui/button'
+
+import { CategorySearch } from '@/components/etc/PopoverCategory'
+import type { CategoryMin } from '@/types/etc'
 interface Props {
-    item: DataTopic
+    item: DataTopicCreate
     index: number
+    flatCategory: CategoryMin[]
     handleTopicInfoChange: any
     removeQuestion: any
     createQuestExample: any
     handleQuestExampleChange: any
     removeQuestExample: any
 }
-export default function SortableItem({ item, index, handleTopicInfoChange, removeQuestion, createQuestExample, handleQuestExampleChange, removeQuestExample }: Props) {
+export default function SortableItem({ item, index, flatCategory, handleTopicInfoChange, removeQuestion, createQuestExample, handleQuestExampleChange, removeQuestExample }: Props) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id })
     const [collapse, setCollapse] = useState<boolean>(false)
-
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
     }
 
+    const handleChooseCategory = (value: string) => {
+        const selectedItem = flatCategory.find((content) => content.title === value)
+        console.log(selectedItem)
+        if (selectedItem) {
+            handleTopicInfoChange(selectedItem, index)
+        }
+    }
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
             <div key={item._id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
@@ -33,18 +43,20 @@ export default function SortableItem({ item, index, handleTopicInfoChange, remov
                     <p className="cursor-grab" {...listeners}>
                         {index + 1}
                     </p>
-                    <div className="w-[80px] flex items-center justify-center text-2xl">{item.icon}</div>
+                    <div className="w-[80px] flex items-center justify-center text-2xl">{item?.icon}</div>
 
                     <div className="flex gap-5 items-center justify-between flex-1">
-                        <div className="py-2.5 flex-1 w-full space-y-2">
-                            <InlineEdit initialValue={item.title} onSave={(value) => handleTopicInfoChange(value, index, 'title')} placeholder="Không có tiêu đề">
-                                <h3 className="font-medium text-lg text-primary cursor-pointer hover:bg-gray-50">{item.title || 'Không có tiêu đề (*)'}</h3>
-                            </InlineEdit>
-
-                            <InlineEdit initialValue={item.desc} onSave={(value) => handleTopicInfoChange(value, index, 'desc')} placeholder="Không có mô tả..." multiline>
-                                <p className="text-sm text-gray-500 cursor-pointer hover:bg-gray-50">{item.desc || 'Không có mô tả...'}</p>
-                            </InlineEdit>
-                        </div>
+                        <CategorySearch handleChooseCategory={handleChooseCategory}>
+                            <div className="py-2.5  w-full space-y-2 hover:bg-gray-200 flex items-center gap-3 group cursor-pointer">
+                                <div className="">
+                                    <h3 className="font-medium text-lg text-primary ">{item?.title || 'Không có tiêu đề (*)'}</h3>
+                                    <p className="text-sm text-gray-500  ">{item?.desc || 'Không có mô tả...'}</p>
+                                </div>
+                                <div className="group-hover:block hidden">
+                                    <Edit size={14} />
+                                </div>
+                            </div>
+                        </CategorySearch>
 
                         <div
                             className=" text-red-500 hover:text-red-600 cursor-pointer"

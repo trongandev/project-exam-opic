@@ -1,6 +1,7 @@
+import type { Category } from './etc'
 import type { User } from './user'
 
-export interface TopicCreate {
+export interface TopicCreateMin {
     name: string
     desc: string
 }
@@ -8,7 +9,22 @@ export interface TopicCreate {
 export interface TopicCreateFull {
     name: string
     desc: string
-    data: DataTopic[]
+    data: DataTopicCreate[]
+}
+
+export interface TopicCreate {
+    _id: string
+    userId: User
+    name: string
+    slug: string
+    viewCount: number
+    data: DataTopicCreate[]
+    isPopular: boolean
+    isActive: boolean
+    rating: any[]
+    desc: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Topic {
@@ -28,9 +44,16 @@ export interface Topic {
 
 export interface DataTopic {
     _id: string
+    categoryId: Category
+    quests: Quest[]
+}
+
+export interface DataTopicCreate {
+    _id: string
     icon: string
     title: string
     desc: string
+    categoryId: string
     quests: Quest[]
 }
 

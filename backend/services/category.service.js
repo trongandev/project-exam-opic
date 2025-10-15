@@ -25,6 +25,17 @@ class CategoryService {
         return newCategory
     }
 
+    async createManyCategory(dataCategories) {
+        for (const dataCategory of dataCategories) {
+            const { title, desc, icon } = dataCategory
+
+            const newCategory = new CategoryModel({ title, desc, icon })
+            await newCategory.save()
+        }
+
+        return true
+    }
+
     async updateCategory(id, dataCategory) {
         const { title, desc, isActive } = dataCategory
         const category = await CategoryModel.findById(id)
@@ -39,6 +50,17 @@ class CategoryService {
         await category.save()
 
         return category
+    }
+
+    async deleteCategory(id) {
+        const category = await CategoryModel.findById(id)
+
+        if (!category) {
+            throw new ErrorResponse('Không tìm thấy danh mục', 404)
+        }
+
+        await CategoryModel.deleteOne({ _id: id })
+        return true
     }
 }
 

@@ -108,7 +108,7 @@ export default function DetailTopicSlugPage() {
                             >
                                 {location.hash === `#topic-${index}` && <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>}
                                 <p>
-                                    {index + 1}. {topic.title}
+                                    {index + 1}. {topic.categoryId.title}
                                 </p>
                             </a>
                         ))}

@@ -40,7 +40,7 @@ export default function InlineEdit({
 
     if (isEditing) {
         return (
-            <div className={cn('flex items-start gap-2', className)}>
+            <div className={cn('flex items-start gap-2 ', className)}>
                 <InputComponent
                     ref={inputRef as any}
                     value={value}
@@ -81,7 +81,7 @@ export default function InlineEdit({
     }
 
     return (
-        <div className={cn('group flex items-center gap-2 cursor-pointer hover:bg-gray-100', className, displayClassName)} onClick={startEdit}>
+        <div className={cn('group flex w-full items-center gap-2 cursor-pointer hover:bg-gray-100', className, displayClassName)} onClick={startEdit}>
             {children || <span className={cn('block', !initialValue && 'text-gray-400 italic')}>{initialValue || computedPlaceholder}</span>}
             <button className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100 transition-opacity">{editIcon}</button>
         </div>

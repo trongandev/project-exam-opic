@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, FileQuestion, Info, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import type { DataTopic, TopicCreate } from '@/types/topic'
+import { useEffect, useState } from 'react'
+import type { DataTopicCreate, TopicCreateMin } from '@/types/topic'
 import InlineEdit from '@/components/InlineEdit'
 import { closestCenter, DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -11,29 +11,48 @@ import topicService from '@/services/topicService'
 import { toast } from 'sonner'
 import LoadingIcon from '@/components/ui/loading-icon'
 import ToastLogManyErrror from '@/components/etc/ToastLogManyErrror'
+import type { Category } from '@/types/etc'
+import categoryService from '@/services/categoryService'
 
 export default function CreateTopicPage() {
     const navigate = useNavigate()
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+    const [flatCategory, setFlatCategory] = useState<Category[]>([])
+    const [randomIndex, setRandomIndex] = useState(1)
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const res = await categoryService.getAllCategories()
+            setFlatCategory(res)
+        }
+        const getCategory = sessionStorage.getItem('categories')
+        if (getCategory) {
+            setFlatCategory(JSON.parse(getCategory))
+        } else {
+            fetchAPI()
+            sessionStorage.setItem('categories', JSON.stringify(flatCategory))
+        }
+    }, [])
 
-    const [topicDetailData, setTopicDetailData] = useState<TopicCreate>({
+    const [topicDetailData, setTopicDetailData] = useState<TopicCreateMin>({
         name: '',
         desc: '',
     })
 
-    const defaultQuestionList: DataTopic = {
+    const defaultQuestionList: DataTopicCreate = {
         _id: new Date().toISOString(),
-        icon: '🐎',
-        title: '',
-        desc: '',
+        icon: flatCategory[randomIndex]?.icon,
+        title: flatCategory[randomIndex]?.title,
+        desc: flatCategory[randomIndex]?.desc,
+        categoryId: flatCategory[randomIndex]?._id,
         quests: [{ _id: new Date().toISOString(), text: '', note: '', answer: '' }],
     }
 
-    const defaultQuestionTemplateList: DataTopic = {
+    const defaultQuestionTemplateList: DataTopicCreate = {
         _id: new Date().toISOString(),
-        icon: '🐎',
-        title: 'Ví dụ về giới thiệu bản thân',
-        desc: 'Mô tả về bản thân, sở thích, công việc, v.v.',
+        icon: flatCategory[randomIndex]?.icon,
+        title: flatCategory[randomIndex]?.title,
+        desc: flatCategory[randomIndex]?.desc,
+        categoryId: flatCategory[randomIndex]?._id,
         quests: [
             {
                 _id: new Date().toISOString(),
@@ -44,11 +63,13 @@ export default function CreateTopicPage() {
         ],
     }
 
-    const [questionList, setQuestionList] = useState<DataTopic[]>([defaultQuestionTemplateList])
+    const [questionList, setQuestionList] = useState<DataTopicCreate[]>([defaultQuestionTemplateList])
     const [loadingCreateTopic, setLoadingCreateTopic] = useState(false)
 
     const createQuestion = () => {
         setQuestionList([{ ...defaultQuestionList, _id: new Date().toISOString() }, ...questionList])
+        const newIndex = Math.floor(Math.random() * flatCategory.length)
+        setRandomIndex(newIndex)
     }
 
     const createQuestExample = (index: number) => {
@@ -85,9 +106,12 @@ export default function CreateTopicPage() {
         }
     }
 
-    const handleTopicInfoChange = (value: string, index: number, field: 'icon' | 'title' | 'desc') => {
+    const handleTopicInfoChange = (item: DataTopicCreate, index: number) => {
         const newList = [...questionList]
-        newList[index][field] = value
+        newList[index].title = item.title
+        newList[index].desc = item.desc
+        newList[index].icon = item.icon
+        newList[index].categoryId = item._id
         setQuestionList(newList)
     }
 
@@ -171,11 +195,12 @@ export default function CreateTopicPage() {
                     <div className="my-5 grid grid-cols-1 gap-5 flex-1 transition-all duration-200">
                         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                             <SortableContext items={questionList.map((item) => item._id)} strategy={verticalListSortingStrategy}>
-                                {questionList.map((item: DataTopic, index: number) => (
+                                {questionList.map((item: DataTopicCreate, index: number) => (
                                     <SortableItem
                                         key={item._id}
                                         item={item}
                                         index={index}
+                                        flatCategory={flatCategory}
                                         handleTopicInfoChange={handleTopicInfoChange}
                                         removeQuestion={removeQuestion}
                                         createQuestExample={createQuestExample}

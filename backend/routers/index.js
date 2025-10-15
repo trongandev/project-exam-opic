@@ -15,8 +15,4 @@ router.use('/profile', require('./profile.router'))
 router.use('/topics', require('./topic.router'))
 
 router.use('/categories', require('./category.router'))
-
-// Exam History routes
-// router.use('/exam-histories', require('./examHistory.router'))
-
 module.exports = router

@@ -16,7 +16,14 @@ class TopicService {
         query.isActive = true
 
         const [topics, total] = await Promise.all([
-            TopicModel.find(query).populate('userId', '_id displayName email').populate('rating.userId', '_id').skip(skip).limit(limit).sort({ createdAt: -1 }).lean(),
+            TopicModel.find(query)
+                .populate('userId', '_id displayName email')
+                .populate({ path: 'data.categoryId', model: 'CategoryModel', select: '_id icon title desc' })
+                .populate('rating.userId', '_id')
+                .skip(skip)
+                .limit(limit)
+                .sort({ createdAt: -1 })
+                .lean(),
             TopicModel.countDocuments(query),
         ])
 
@@ -39,7 +46,11 @@ class TopicService {
 
     // Lấy topic theo ID
     async getTopicById(id) {
-        const topic = await TopicModel.findById(id).populate('userId', '_id displayName email').populate('rating.userId', '_id displayName email').lean()
+        const topic = await TopicModel.findById(id)
+            .populate('userId', '_id displayName email')
+            .populate('rating.userId', '_id displayName email')
+            .populate({ path: 'data.categoryId', model: 'CategoryModel', select: '_id icon title desc' })
+            .lean()
 
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
@@ -52,7 +63,11 @@ class TopicService {
 
     // Lấy topic theo slug
     async getTopicBySlug(slug) {
-        const topic = await TopicModel.findOne({ slug }).populate('userId', '_id displayName email').populate('rating.userId', '_id displayName email').lean()
+        const topic = await TopicModel.findOne({ slug })
+            .populate('userId', '_id displayName email')
+            .populate('rating.userId', '_id displayName email')
+            .populate({ path: 'data.categoryId', model: 'CategoryModel', select: '_id icon title desc' })
+            .lean()
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
@@ -64,7 +79,7 @@ class TopicService {
 
     // Lấy topic theo slug
     async getTopicByIdToEdit(userId, id) {
-        const topic = await TopicModel.findById(id).populate('userId', '_id')
+        const topic = await TopicModel.findById(id).populate('userId', '_id').populate({ path: 'data.categoryId', model: 'CategoryModel', select: '_id icon title desc' })
         if (!topic) {
             throw new ErrorResponse('Không tìm thấy chủ đề', 404)
         }
