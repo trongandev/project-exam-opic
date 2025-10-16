@@ -143,3 +143,22 @@ body {
 html {
     scroll-behavior: smooth;
 }
+
+.custom-scrollbar-category::-webkit-scrollbar {
+    width: 2px;
+}
+.custom-scrollbar-category::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar-category::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.5);
+    border-radius: 2px;
+}
+.custom-scrollbar-category::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.7);
+}
+.custom-scrollbar-category {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
+}
