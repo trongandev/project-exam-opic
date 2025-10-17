@@ -26,9 +26,8 @@ export default function EditTopicPage() {
             try {
                 setLoading(true)
                 const res = await categoryService.getAllCategories()
-                console.log(res)
-                if (res.status === 200) {
-                    setFlatCategory(res.data.data)
+                if (res) {
+                    setFlatCategory(res)
                 } else {
                     setFlatCategory([])
                     toast.error('Không tìm thấy chủ đề này')

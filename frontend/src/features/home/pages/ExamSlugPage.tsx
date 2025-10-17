@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ExamOpic from '../components/ExamOpic'
 import type { Topic } from '@/types/topic'
 import topicService from '@/services/topicService'
