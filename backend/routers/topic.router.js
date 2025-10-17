@@ -23,6 +23,7 @@ router.get('/:id', checkIdIsValid, TopicController.getTopicById)
 // [GET] /api/topics/:id - Lấy topic theo ID (public)
 router.get('/:id/edit', authenticateToken, checkIdIsValid, TopicController.getTopicByIdToEdit)
 router.post('/', authenticateToken, validateCreateTopic, TopicController.createTopic)
+router.post('/clone/', authenticateToken, TopicController.cloneTopic)
 
 // [PUT] /api/topics/:id - Cập nhật topic
 router.patch('/:id', authenticateToken, checkIdIsValid, validateUpdateTopic, TopicController.updateTopic)

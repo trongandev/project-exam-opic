@@ -65,6 +65,18 @@ class TopicController {
         return SuccessResponse.created(res, 'Tạo chủ đề thành công', result)
     })
 
+    cloneTopic = catchAsync(async (req, res, next) => {
+        const { topicId } = req.body
+        const result = await TopicService.cloneTopic({
+            userId: req.user.id,
+            topicId,
+        })
+        if (!result) {
+            return ErrorResponse.notFound(res, 'Không tìm thấy chủ đề để tạo bản sao')
+        }
+        return SuccessResponse.created(res, 'Tạo chủ đề thành công', result)
+    })
+
     // [PUT] /api/topics/:id - Cập nhật topic
     updateTopic = catchAsync(async (req, res, next) => {
         const { id } = req.params

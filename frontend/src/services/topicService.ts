@@ -26,6 +26,11 @@ class TopicService {
         return response.data
     }
 
+    async cloneTopic(topicId: string) {
+        const response = await axiosInstance.post<APIResponse<Topic>>(`/topics/clone/`, { topicId })
+        return response.data
+    }
+
     async updateTopic(id: string, data: TopicCreateFull) {
         const response = await axiosInstance.patch<APIResponse<Topic>>(`/topics/${id}`, data)
         return response.data

@@ -113,6 +113,24 @@ class TopicService {
         return topic
     }
 
+    async cloneTopic({ userId, topicId }) {
+        const topic = await TopicModel.findById(topicId).lean()
+        if (!topic) {
+            return false
+        }
+        const newTopic = new TopicModel({
+            userId: userId,
+            name: topic.name + ' (Bản sao)',
+            slug: topic.slug + '-clone',
+            desc: topic.desc,
+            data: topic.data,
+        })
+
+        await newTopic.save()
+
+        return { _id: newTopic._id }
+    }
+
     // Cập nhật topic
     async updateTopic(id, dataTopic) {
         const { name, slug, desc, isActive, data } = dataTopic

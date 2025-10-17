@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
+import { ArrowLeft, Copy, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -19,6 +19,7 @@ export default function DetailTopicSlugPage() {
     const params = useParams()
     const [topicDetailData, setTopicDetailData] = useState<Topic>()
     const [loading, setLoading] = useState(false)
+    const [loadingClone, setLoadingClone] = useState(false)
     const [score, setScore] = useState(0)
     const [comment, setComment] = useState('')
     const [isSubmittingReview, setIsSubmittingReview] = useState(false)
@@ -32,7 +33,6 @@ export default function DetailTopicSlugPage() {
         }
         fetchTopicDetail()
     }, [params.slug])
-
     const handleSubmitReview = async () => {
         if (score === 0) {
             toast.error('Vui lòng chọn số sao đánh giá!')
@@ -70,6 +70,19 @@ export default function DetailTopicSlugPage() {
         }
     }
 
+    const handleCloneTopic = async () => {
+        try {
+            setLoadingClone(true)
+            const res = await topicService.cloneTopic(topicDetailData?._id as string)
+            toast.success('Tạo bản sao chủ đề thành công!')
+            navigate(`/topic/edit-topic/${res.data._id}`)
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoadingClone(false)
+        }
+    }
+
     if (loading || !topicDetailData) {
         return <LoadingScreen />
     }
@@ -85,6 +98,10 @@ export default function DetailTopicSlugPage() {
                             <Edit /> Chỉnh sửa
                         </Button>
                     )}
+                    <Button variant={'outline'} disabled={loadingClone} onClick={() => handleCloneTopic()}>
+                        <Copy />
+                        Tạo bản sao
+                    </Button>
 
                     <VoiceSelectionModal>
                         <Button variant={'outline'}>
