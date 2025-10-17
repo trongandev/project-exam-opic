@@ -1,78 +1,21 @@
-import SpeakButton from '@/components/SpeakButton'
-import { Button } from '@/components/ui/button'
+import React, { useEffect, useState } from 'react'
+import ExamOpic from '../components/ExamOpic'
+import type { Topic } from '@/types/topic'
+import topicService from '@/services/topicService'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import LoadingScreen from '@/components/etc/LoadingScreen'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { GENERIC_TIPS } from '@/config/etcConfig'
-import { ChevronLeft, ChevronRight, Eye, EyeOff, LogOut, Mic, Play, Pause, Volume2 } from 'lucide-react'
-import { useEffect, useRef, useState, useCallback } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { format, formatDate } from 'date-fns'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { toast } from 'sonner'
-import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
-import { shuffleArray } from '@/lib/utils'
-import topicService from '@/services/topicService'
-import type { Quest, Topic } from '@/types/topic'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, Play } from 'lucide-react'
 import AvatarCircle from '@/components/etc/AvatarCircle'
-import { useSpeakWordContext } from '@/hooks/useSpeakWordContext'
-import axios from 'axios'
-import LoadingIcon from '@/components/ui/loading-icon'
-
-interface IAccurancyFromRecoderAudio {
-    end_time: string
-    ipa_transcript: string
-    is_letter_correct_all_words: string
-    matched_transcripts: string
-    matched_transcripts_ipa: string
-    pair_accuracy_category: string
-    pronunciation_accuracy: string
-    real_transcript: string
-    real_transcripts: string
-    real_transcripts_ipa: string
-    start_time: string
-}
-// Helper function to convert Blob to base64
-const convertBlobToBase64 = async (blob: any) => {
-    return await blobToBase64(blob)
-}
-
-const blobToBase64 = (blob: any) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(blob)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = (error) => reject(error)
-    })
+import { formatDate } from 'date-fns'
 
 export default function ExamSlugPage() {
     const params = useParams()
-    const [dataExam, setDataExam] = useState<Topic>()
-    const [isStartExam, setIsStartExam] = useState(true)
-    const [isRecording, setIsRecording] = useState(false)
-    const [isShowScript, setIsShowScript] = useState(false)
-    const [isShowAnswer, setIsShowAnswer] = useState(false)
-    const [isShuffleData, setIsShuffleData] = useState(false)
-    const [isFreedomMode, setIsFreedomMode] = useState(false)
-    const [confidence, setConfidence] = useState(0)
-    const [newData, setNewData] = useState<Quest[]>([])
-    const [volume, setVolume] = useState(0)
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [countDown, setCountDown] = useState(60) // Thời gian ghi âm 60 giây
-    // const [showAnswer, setShowAnswer] = useState(false) // Hiển thị đáp án sau khi hết thời gian
-    const [recordingCompleted, setRecordingCompleted] = useState(false) // Đánh dấu hoàn thành ghi âm
-    const [recordedAudio, setRecordedAudio] = useState<string | null>(null)
-    const [loadingAccurancy, setLoadingAccurancy] = useState(false)
-    const [accurancyFromRecoderAudio, setAccurancyFromRecoderAudio] = useState<IAccurancyFromRecoderAudio | null>(null)
-    const [isPlayingAudio, setIsPlayingAudio] = useState(false)
-    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
-    const analyserRef = useRef<AnalyserNode | null>(null)
-    const recognitionRef = useRef<any>(null)
-    const audioRef = useRef<HTMLAudioElement | null>(null)
+    const [dataExam, setDataExam] = useState<Topic | null>(null)
+    const [isStartExam, setIsStartExam] = useState(false)
     const navigate = useNavigate()
-    const { speakWord } = useSpeakWordContext()
-
-    const { transcript, interimTranscript, finalTranscript, resetTranscript } = useSpeechRecognition()
 
     useEffect(() => {
         const fetchAPI = async () => {
@@ -82,567 +25,49 @@ export default function ExamSlugPage() {
         fetchAPI()
     }, [params.slug])
 
-    useEffect(() => {
-        if (dataExam) {
-            const flattenedData = dataExam?.data.flatMap((item) => item.quests)
-            if (isShuffleData) {
-                // Shuffle the data
-
-                setNewData(shuffleArray(flattenedData))
-                toast.info('Shuffle mode is on. Questions are randomized.', { duration: 5000, position: 'top-center' })
-            } else {
-                setNewData(flattenedData)
-                speakWord(flattenedData[0]?.text || 'Unable to load question', 'custom')
-            }
-        }
-    }, [isShuffleData, dataExam])
-
-    // Setup audio reference when recorded audio is available
-    useEffect(() => {
-        if (recordedAudio && audioRef.current) {
-            audioRef.current.src = recordedAudio
-        }
-    }, [recordedAudio])
-
-    // Cleanup recorded audio URL when component unmounts or audio changes
-    useEffect(() => {
-        return () => {
-            if (recordedAudio) {
-                URL.revokeObjectURL(recordedAudio)
-            }
-        }
-    }, [recordedAudio])
-
-    // Countdown timer for recording
-
-    // Function để dừng recording hoàn toàn
-    const stopRecording = useCallback(async () => {
-        if (recognitionRef.current) {
-            recognitionRef.current.stop()
-            recognitionRef.current.onend = null // Ngăn không cho restart
-        }
-
-        // Stop MediaRecorder
-        if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop()
-        }
-
-        setIsRecording(false)
-        setVolume(0) // Reset volume khi dừng
-        analyserRef.current = null // Clear analyser reference
-        SpeechRecognition.stopListening()
-    }, [mediaRecorder])
-    useEffect(() => {
-        let timer: number
-
-        if (isRecording && countDown > 0) {
-            timer = window.setTimeout(() => {
-                setCountDown((prev) => prev - 1)
-            }, 1000)
-        } else if (isRecording && countDown === 0) {
-            // Auto stop recording when time's up
-            stopRecording()
-            setRecordingCompleted(true)
-            toast.info('Hết thời gian ghi âm!')
-        }
-
-        return () => {
-            if (timer) window.clearTimeout(timer)
-        }
-    }, [isRecording, countDown, stopRecording])
-
-    // Function để khởi tạo MediaRecorder
-    const setupMediaRecorder = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-            const chunks: Blob[] = []
-
-            const recorder = new MediaRecorder(stream)
-
-            recorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    chunks.push(event.data)
-                }
-            }
-
-            recorder.onstop = async () => {
-                try {
-                    const audioBlob = new Blob(chunks, { type: 'audio/webm' })
-                    const audioUrl = URL.createObjectURL(audioBlob)
-                    const convertedBase64 = (await convertBlobToBase64(audioBlob)) as string
-                    console.log(convertedBase64.length)
-                    if (convertedBase64.length < 6) {
-                        toast.error('Không thể ghi âm, vui lòng thử lại.')
-                        return
-                    }
-
-                    setRecordedAudio(audioUrl)
-                    setLoadingAccurancy(true)
-                    const res = await axios.post(
-                        `${import.meta.env.VITE_API_STS}/GetAccuracyFromRecordedAudio`,
-                        {
-                            title: newData[currentIndex]?.answer,
-                            base64Audio: convertedBase64,
-                            language: 'en',
-                        },
-                        {
-                            headers: { 'X-Api-Key': import.meta.env.VITE_STS_KEY as string },
-                        }
-                    )
-                    setAccurancyFromRecoderAudio(res.data)
-                    setLoadingAccurancy(false)
-                } catch (error) {
-                    console.error('Error creating audio blob:', error)
-                    toast.error('Lỗi xử lý audio đã ghi')
-                } finally {
-                    setLoadingAccurancy(false)
-                }
-            }
-
-            setMediaRecorder(recorder)
-            return recorder
-        } catch (error) {
-            console.error('Error setting up media recorder:', error)
-            toast.error('Không thể truy cập microphone')
-            return null
-        }
+    if (!dataExam) {
+        return <LoadingScreen />
     }
-
-    // Function để phát/dừng audio đã ghi
-    const toggleAudioPlayback = async () => {
-        if (!recordedAudio || !audioRef.current) return
-
-        try {
-            if (isPlayingAudio) {
-                audioRef.current.pause()
-                setIsPlayingAudio(false)
-            } else {
-                // Ensure audio is loaded before playing
-                await audioRef.current.load()
-                await audioRef.current.play()
-                setIsPlayingAudio(true)
-            }
-        } catch (error) {
-            console.error('Error playing audio:', error)
-            setIsPlayingAudio(false)
-            toast.error('Không thể phát audio đã ghi')
-        }
-    }
-
-    const handleRecoding = async () => {
-        if (!isRecording && !recordingCompleted) {
-            // Bắt đầu ghi âm
-            resetTranscript()
-            setRecordedAudio(null) // Reset audio cũ
-            setIsPlayingAudio(false) // Reset playing state
-
-            // Setup MediaRecorder
-            const recorder = await setupMediaRecorder()
-            if (!recorder) return
-
-            SpeechRecognition.startListening({ continuous: true })
-            recorder.start()
-
-            setIsRecording(true)
-            setCountDown(60) // Reset thời gian về 60 giây
-            setRecordingCompleted(false)
-            recognitionRef.current?.start()
-        }
-        // Không cho phép dừng recording trong quá trình ghi âm
-    }
-
-    const handleFreedomModeChange = (index: number) => {
-        if (isFreedomMode || recordingCompleted) {
-            stopRecording()
-
-            // Reset audio states
-            setRecordedAudio(null)
-            setIsPlayingAudio(false)
-
-            setCurrentIndex(index)
-            setRecordingCompleted(false)
-            setCountDown(60)
-            setConfidence(0)
-            resetTranscript()
-            setAccurancyFromRecoderAudio(null)
-            speakWord(newData[index]?.text || 'Unable to load question', 'custom')
-        }
-    }
-    const renderAccurancy = () => {
-        if (!accurancyFromRecoderAudio) return null
-        const lettersOfWordAreCorrect = accurancyFromRecoderAudio.is_letter_correct_all_words.split(' ')
-        const currentTextWords = newData[currentIndex]?.answer.split(' ') || []
-
+    if (!isStartExam)
         return (
-            <div className="text-justify">
-                {currentTextWords.map((word, wordIdx) => (
-                    <span key={wordIdx} className="inline-block mr-2">
-                        {word.split('').map((letter, letterIdx) => {
-                            const isCorrect = lettersOfWordAreCorrect[wordIdx]?.[letterIdx] === '1'
-                            return (
-                                <span key={letterIdx} className={`${isCorrect ? 'text-green-600' : 'text-red-600'} font-medium`}>
-                                    {letter}
-                                </span>
-                            )
-                        })}
-                    </span>
-                ))}
+            <div className="flex flex-col gap-2 justify-center items-center h-screen px-3 md:px-0">
+                <div className="flex  gap-3 items-center text-gray-700 mt-5">
+                    <AvatarCircle user={dataExam?.userId} />
+                    <p>
+                        Cảm ơn{' '}
+                        <Link to={`/profile/${dataExam?.userId._id}`} className="font-medium">
+                            {dataExam?.userId.displayName}
+                        </Link>{' '}
+                        đã chia sẻ Topic "{dataExam?.name}"
+                    </p>
+                </div>
+                <p className="text-gray-500">Ngày tạo topic: {formatDate(dataExam?.createdAt || new Date(), 'dd/MM/yyyy')}</p>
+                <Card className="mt-10 bg-gradient-to-r from-sky-50 to-purple-50 ">
+                    <CardHeader>
+                        <CardTitle className="text-xl text-gray-900 text-center">Mẹo tổng quát khi trả lời</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        {GENERIC_TIPS.map((tip) => (
+                            <div key={tip.id} className="flex items-start gap-3">
+                                <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">{tip.id}</span>
+                                <p className="text-gray-700">
+                                    <strong>{tip.textBold}</strong>
+                                    {tip.text}
+                                </p>
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+
+                <div className="text-center mt-5 md:mt-0">
+                    <Button variant={'outline'} className="mr-5" onClick={() => navigate('/')}>
+                        <ChevronLeft /> Quay về trang chủ
+                    </Button>
+                    <Button className="mt-5 w-64 h-16 text-lg " onClick={() => setIsStartExam(true)} disabled={isStartExam}>
+                        <Play /> Bắt đầu thi
+                    </Button>
+                </div>
             </div>
         )
-    }
-
-    const getBgColorForAccuracy = (accuracy: string) => {
-        const accuracyValue = parseFloat(accuracy)
-        if (accuracyValue >= 85) return 'border-green-200  bg-green-50 text-green-800'
-        if (accuracyValue >= 70) return 'border-yellow-200 bg-yellow-50 text-yellow-800'
-        if (accuracyValue >= 50) return 'border-orange-200  bg-orange-50 text-orange-800'
-        if (accuracyValue <= 25 && accuracyValue > 0) return 'border-red-200  bg-red-50 text-red-800'
-        return 'border-blue-200 bg-blue-50 text-blue-800'
-    }
-    return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto  h-screen">
-            {!isStartExam && (
-                <div className="flex flex-col gap-2 justify-center items-center h-screen">
-                    <Card className="mt-10 bg-gradient-to-r from-sky-50 to-purple-50 ">
-                        <CardHeader>
-                            <CardTitle className="text-xl text-gray-900 text-center">Mẹo tổng quát khi trả lời</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            {GENERIC_TIPS.map((tip) => (
-                                <div key={tip.id} className="flex items-start gap-3">
-                                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">{tip.id}</span>
-                                    <p className="text-gray-700">
-                                        <strong>{tip.textBold}</strong>
-                                        {tip.text}
-                                    </p>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </Card>
-                    <div className="text-center">
-                        <Button variant={'outline'} className="mr-5" onClick={() => navigate('/')}>
-                            <ChevronLeft /> Quay về trang chủ
-                        </Button>
-                        <Button className="mt-5 w-64 h-16 text-lg " onClick={() => setIsStartExam(true)} disabled={isStartExam}>
-                            <Play /> Bắt đầu thi
-                        </Button>
-                    </div>
-                </div>
-            )}
-            {isStartExam && (
-                <div className="py-20">
-                    <div className="flex items-center justify-end gap-5">
-                        <VoiceSelectionModal>
-                            <Button variant={'outline'}>Voice Settings</Button>
-                        </VoiceSelectionModal>
-                        <div className="flex items-center space-x-2 border-2 border-primary/20 p-2 rounded-md">
-                            <Switch id="shuffle-mode" checked={isShuffleData} onCheckedChange={setIsShuffleData} />
-                            <Label htmlFor="shuffle-mode">Shuffle Mode</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border-2 border-primary/20 p-2 rounded-md">
-                            <Switch
-                                id="freedom-mode"
-                                checked={isFreedomMode}
-                                onCheckedChange={() => {
-                                    setIsFreedomMode(!isFreedomMode)
-                                    toast.success('Freedom Mode is on. You can navigate between questions freely.', {
-                                        duration: 5000,
-                                        position: 'top-center',
-                                    })
-                                }}
-                            />
-                            <Label htmlFor="freedom-mode">Freedom Mode</Label>
-                        </div>
-                        <Button
-                            variant={'destructive'}
-                            onClick={() => {
-                                stopRecording() // Dừng recording khi thoát
-                                setIsStartExam(false)
-                            }}
-                        >
-                            <LogOut /> Leave
-                        </Button>
-                    </div>
-                    <h1 className="w-full border-b-2 pb-2 border-gray-100 text-2xl font-medium">
-                        Question {currentIndex + 1} or {dataExam?.data.reduce((acc, curr) => acc + curr.quests.length, 0)}
-                    </h1>
-                    <div className="flex gap-5 flex-col md:flex-row ">
-                        <div className="pl-5 pt-5 flex gap-5  w-[350px]">
-                            <div className="space-y-3">
-                                <img src="/images/NewEuroAvatarCaptured.png" alt="" className="w-[350px]" />
-                                <SpeakButton text={newData[currentIndex]?.text || 'Unable to load question'} id={'custom'} className=" w-full shadow-xs !h-10" />
-
-                                <div className="flex gap-2">
-                                    <Button variant={'secondary'} className="transition-all" onClick={() => setIsShowScript(!isShowScript)}>
-                                        {isShowScript ? (
-                                            <>
-                                                <EyeOff /> Hide Script
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Eye /> Show Script
-                                            </>
-                                        )}
-                                    </Button>
-                                    <Button variant={'secondary'} className="transition-all" onClick={() => setIsShowAnswer(!isShowAnswer)}>
-                                        {isShowAnswer ? (
-                                            <>
-                                                <EyeOff /> Hide Answer
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Eye /> Show Answer
-                                            </>
-                                        )}
-                                    </Button>
-                                </div>
-                                {(isShowScript || isShowAnswer) && <p className="text-gray-500 italic">{isShowScript ? newData[currentIndex]?.text : newData[currentIndex]?.answer}</p>}
-                                <div className="hidden md:flex  gap-3 items-center text-gray-700 mt-5">
-                                    <AvatarCircle user={dataExam?.userId} />
-                                    <p>
-                                        Cảm ơn{' '}
-                                        <Link to={`/profile/${dataExam?.userId._id}`} className="font-medium">
-                                            {dataExam?.userId.displayName}
-                                        </Link>{' '}
-                                        đã chia sẻ Topic "{dataExam?.name}"
-                                    </p>
-                                </div>
-                                <p className="text-gray-500">Ngày tạo topic: {formatDate(dataExam?.createdAt || new Date(), 'dd/MM/yyyy')}</p>
-                            </div>
-                            <div className="flex flex-col gap-3 justify-center items-center">
-                                <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">
-                                    <div
-                                        className={`w-1 rounded-md transition-all ${isRecording ? 'bg-gradient-to-t from-sky-600 to-purple-600' : 'bg-gray-300'}`}
-                                        style={{
-                                            height: `${isRecording ? volume : 0}%`,
-                                            transition: 'height 0.1s ease-out',
-                                        }}
-                                    />
-                                </div>
-                                <div className={`mb-1 transition-colors ${isRecording ? 'text-red-500' : 'text-gray-500'}`}>
-                                    <Mic size={20} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex-1 pt-5">
-                            <h1 className="mb-2 text-gray-700 font-medium">Question Progress:</h1>
-                            <div className="flex gap-2  flex-wrap w-full">
-                                {newData &&
-                                    newData?.map((_item: any, index: number) => (
-                                        <div
-                                            key={index}
-                                            onClick={() => handleFreedomModeChange(index)}
-                                            className={`w-10 h-10  rounded-md flex items-center justify-center text-xs font-medium ${currentIndex === index ? 'bg-primary text-white' : ' bg-gray-200'}
-                                                 ${isFreedomMode ? 'cursor-pointer hover:bg-primary/50 hover:text-white' : 'cursor-not-allowed'}
-                                                `}
-                                        >
-                                            {index + 1}
-                                        </div>
-                                    ))}
-                            </div>
-                            {(!recordingCompleted || isRecording) && (
-                                <div
-                                    className={`w-full h-20 border-2 border-dashed rounded-md mt-10 flex items-center justify-center gap-4 transition-all duration-300 ${
-                                        isRecording
-                                            ? 'border-red-500/50 text-red-600 bg-red-50'
-                                            : recordingCompleted
-                                            ? 'border-primary text-primary bg-green-50 cursor-not-allowed'
-                                            : 'border-gray-300 text-gray-500 cursor-pointer hover:border-gray-500 hover:text-gray-800'
-                                    }`}
-                                    onClick={handleRecoding}
-                                >
-                                    <div className="relative size-5 flex items-center justify-center">
-                                        <div className={`absolute inset-0 bg-red-500 opacity-25 rounded-full -z-1 animate-ping ${isRecording ? 'visible' : 'invisible'}`}></div>
-                                        <Mic />
-                                    </div>
-                                    <p className="text-xl">{isRecording ? 'Recording... Đang ghi âm' : recordingCompleted ? 'Recording completed' : 'Press to start recording'}</p>
-                                </div>
-                            )}
-
-                            {isRecording && (
-                                <div className="mt-5 ">
-                                    <h1 className="mb-2 text-gray-700 font-medium">Response time:</h1>
-                                    <div className="h-5 bg-gray-100 w-full  rounded-full">
-                                        <div
-                                            className="bg-gradient-to-r relative overflow-hidden from-sky-700 to-purple-700 h-full rounded-full"
-                                            style={{ width: `${((60 - countDown) * 100) / 60}%` }}
-                                        >
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse duration-2000 translate-x-[-100%]"
-                                                style={{
-                                                    animation: 'shimmer 2s ease-in-out infinite',
-                                                    animationDelay: '0s',
-                                                }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                    <div className="text-end text-gray-500 mt-1">{format(countDown * 1000, 'mm:ss')}</div>
-                                </div>
-                            )}
-
-                            {/* Transcript Display */}
-                            {(transcript || isRecording) && (
-                                <div className="mt-5">
-                                    <h1 className="mb-2 text-gray-700 font-medium flex items-center gap-2">
-                                        Your Response:
-                                        {isRecording && (
-                                            <span className="text-red-500 text-sm font-normal flex items-center gap-1">
-                                                <span className="w-2 h-2 bg-red-500 rounded-full relative">
-                                                    <span className="w-2 h-2 bg-red-500 rounded-full animate-ping absolute inset-0 -z-10"></span>
-                                                </span>
-                                                Live
-                                            </span>
-                                        )}
-                                    </h1>
-                                    <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 relative">
-                                        {transcript ? (
-                                            <div className="text-gray-800 leading-relaxed">
-                                                {/* Hiển thị transcript đã hoàn thành */}
-                                                <span>{finalTranscript}</span>
-
-                                                {/* Hiển thị interim transcript (đang được nhận diện) với highlight */}
-                                                {interimTranscript && <span className="text-blue-600 bg-blue-100 px-1 rounded ml-1">{interimTranscript}</span>}
-
-                                                {/* Cursor khi đang recording */}
-                                                {isRecording && <span className="inline-block w-0.5 h-4 bg-gray-600 animate-pulse ml-1"></span>}
-                                            </div>
-                                        ) : isRecording ? (
-                                            <div className="text-gray-500 italic flex items-center gap-2">
-                                                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                                                Listening for your voice...
-                                            </div>
-                                        ) : (
-                                            <div className="text-gray-400 italic">No speech detected yet</div>
-                                        )}
-
-                                        {confidence > 0 && (
-                                            <div className="mt-3 pt-2 border-t border-gray-200">
-                                                <div className="text-sm text-gray-500 flex items-center justify-between">
-                                                    <span>Speech Confidence: {Math.round(confidence * 100)}%</span>
-                                                    <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-green-500 transition-all duration-300" style={{ width: `${confidence * 100}%` }} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Audio Playback Controls */}
-                            {recordedAudio && recordingCompleted && (
-                                <div className="mt-5">
-                                    <h1 className="mb-2 text-gray-700 font-medium flex items-center gap-2">
-                                        <Volume2 size={18} />
-                                        Your Recording:
-                                    </h1>
-                                    <div className="p-4 border rounded-lg bg-green-50 border-green-200">
-                                        <div className="flex items-center gap-3">
-                                            <Button variant="outline" size="sm" onClick={toggleAudioPlayback} className="flex items-center gap-2">
-                                                {isPlayingAudio ? (
-                                                    <>
-                                                        <Pause size={16} />
-                                                        Pause
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Play size={16} />
-                                                        Play Recording
-                                                    </>
-                                                )}
-                                            </Button>
-                                            <span className="text-sm text-gray-600">Click to {isPlayingAudio ? 'pause' : 'play'} your recorded answer</span>
-                                        </div>
-                                        <audio
-                                            ref={audioRef}
-                                            src={recordedAudio}
-                                            onEnded={() => setIsPlayingAudio(false)}
-                                            onPause={() => setIsPlayingAudio(false)}
-                                            onPlay={() => setIsPlayingAudio(true)}
-                                            className="hidden"
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Stop Recording Button */}
-                            {isRecording && (
-                                <div className="mt-5 text-center">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                            stopRecording()
-                                            setRecordingCompleted(true)
-                                            setCountDown(0)
-                                        }}
-                                        className="border-red-500 text-red-600 hover:bg-red-50"
-                                    >
-                                        Dừng recording
-                                    </Button>
-                                </div>
-                            )}
-                            {recordingCompleted && (
-                                <div className="mt-5">
-                                    <h1 className="mb-2 text-gray-700 font-medium">Check Answer:</h1>
-                                    <div className={`p-4 border rounded-lg text-gray-800 relative ${getBgColorForAccuracy(accurancyFromRecoderAudio?.pronunciation_accuracy || '0')}`}>
-                                        {accurancyFromRecoderAudio && (
-                                            <div className="space-y-5">
-                                                <div
-                                                    className={`absolute -top-4 -right-3 -skew-5 px-1 py-0.5 text-lg rounded-sm shadow border ${getBgColorForAccuracy(
-                                                        accurancyFromRecoderAudio.pronunciation_accuracy
-                                                    )}`}
-                                                >
-                                                    <span className="skew-5">{accurancyFromRecoderAudio.pronunciation_accuracy}%</span>
-                                                </div>
-                                                <p className="text-gray-800 leading-relaxed italic">{renderAccurancy()}</p>
-                                                <div className="">
-                                                    <p>Audio detect in server:</p>
-                                                    <p className="text-gray-500 mt-1">{accurancyFromRecoderAudio.real_transcript}</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {!accurancyFromRecoderAudio && !loadingAccurancy && <p className="text-gray-500 italic">No accuracy data available. Please try recording again.</p>}
-
-                                        {loadingAccurancy && !accurancyFromRecoderAudio && (
-                                            <p className="text-gray-500 text-sm flex flex-col items-center justify-center gap-4 ">
-                                                <LoadingIcon /> <span className="animate-bounce">Loading accuracy details, wait a moment...</span>
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className={`flex items-center ${isFreedomMode ? 'justify-between' : 'justify-end'} mt-10`}>
-                                {isFreedomMode && (
-                                    <Button
-                                        disabled={!isFreedomMode || currentIndex === 0}
-                                        onClick={() => {
-                                            if (currentIndex > 0) {
-                                                handleFreedomModeChange(currentIndex - 1)
-                                            }
-                                        }}
-                                    >
-                                        <ChevronLeft /> Prev
-                                    </Button>
-                                )}
-
-                                <Button
-                                    disabled={(!isFreedomMode || currentIndex === newData.length - 1) && !recordingCompleted}
-                                    onClick={() => {
-                                        if (currentIndex < newData.length - 1 && !loadingAccurancy) {
-                                            handleFreedomModeChange(currentIndex + 1)
-                                        } else {
-                                            toast.info('Vui lòng chờ hệ thống xử lý câu trả lời của bạn trước khi chuyển sang câu hỏi tiếp theo.', { duration: 5000, position: 'top-center' })
-                                        }
-                                    }}
-                                >
-                                    Next <ChevronRight />
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+    return <ExamOpic data={dataExam} />
 }

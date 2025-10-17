@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -27,16 +27,6 @@ export default function VoiceSelectionModal({ children }: VoiceSelectionModalPro
     const [isLoading, setIsLoading] = useState(false)
     const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' })) // Đổi locale thành zh-CN cho phù hợp
     const { selectedVoice, setSelectedVoice } = useSpeakWord()
-    // Lắng nghe thay đổi localStorage để đồng bộ giữa các tab/component
-    useEffect(() => {
-        const handleStorageChange = () => {
-            // Hook useSpeakWord sẽ tự động đồng bộ khi localStorage thay đổi
-            console.log('localStorage changed - voice preferences updated')
-        }
-
-        window.addEventListener('storage', handleStorageChange)
-        return () => window.removeEventListener('storage', handleStorageChange)
-    }, [])
 
     const handlePlaySample = (text: string, voiceId: string) => {
         if (playingVoice === voiceId) {
@@ -121,9 +111,7 @@ export default function VoiceSelectionModal({ children }: VoiceSelectionModalPro
         // Sử dụng hàm updateSelectedVoice từ hook để đồng bộ với localStorage
         setSelectedVoice(voice.id)
         try {
-            const savedVoice = JSON.parse(localStorage.getItem('defaultVoices') || '')
-            savedVoice['en-US'] = voice.id // Lưu voice đã chọn vào localStorage
-            localStorage.setItem('defaultVoices', JSON.stringify(savedVoice))
+            localStorage.setItem('defaultVoices', voice.id)
             setSelectedVoice(voice.id) // Cập nhật voice trong SpeakWordContext
         } catch (error) {
             console.warn('LocalStorage not available, using session storage as fallback:', error)

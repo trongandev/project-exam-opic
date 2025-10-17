@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, useMemo } from 'react'
+import { useCallback, useState, useRef, useMemo, useEffect } from 'react'
 import { EdgeSpeechTTS } from '@lobehub/tts'
 import { toast } from 'sonner'
 
@@ -23,20 +23,24 @@ export default function useSpeakWord() {
     const [selectedVoice, setSelectedVoice] = useState<string | null>(null)
     const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' }))
 
+    useEffect(() => {
+        try {
+            const saveVoiceId = localStorage.getItem('defaultVoices')
+            setSelectedVoice(saveVoiceId)
+        } catch (error: any) {
+            toast.error('Không thể load giọng nói', { description: error.message })
+            setSelectedVoice('en-US-JennyNeural') // Mặc định
+        }
+    }, [])
+
     // Hàm để cập nhật voice và đồng bộ với localStorage
     const updateSelectedVoice = useCallback((newVoiceId: string) => {
         try {
             localStorage.setItem('defaultVoices', newVoiceId)
             setSelectedVoice(newVoiceId)
-
-            toast.success('Đã cập nhật giọng nói', {
-                description: `Giọng mới sẽ được sử dụng cho các lần phát âm tiếp theo`,
-                duration: 2000,
-            })
-        } catch (error) {
-            console.warn('Cannot save to localStorage:', error)
+        } catch (error: any) {
             setSelectedVoice(newVoiceId)
-            toast.error('Không thể lưu giọng nói vào bộ nhớ')
+            toast.error('Không thể lưu giọng nói vào bộ nhớ', { description: error.message })
         }
     }, [])
 

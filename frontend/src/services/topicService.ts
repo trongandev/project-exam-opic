@@ -16,6 +16,11 @@ class TopicService {
         return response.data
     }
 
+    async getTopicPopulated() {
+        const response = await axiosInstance.get<APIResponse<Topic>>(`/topics/populate`)
+        return response.data.data
+    }
+
     async createTopic(data: TopicCreateFull) {
         const response = await axiosInstance.post<APIResponse<Topic>>('/topics', data)
         return response.data

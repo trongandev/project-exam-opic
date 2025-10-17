@@ -20,7 +20,7 @@ interface Props {
     removeQuestExample: any
 }
 export default function SortableItem({ item, index, flatCategory, handleTopicInfoChange, removeQuestion, createQuestExample, handleQuestExampleChange, removeQuestExample }: Props) {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item._id })
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.dateId })
     const [collapse, setCollapse] = useState<boolean>(false)
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -36,7 +36,7 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
     }
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
-            <div key={item._id} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200">
+            <div key={item.dateId} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200  select-none">
                 {/* Question Header */}
                 <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-5">
                     <GripVertical {...listeners} className="cursor-grab hover:text-primary" />
@@ -46,7 +46,7 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
                     <div className="w-[80px] flex items-center justify-center text-2xl">{item?.icon}</div>
 
                     <div className="flex gap-5 items-center justify-between flex-1">
-                        <CategorySearch handleChooseCategory={handleChooseCategory}>
+                        <CategorySearch flatCategory={flatCategory} handleChooseCategory={handleChooseCategory}>
                             <div className="py-2.5  w-full space-y-2 hover:bg-gray-200 flex items-center gap-3 group cursor-pointer">
                                 <div className="">
                                     <h3 className="font-medium text-lg text-primary ">{item?.title || 'Không có tiêu đề (*)'}</h3>

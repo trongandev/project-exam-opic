@@ -9,6 +9,9 @@ const { authenticateToken, checkIdIsValid } = require('../middlewares/auth.middl
 // [GET] /api/topics - Lấy danh sách topics (public để user có thể xem)
 router.get('/', TopicController.getAllTopics)
 
+// [GET] /api/topics/populate - Lấy topic phổ biến nhất
+router.get('/populate', TopicController.getTopicPopulated)
+
 // [GET] /api/topics/slug/:slug - Lấy topic theo slug (public)
 router.get('/slug/:slug', TopicController.getTopicBySlug)
 

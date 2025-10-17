@@ -1,3 +1,4 @@
+const ErrorResponse = require('../core/error')
 const { CategoryModel } = require('../models/category.model')
 
 class CategoryService {
@@ -8,10 +9,6 @@ class CategoryService {
 
     async getCategoryById(id) {
         const category = await CategoryModel.findById(id).lean()
-
-        if (!category) {
-            throw new ErrorResponse('Không tìm thấy danh mục', 404)
-        }
 
         return category
     }
@@ -37,13 +34,14 @@ class CategoryService {
     }
 
     async updateCategory(id, dataCategory) {
-        const { title, desc, isActive } = dataCategory
+        const { icon, title, desc, isActive } = dataCategory
         const category = await CategoryModel.findById(id)
 
         if (!category) {
-            throw new ErrorResponse('Không tìm thấy danh mục', 404)
+            return false
         }
         // Cập nhật các trường
+        if (icon !== undefined) category.icon = icon
         if (title !== undefined) category.title = title
         if (desc !== undefined) category.desc = desc
         if (isActive !== undefined) category.isActive = isActive
@@ -56,7 +54,7 @@ class CategoryService {
         const category = await CategoryModel.findById(id)
 
         if (!category) {
-            throw new ErrorResponse('Không tìm thấy danh mục', 404)
+            return false
         }
 
         await CategoryModel.deleteOne({ _id: id })

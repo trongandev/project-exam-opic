@@ -1,24 +1,46 @@
-import { useFetching } from '@/hooks/useFetching'
 import categoryService from '@/services/categoryService'
 import type { Category } from '@/types/etc'
-import ErrorUI from '@/components/etc/ErrorUI'
 import LoadingGrid from '@/components/etc/LoadingGrid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Rows2, Rows4 } from 'lucide-react'
 import CategoryItem from '../components/CategoryItem'
 import { useNavigate } from 'react-router-dom'
 
 export default function CategoryPage() {
-    const { data: categories, loading, error, refetch, isError, isSuccess } = useFetching<Category[]>(() => categoryService.getAllCategories(), {})
+    const [categories, setCategories] = useState<Category[]>([])
+    const [loading, setLoading] = useState(false)
+
     const [isSimple, setIsSimple] = useState(false)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const initDataFetch = async () => {
+            const initData: Category[] = []
+            const fetchAPI = async () => {
+                setLoading(true)
+                const res = await categoryService.getAllCategories()
+                setCategories(res)
+                initData.push(...res)
+                setLoading(false)
+            }
+            const getCategory = sessionStorage.getItem('categories')
+            if (getCategory) {
+                setCategories(JSON.parse(getCategory))
+            } else {
+                await fetchAPI()
+                sessionStorage.setItem('categories', JSON.stringify(initData))
+            }
+        }
+        initDataFetch()
+    }, [])
+
     return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20 min-h-screen">
+        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-5  min-h-screen">
             <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                 <ArrowLeft /> Quay lại
             </Button>
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 mt-5 md:mt-0">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Tổng hợp {categories?.length || 0} thể loại</h1>
                 <p className="text-gray-600">Tất tần tận {categories?.length || 0} thể loại hay gặp nhất khi thi OPIc</p>
             </div>
@@ -38,10 +60,10 @@ export default function CategoryPage() {
             {loading && <LoadingGrid />}
 
             {/* Error State */}
-            {isError && error && <ErrorUI error={error} refetch={refetch} />}
+            {/* {isError && error && <ErrorUI error={error} refetch={refetch} />} */}
 
             {/* Success State */}
-            {isSuccess && categories && isSimple && (
+            {categories && isSimple && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {categories.map((category) => (
                         <div key={category._id} className="p-6 border rounded-lg hover:shadow-md transition-shadow bg-white">
@@ -55,7 +77,7 @@ export default function CategoryPage() {
                 </div>
             )}
 
-            {isSuccess && categories && !isSimple && (
+            {categories && !isSimple && (
                 <div className="flex gap-10 ">
                     <div className="my-5 grid grid-cols-1  gap-5 flex-1">
                         {categories.map((category, index) => (
@@ -82,7 +104,7 @@ export default function CategoryPage() {
             )}
 
             {/* Empty State */}
-            {isSuccess && (!categories || categories.length === 0) && (
+            {(!categories || categories.length === 0) && (
                 <div className="text-center py-20">
                     <p className="text-gray-500">Chưa có thể loại nào</p>
                 </div>

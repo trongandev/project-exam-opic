@@ -1,13 +1,21 @@
 // import SpeakButton from '@/components/SpeakButton'
 import type { Category } from '@/types/etc'
+import { toast } from 'sonner'
 // import { MoveDown } from 'lucide-react'
 
 export default function CategoryItem({ category, index }: { category: Category; index: number }) {
+    const handleCopyToClipboard = (text: string) => {
+        if (navigator.clipboard && window.isSecureContext) {
+            // navigator clipboard api method'
+            toast.success('Đã sao chép ID thể loại vào bộ nhớ tạm')
+            return navigator.clipboard.writeText(text)
+        }
+    }
     return (
-        <div key={index} id={`category-${index}`} className="border border-gray-200 rounded-lg  transition-shadow  bg-gray-200">
+        <div key={index} id={`category-${index}`} className="border border-gray-200 rounded-lg  transition-shadow  bg-gray-200" onClick={() => handleCopyToClipboard(category._id)}>
             <div className="flex gap-4 shadow sticky top-0 bg-gray-200/20 backdrop-blur-sm">
                 <div className="w-[80px] flex items-center justify-center text-2xl ">{category.icon}</div>
-                <div className="py-2.5">
+                <div className="py-2.5 flex-1">
                     <h3 className="font-medium text-lg mb-1 text-primary">{category.title}</h3>
                     <p className="text-sm text-gray-500">{category.desc || 'Không có mô tả'}</p>
                 </div>

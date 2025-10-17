@@ -45,6 +45,12 @@ class TopicController {
         return SuccessResponse.ok(res, 'Lấy thông tin chủ đề thành công', result)
     })
 
+    getTopicPopulated = catchAsync(async (req, res, next) => {
+        const result = await TopicService.getTopicPopulated()
+
+        return SuccessResponse.ok(res, 'Lấy thông tin chủ đề thành công', result)
+    })
+
     // [POST] /api/topics - Tạo topic mới
     createTopic = catchAsync(async (req, res, next) => {
         const { name, desc, data } = req.body
@@ -72,6 +78,10 @@ class TopicController {
             isActive,
             data,
         })
+
+        if (!result) {
+            return ErrorResponse.notFound(res, 'Không tìm thấy chủ đề')
+        }
 
         return SuccessResponse.ok(res, 'Cập nhật chủ đề thành công', result)
     })

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Info, MessageCircleMore, Play, Star } from 'lucide-react'
+import { ArrowLeft, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -75,22 +75,34 @@ export default function DetailTopicSlugPage() {
     }
     return (
         <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center px-3 md:px-0">
                 <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại
                 </Button>
-                <VoiceSelectionModal>
-                    <Button variant={'outline'}>Chọn giọng nói</Button>
-                </VoiceSelectionModal>
+                <div className="flex items-center gap-2">
+                    {user?._id === topicDetailData.userId._id && (
+                        <Button variant={'outline'} onClick={() => navigate(`/topic/edit-topic/${topicDetailData._id}`)}>
+                            <Edit /> Chỉnh sửa
+                        </Button>
+                    )}
+
+                    <VoiceSelectionModal>
+                        <Button variant={'outline'}>
+                            <Mic /> Chọn giọng nói
+                        </Button>
+                    </VoiceSelectionModal>
+                </div>
             </div>
             <div className="space-y-2 mt-5">
-                <h1 className="text-xl font-medium  px-4 xl:px-0">{topicDetailData.name}</h1>
-                <p className=" px-4 xl:px-0">{topicDetailData.desc}</p>
-                <Link to={`/exam/${params.slug}`} className="block mt-3">
-                    <Button>
-                        <Play /> Thi thử
-                    </Button>
-                </Link>
+                <div className=" px-3 md:px-0">
+                    <h1 className="text-xl font-medium  px-4 xl:px-0">{topicDetailData.name}</h1>
+                    <p className=" px-4 xl:px-0">{topicDetailData.desc}</p>
+                    <Link to={`/exam/${params.slug}`} className="block mt-3">
+                        <Button>
+                            <Play /> Thi thử
+                        </Button>
+                    </Link>
+                </div>
                 <div className="flex gap-10 ">
                     <div className="my-5 grid grid-cols-1  gap-5 flex-1">
                         {topicDetailData.data.map((topic, index) => (
@@ -101,58 +113,60 @@ export default function DetailTopicSlugPage() {
                         {topicDetailData.data.map((topic, index) => (
                             <a
                                 href={`#topic-${index}`}
-                                className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md ${
+                                className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md  ${
                                     location.hash === `#topic-${index}` ? 'text-primary bg-sky-100' : 'text-gray-700'
                                 }`}
                                 key={index}
                             >
                                 {location.hash === `#topic-${index}` && <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>}
-                                <p>
-                                    {index + 1}. {topic.categoryId.title}
+                                <p className="flex">
+                                    {topic.categoryId.icon} <Dot /> {topic.categoryId.title}
                                 </p>
                             </a>
                         ))}
                     </div>
                 </div>
-                <div className="text-red-700 bg-red-50 border-l-4 border-red-700 p-3 md:p-5 rounded-r-xl ">
-                    <p className="flex items-center gap-2 font-medium mb-2">
-                        <Info size={20} /> Lưu ý:
-                    </p>
-                    <p className="">Các chủ đề trên được cộng đồng chia sẻ, mang tính chất tham khảo, bạn có thể mở rộng thêm các chủ đề khác phù hợp với khả năng và sở thích của mình.</p>
-                    <p>
-                        Hoặc{' '}
-                        <a href="create-topic" className="underline text-primary">
-                            click vào đây
-                        </a>{' '}
-                        để tạo chủ đề cho riêng mình
-                    </p>
-                </div>
-                <RatingComponent score={score} setScore={setScore} comment={comment} setComment={setComment} isSubmittingReview={isSubmittingReview} handleSubmitReview={handleSubmitReview} />
-                <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                    <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
-                        <MessageCircleMore size={18} className="text-primary" /> Bình luận và đánh giá của những người khác
-                    </h3>
-                    {topicDetailData.rating.length === 0 && <p className="text-gray-500">Chưa có đánh giá nào</p>}
-                    <div className="space-y-5">
-                        {topicDetailData.rating.map((item) => (
-                            <div key={item._id} className="flex gap-4 border border-gray-200 rounded-lg p-4">
-                                <Link to={`/profile/${item.userId._id}`}>
-                                    <AvatarCircle user={item.userId} className="h-14 w-14" />
-                                </Link>
-                                <div className="flex-1">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <h4 className="font-medium">{item.userId.displayName}</h4>
-                                            <p className="ml-2 text-sm text-gray-600 flex gap-1 items-center">
-                                                ({item.score}/5 <Star size={14} />)
-                                            </p>
+                <div className="mx-3 md:mx-0">
+                    <div className=" text-red-700 bg-red-50 border-l-4 border-red-700 p-3 md:p-5 rounded-r-xl ">
+                        <p className="flex items-center gap-2 font-medium mb-2">
+                            <Info size={20} /> Lưu ý:
+                        </p>
+                        <p className="">Các chủ đề trên được cộng đồng chia sẻ, mang tính chất tham khảo, bạn có thể mở rộng thêm các chủ đề khác phù hợp với khả năng và sở thích của mình.</p>
+                        <p>
+                            Hoặc{' '}
+                            <a href="create-topic" className="underline text-primary">
+                                click vào đây
+                            </a>{' '}
+                            để tạo chủ đề cho riêng mình
+                        </p>
+                    </div>
+                    <RatingComponent score={score} setScore={setScore} comment={comment} setComment={setComment} isSubmittingReview={isSubmittingReview} handleSubmitReview={handleSubmitReview} />
+                    <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                        <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
+                            <MessageCircleMore size={18} className="text-primary" /> Bình luận và đánh giá của những người khác
+                        </h3>
+                        {topicDetailData.rating.length === 0 && <p className="text-gray-500">Chưa có đánh giá nào</p>}
+                        <div className="space-y-5">
+                            {topicDetailData.rating.map((item) => (
+                                <div key={item._id} className="flex gap-4 border border-gray-200 rounded-lg p-4">
+                                    <Link to={`/profile/${item.userId._id}`}>
+                                        <AvatarCircle user={item.userId} className="h-14 w-14" />
+                                    </Link>
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <h4 className="font-medium">{item.userId.displayName}</h4>
+                                                <p className="ml-2 text-sm text-gray-600 flex gap-1 items-center">
+                                                    ({item.score}/5 <Star size={14} />)
+                                                </p>
+                                            </div>
+                                            <div className="text-xs text-gray-500">{formatDistance(new Date(item.createdAt), new Date(), { addSuffix: true, locale: vi })}</div>
                                         </div>
-                                        <div className="text-xs text-gray-500">{formatDistance(new Date(item.createdAt), new Date(), { addSuffix: true, locale: vi })}</div>
+                                        <p className="mt-1 text-gray-700">{item.comment}</p>
                                     </div>
-                                    <p className="mt-1 text-gray-700">{item.comment}</p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

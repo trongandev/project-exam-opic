@@ -35,3 +35,17 @@ export interface CategoryMin {
     title: string
     desc: string
 }
+
+export interface IAccurancyFromRecoderAudio {
+    end_time: string
+    ipa_transcript: string
+    is_letter_correct_all_words: string
+    matched_transcripts: string
+    matched_transcripts_ipa: string
+    pair_accuracy_category: string
+    pronunciation_accuracy: string
+    real_transcript: string
+    real_transcripts: string
+    real_transcripts_ipa: string
+    start_time: string
+}

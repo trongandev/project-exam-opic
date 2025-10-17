@@ -42,17 +42,32 @@ export interface Topic {
     updatedAt: string
 }
 
+export interface TopicSample {
+    _id: string
+    name: string
+    data: DataTopic[]
+    desc: string
+}
+
 export interface DataTopic {
     _id: string
     categoryId: Category
     quests: Quest[]
 }
 
-export interface DataTopicCreate {
+export interface DataTopicNoCategory {
     _id: string
     icon: string
     title: string
     desc: string
+    quests: Quest[]
+}
+
+export interface DataTopicCreate {
+    icon: string
+    title: string
+    desc: string
+    dateId: string
     categoryId: string
     quests: Quest[]
 }

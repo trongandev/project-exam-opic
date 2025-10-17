@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, FileQuestion, Save } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import type { DataTopicCreate, TopicCreateMin } from '@/types/topic'
+import type { DataTopicCreate, DataTopicNoCategory, TopicCreateMin } from '@/types/topic'
 import InlineEdit from '@/components/InlineEdit'
 import { closestCenter, DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -13,16 +13,31 @@ import LoadingIcon from '@/components/ui/loading-icon'
 import ToastLogManyErrror from '@/components/etc/ToastLogManyErrror'
 import type { Category } from '@/types/etc'
 import categoryService from '@/services/categoryService'
+import LoadingScreen from '@/components/etc/LoadingScreen'
 export default function EditTopicPage() {
     const navigate = useNavigate()
     const params = useParams()
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
     const [flatCategory, setFlatCategory] = useState<Category[]>([])
     const [randomIndex, setRandomIndex] = useState(1)
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         const fetchAPI = async () => {
-            const res = await categoryService.getAllCategories()
-            setFlatCategory(res)
+            try {
+                setLoading(true)
+                const res = await categoryService.getAllCategories()
+                console.log(res)
+                if (res.status === 200) {
+                    setFlatCategory(res.data.data)
+                } else {
+                    setFlatCategory([])
+                    toast.error('Không tìm thấy chủ đề này')
+                }
+            } catch (error: any) {
+                toast.error(error.message)
+            } finally {
+                setLoading(false)
+            }
         }
         const getCategory = sessionStorage.getItem('categories')
         if (getCategory) {
@@ -38,11 +53,11 @@ export default function EditTopicPage() {
         desc: '',
     })
     const defaultQuestionList: DataTopicCreate = {
-        _id: new Date().toISOString(),
         icon: flatCategory[randomIndex]?.icon || '',
         title: flatCategory[randomIndex]?.title || '',
         desc: flatCategory[randomIndex]?.desc || '',
         categoryId: flatCategory[randomIndex]?._id || '',
+        dateId: Date.now().toString(),
         quests: [{ _id: new Date().toISOString(), text: '', note: '', answer: '' }],
     }
     const [questionList, setQuestionList] = useState<DataTopicCreate[]>([defaultQuestionList])
@@ -65,7 +80,7 @@ export default function EditTopicPage() {
     }, [params._id])
 
     const createQuestion = () => {
-        setQuestionList([{ ...defaultQuestionList, _id: new Date().toISOString() }, ...questionList])
+        setQuestionList([{ ...defaultQuestionList, dateId: Date.now().toString() }, ...questionList])
         const newIndex = Math.floor(Math.random() * flatCategory.length)
         setRandomIndex(newIndex)
     }
@@ -104,7 +119,7 @@ export default function EditTopicPage() {
         }
     }
 
-    const handleTopicInfoChange = (item: DataTopicCreate, index: number) => {
+    const handleTopicInfoChange = (item: DataTopicNoCategory, index: number) => {
         console.log(item, index)
         const newList = [...questionList]
         newList[index].title = item.title
@@ -127,7 +142,7 @@ export default function EditTopicPage() {
             toast.success(res.message)
             navigate(`/topic/${res.data.slug}`)
         } catch (error: any) {
-            console.log(error.response.data)
+            console.log(error)
             ToastLogManyErrror(error)
         } finally {
             setLoadingCreateTopic(false)
@@ -139,11 +154,22 @@ export default function EditTopicPage() {
 
         if (active.id !== over.id) {
             setQuestionList((items) => {
-                const oldIndex = items.findIndex((item) => item._id === active.id)
-                const newIndex = items.findIndex((item) => item._id === over.id)
+                const oldIndex = items.findIndex((item) => item.dateId === active.id)
+                const newIndex = items.findIndex((item) => item.dateId === over.id)
                 return arrayMove(items, oldIndex, newIndex)
             })
         }
+    }
+    if (loading) {
+        return LoadingScreen()
+    }
+    if (!loading && topicDetailData.name === '') {
+        return (
+            <div className="h-screen text-gray-700 flex justify-center flex-col items-center gap-5">
+                <p className="text-center">Không tìm thấy chủ đề này</p>
+                <Button onClick={() => navigate(-1)}>Quay lại</Button>
+            </div>
+        )
     }
     return (
         <div className={`px-0 max-w-7xl mx-auto my-10 text-gray-700 relative`}>
@@ -187,10 +213,10 @@ export default function EditTopicPage() {
                 <div className="flex gap-10 my-5">
                     <div className="my-5 grid grid-cols-1 gap-5 flex-1 transition-all duration-200">
                         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                            <SortableContext items={questionList.map((item) => item._id)} strategy={verticalListSortingStrategy}>
+                            <SortableContext items={questionList.map((item) => item.dateId)} strategy={verticalListSortingStrategy}>
                                 {questionList.map((item: DataTopicCreate, index: number) => (
                                     <SortableItem
-                                        key={item._id}
+                                        key={item.dateId}
                                         item={item}
                                         index={index}
                                         flatCategory={flatCategory}
@@ -206,7 +232,7 @@ export default function EditTopicPage() {
                     </div>
                 </div>
                 <div className="mt-28"></div>
-                <div className="fixed bottom-0 bg-sky-50/50 backdrop-blur-xs h-20 w-full md:w-7xl border-t-2 md:border-2 border-sky-700/20  border flex items-center justify-between px-5 md:px-5 pt-3 rounded-t-3xl">
+                <div className="fixed bottom-0 bg-sky-50/50 backdrop-blur-xs h-20 w-full max-w-7xl border-t-2 md:border-2 border-sky-700/20  border flex items-center justify-between px-5 md:px-5 pt-3 rounded-t-3xl">
                     <div className="font-medium text-gray-700">Tổng số câu: {questionList.reduce((acc, curr) => acc + (curr.quests ? curr.quests.length : 0), 0)}</div>
                     <div className="flex items-center gap-3">
                         <Button variant={'outline'}>Hủy</Button>

@@ -31,7 +31,9 @@ export default function CHeader() {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <nav className="flex flex-col gap-2 items-start justify-start">
-                        <h1 className="text-lg font-semibold text-center w-full py-5 text-primary">EXAM OPIc</h1>
+                        <Link to={'/'} className="text-lg font-semibold text-center w-full py-5 text-primary">
+                            EXAM OPIc
+                        </Link>
                         {linkData.map((item) => (
                             <Link
                                 key={item.href}
@@ -50,7 +52,7 @@ export default function CHeader() {
                 <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm h-12 md:h-14 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
                     <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                         <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
-                        <h1>EXAM OPIc</h1>
+                        <Link to={'/'}>EXAM OPIc</Link>
                     </div>
 
                     <ul className="gap-10 h-full md:flex hidden ">

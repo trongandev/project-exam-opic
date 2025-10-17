@@ -95,6 +95,15 @@ class TopicService {
         return topic
     }
 
+    async getTopicPopulated() {
+        const topics = await TopicModel.findOne({ isPopular: true })
+            .populate('userId', '_id displayName email')
+            .populate({ path: 'data.categoryId', model: 'CategoryModel', select: '_id icon title desc' })
+            .populate('rating.userId', '_id displayName email')
+            .lean()
+        return topics
+    }
+
     // Tạo topic mới
     async createTopic(data) {
         const topic = new TopicModel(data)
@@ -110,7 +119,7 @@ class TopicService {
         const topic = await TopicModel.findById(id)
 
         if (!topic) {
-            throw new ErrorResponse('Không tìm thấy chủ đề', 404)
+            return false
         }
 
         // Cập nhật các trường
