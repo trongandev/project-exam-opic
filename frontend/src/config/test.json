@@ -1,66 +1,66 @@
 [
     {
-        "_id": "68f1a1f097c7b03a50ad6209",
+        "_id": "68f1f12c7f79bc4e756901a3",
         "icon": "🌍",
-        "title": "Role Play",
+        "title": "Role Play - Đóng vai",
         "desc": "Một số tính huống như mở thẻ ngân hàng, rủ đi chơi công viên, có người bạn diễn violon, có người bạn nước ngoài, hủy kế hoạch du lịch, gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, nói về nấu ăn"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad6207",
+        "_id": "68f1f12b7f79bc4e756901a1",
         "icon": "🎬",
         "title": "Movie",
         "desc": "Phim yêu thích, diễn viên thích, lần xem phim gần nhất, đáng nhớ nhất, hay rủ ai đi xem phim, thường làm gì trước, trong và sau khi xem"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad6205",
+        "_id": "68f1f12b7f79bc4e7569019f",
         "icon": "⛲",
         "title": "Park",
         "desc": "Sự cố ngoài ý muốn khi đi công viên"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad6203",
+        "_id": "68f1f12b7f79bc4e7569019d",
         "icon": "🏠",
         "title": "House",
         "desc": "Giới thiệu nhà, phòng yêu thích, công việc hay làm trong nhà, so sánh nhà hồi bé và hiện tại, ngày thường - cuối tuần ở nhà làm gì"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad6201",
+        "_id": "68f1f12b7f79bc4e7569019b",
         "icon": "🍽️",
         "title": "Furniture",
         "desc": "Các vấn đề của đồ gia dụng, cách giải quyết vấn đề của bạn"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61ff",
+        "_id": "68f1f12b7f79bc4e75690199",
         "icon": "✈️",
         "title": "Travel",
         "desc": "Địa điểm yêu thích, hoạt động khi đi du lịch, kỷ niệm đáng nhớ, kế hoạch tương lai."
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61fd",
+        "_id": "68f1f12b7f79bc4e75690197",
         "icon": "🌍",
         "title": "Country & Culture",
         "desc": "Các món ăn phổ biến, thời tiết, trải nghiệm đáng nhớ, khác biệt xưa-nay"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61fb",
+        "_id": "68f1f12b7f79bc4e75690195",
         "icon": "🚶",
         "title": "Walking",
         "desc": "Nơi đi bộ yêu thích, tần suất, lợi ích của việc đi bộ, lần đáng nhớ"
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61f9",
+        "_id": "68f1f12b7f79bc4e75690193",
         "icon": "👨‍👩‍👧‍👦",
         "title": "Family & Friends",
         "desc": "Mô tả người thân, mối quan hệ với bạn bè, các hoạt động chung, kỷ niệm đáng nhớ."
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61f7",
+        "_id": "68f1f12b7f79bc4e75690191",
         "icon": "🎵",
         "title": "Music & Concerts",
         "desc": "Thể loại âm nhạc yêu thích, nhạc cụ, buổi hòa nhạc đã tham gia."
     },
     {
-        "_id": "68f1a1f097c7b03a50ad61f5",
+        "_id": "68f1f12b7f79bc4e7569018f",
         "icon": "👤",
         "title": "Introduce yourself",
         "desc": "Thông tin cá nhân, sở thích, công việc, học vấn."

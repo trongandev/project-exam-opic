@@ -6,7 +6,7 @@
             "icon": "👤",
             "title": "Introduce yourself",
             "desc": "Thông tin cá nhân, sở thích, công việc, học vấn.",
-            "categoryId": "68f1a1f097c7b03a50ad61f5",
+            "categoryId": "68f1f12b7f79bc4e7569018f",
             "quests": [
                 {
                     "text": "Let's start the interview now, tell me a little bit about yourself.",
@@ -19,7 +19,7 @@
             "icon": "🎵",
             "title": "Music & Concerts",
             "desc": "Thể loại âm nhạc yêu thích, nhạc cụ, buổi hòa nhạc đã tham gia.",
-            "categoryId": "68f1a1f097c7b03a50ad61f7",
+            "categoryId": "68f1f12b7f79bc4e75690191",
 
             "quests": [
                 {
@@ -44,7 +44,7 @@
             "icon": "👨‍👩‍👧‍👦",
             "title": "Family & Friends",
             "desc": "Mô tả người thân, mối quan hệ với bạn bè, các hoạt động chung, kỷ niệm đáng nhớ.",
-            "categoryId": "68f1a1f097c7b03a50ad61f9",
+            "categoryId": "68f1f12b7f79bc4e75690193",
 
             "quests": [
                 {
@@ -58,7 +58,7 @@
             "icon": "🚶",
             "title": "Walking",
             "desc": "Nơi đi bộ yêu thích, tần suất, lợi ích của việc đi bộ, lần đáng nhớ",
-            "categoryId": "68f1a1f097c7b03a50ad61fb",
+            "categoryId": "68f1f12b7f79bc4e75690195",
 
             "quests": [
                 {
@@ -82,7 +82,7 @@
             "icon": "🌍",
             "title": "Country & Culture",
             "desc": "Các món ăn phổ biến, thời tiết, trải nghiệm đáng nhớ, khác biệt xưa-nay",
-            "categoryId": "68f1a1f097c7b03a50ad61fd",
+            "categoryId": "68f1f12b7f79bc4e75690197",
 
             "quests": [
                 {
@@ -121,7 +121,7 @@
             "icon": "✈️",
             "title": "Travel",
             "desc": "Địa điểm yêu thích, hoạt động khi đi du lịch, kỷ niệm đáng nhớ, kế hoạch tương lai.",
-            "categoryId": "68f1a1f097c7b03a50ad61ff",
+            "categoryId": "68f1f12b7f79bc4e75690199",
 
             "quests": [
                 {
@@ -135,7 +135,7 @@
             "icon": "🍽️",
             "title": "Furniture",
             "desc": "Các vấn đề của đồ gia dụng, cách giải quyết vấn đề của bạn",
-            "categoryId": "68f1a1f097c7b03a50ad6201",
+            "categoryId": "68f1f12b7f79bc4e7569019b",
 
             "quests": [
                 {
@@ -149,7 +149,7 @@
             "icon": "🏠",
             "title": "House",
             "desc": "Giới thiệu nhà, phòng yêu thích, công việc hay làm trong nhà, so sánh nhà hồi bé và hiện tại, ngày thường - cuối tuần ở nhà làm gì",
-            "categoryId": "68f1a1f097c7b03a50ad6203",
+            "categoryId": "68f1f12b7f79bc4e7569019d",
 
             "quests": [
                 {
@@ -178,7 +178,7 @@
             "icon": "⛲",
             "title": "Park",
             "desc": "Sự cố ngoài ý muốn khi đi công viên",
-            "categoryId": "68f1a1f097c7b03a50ad6205",
+            "categoryId": "68f1f12b7f79bc4e7569019f",
 
             "quests": [
                 {
@@ -192,7 +192,7 @@
             "icon": "🎬",
             "title": "Movie",
             "desc": "Phim yêu thích, diễn viên thích, lần xem phim gần nhất, đáng nhớ nhất, hay rủ ai đi xem phim, thường làm gì trước, trong và sau khi xem",
-            "categoryId": "68f1a1f097c7b03a50ad6207",
+            "categoryId": "68f1f12b7f79bc4e756901a1",
 
             "quests": [
                 {
@@ -226,7 +226,7 @@
             "icon": "👽",
             "title": "Role Play",
             "desc": "Một số tính huống như mở thẻ ngân hàng, rủ đi chơi công viên, có người bạn diễn violon, có người bạn nước ngoài, hủy kế hoạch du lịch, gặp khó khăn khi đi mua áo, gọi điện nhờ sửa đồ, nói về nấu ăn",
-            "categoryId": "68f1a1f097c7b03a50ad6209",
+            "categoryId": "68f1f12c7f79bc4e756901a3",
 
             "quests": [
                 {

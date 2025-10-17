@@ -1,7 +1,7 @@
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import { Button } from '@/components/ui/button'
 import { TOPICDATA } from '@/config/templateData'
-import { ArrowLeft, Dot, Play } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, Dot, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -10,19 +10,28 @@ import topicService from '@/services/topicService'
 import type { Topic } from '@/types/topic'
 
 export default function ExamPage() {
-    const [dataExam, setDataExam] = useState<Topic>(TOPICDATA)
+    const [dataExam, setDataExam] = useState<Topic | null>(TOPICDATA)
     const [isStartExam, setIsStartExam] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
         const fetchAPI = async () => {
             const res = await topicService.getTopicPopulated()
-            console.log(res)
             setDataExam(res)
         }
         fetchAPI()
     }, [])
-    if (!isStartExam) {
+    if (!dataExam) {
+        return (
+            <div className="flex items-center justify-center h-screen flex-col gap-2">
+                <p>Không tìm thấy bộ đề thi.</p>
+                <Button onClick={() => navigate(-1)}>
+                    <ChevronLeft /> Quay lại
+                </Button>
+            </div>
+        )
+    }
+    if (!isStartExam && dataExam) {
         return (
             <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
                 <div className="flex justify-between items-center px-3 md:px-0">
@@ -71,5 +80,5 @@ export default function ExamPage() {
             </div>
         )
     }
-    return <ExamOpic data={dataExam} />
+    if (isStartExam && dataExam) return <ExamOpic data={dataExam} />
 }

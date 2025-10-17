@@ -3,7 +3,7 @@ const { CategoryModel } = require('../models/category.model')
 
 class CategoryService {
     async getAllCategories() {
-        const categories = await CategoryModel.find({ isActive: true }).sort({ createdAt: -1 }).lean()
+        const categories = await CategoryModel.find({ isActive: true }).sort({ createdAt: -1 }).select('_id icon title desc').lean()
         return categories
     }
 
