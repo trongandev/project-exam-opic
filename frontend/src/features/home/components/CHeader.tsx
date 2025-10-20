@@ -1,4 +1,4 @@
-import { BookA, GalleryVerticalEnd, Home, LogOut, Menu, PhoneCall, TestTubes, User } from 'lucide-react'
+import { GalleryVerticalEnd, Home, LogOut, Menu, MessageCircleQuestion, PhoneCall, TestTubes, User } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
@@ -13,9 +13,9 @@ export default function CHeader() {
     const pathname = location.pathname
     const linkData = [
         { name: 'Trang chủ', icon: Home, href: '/' },
-        { name: 'Thể loại', icon: BookA, href: '/category' },
         { name: 'Tổng hợp topic', icon: GalleryVerticalEnd, href: '/topic' },
         { name: 'Thi thử', icon: TestTubes, href: '/exam' },
+        { name: 'Góp ý', icon: MessageCircleQuestion, href: '/feedback' },
     ]
     return (
         <>

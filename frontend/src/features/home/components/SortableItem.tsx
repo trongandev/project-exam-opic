@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { motion } from 'framer-motion'
 
 import type { DataTopicCreate } from '@/types/topic'
 import { ChevronDown, ChevronUp, Edit, GripVertical, MoveDown, PlusCircle, Trash2 } from 'lucide-react'
@@ -35,7 +36,15 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
         }
     }
     return (
-        <div ref={setNodeRef} style={style} {...attributes}>
+        <motion.div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            initial={{ opacity: 0, y: -20 }} // bắt đầu ở trên, mờ
+            animate={{ opacity: 1, y: 0 }} // trượt xuống và hiện ra
+            exit={{ opacity: 0, y: -20 }} // trượt lên khi xóa
+            transition={{ duration: 0.3 }}
+        >
             <div key={item.dateId} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200  select-none">
                 {/* Question Header */}
                 <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-5">
@@ -143,6 +152,6 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }

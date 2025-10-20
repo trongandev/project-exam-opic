@@ -12,7 +12,7 @@ export default function CategoryPage() {
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(false)
 
-    const [isSimple, setIsSimple] = useState(false)
+    const [isSimple, setIsSimple] = useState(true)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function CategoryPage() {
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto my-5  min-h-screen">
             <SEO title={`Tổng hợp ${categories?.length || 74} thể loại`} description="Danh sách các thể loại hay gặp nhất khi thi OPIc" />
-            <Button variant={'ghost'} onClick={() => navigate('/topic')}>
+            <Button variant={'ghost'} onClick={() => navigate(-1)}>
                 <ArrowLeft /> Quay lại
             </Button>
             <div className="text-center mb-8 mt-5 md:mt-0">

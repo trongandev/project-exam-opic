@@ -1,6 +1,5 @@
 import type { RouteObject } from 'react-router-dom'
 import { lazy } from 'react'
-// import { authGuard, userLoader } from './guards'
 import RegisterPage from '@/features/auth/pages/RegisterPage'
 import ProfilePage from '@/features/home/pages/ProfilePage'
 import SupportPage from '@/features/home/pages/SupportPage'
@@ -11,6 +10,8 @@ import CreateTopicPage from '@/features/home/pages/CreateTopicPage'
 import ExamSlugPage from '@/features/home/pages/ExamSlugPage'
 import EditTopicPage from '@/features/home/pages/EditTopicPage'
 import CategoryPage from '@/features/home/pages/CategoryPage'
+import FeedbackPage from '@/features/home/pages/FeedbackPage'
+// import { authGuard } from './guards'
 
 // Lazy Loading các components
 const RootLayout = lazy(() => import('../layouts/RootLayout'))
@@ -51,6 +52,10 @@ export const routes: RouteObject[] = [
                     {
                         path: 'help-center',
                         element: <SupportPage />,
+                    },
+                    {
+                        path: 'feedback',
+                        element: <FeedbackPage />,
                     },
                 ],
                 errorElement: <div>Something went wrong!</div>,

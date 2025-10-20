@@ -15,4 +15,5 @@ router.use('/profile', require('./profile.router'))
 router.use('/topics', require('./topic.router'))
 
 router.use('/categories', require('./category.router'))
+router.use('/feedback', require('./feedback.router'))
 module.exports = router

@@ -21,8 +21,7 @@ import SEO from '@/components/etc/SEO'
 export default function ExamOpic({ data }: { data: Topic }) {
     const dataExam: Topic = data
     const [isRecording, setIsRecording] = useState(false)
-    const [isShowScript, setIsShowScript] = useState(false)
-    const [isShowAnswer, setIsShowAnswer] = useState(false)
+    const [isShowSynthetic, setIsShowSynthetic] = useState<string>('')
     const [isShuffleData, setIsShuffleData] = useState(false)
     const [isFreedomMode, setIsFreedomMode] = useState(false)
     const [confidence, setConfidence] = useState(0)
@@ -230,6 +229,14 @@ export default function ExamOpic({ data }: { data: Topic }) {
             speakWord(newData[index]?.text || 'Unable to load question', 'custom')
         }
     }
+
+    const handleSyntheticChange = (type: 'script' | 'answer') => {
+        if (isShowSynthetic === type) {
+            setIsShowSynthetic('')
+        } else {
+            setIsShowSynthetic(type)
+        }
+    }
     const renderAccurancy = () => {
         if (!accurancyFromRecoderAudio) return null
         const lettersOfWordAreCorrect = accurancyFromRecoderAudio.is_letter_correct_all_words.split(' ')
@@ -307,8 +314,8 @@ export default function ExamOpic({ data }: { data: Topic }) {
                             <SpeakButton text={newData[currentIndex]?.text || 'Unable to load question'} id={'custom'} className=" w-full shadow-xs !h-10" />
 
                             <div className="flex gap-2">
-                                <Button variant={'secondary'} className="transition-all" onClick={() => setIsShowScript(!isShowScript)}>
-                                    {isShowScript ? (
+                                <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('script')}>
+                                    {isShowSynthetic === 'script' ? (
                                         <>
                                             <EyeOff /> Hide Script
                                         </>
@@ -318,8 +325,8 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                         </>
                                     )}
                                 </Button>
-                                <Button variant={'secondary'} className="transition-all" onClick={() => setIsShowAnswer(!isShowAnswer)}>
-                                    {isShowAnswer ? (
+                                <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('answer')}>
+                                    {isShowSynthetic === 'answer' ? (
                                         <>
                                             <EyeOff /> Hide Answer
                                         </>
@@ -330,7 +337,9 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                     )}
                                 </Button>
                             </div>
-                            {(isShowScript || isShowAnswer) && <p className="text-gray-500 italic">{isShowScript ? newData[currentIndex]?.text : newData[currentIndex]?.answer}</p>}
+                            {(isShowSynthetic === 'script' || isShowSynthetic === 'answer') && (
+                                <p className="text-gray-500 italic">{isShowSynthetic === 'script' ? newData[currentIndex]?.text : newData[currentIndex]?.answer}</p>
+                            )}
                         </div>
                         <div className="flex-col gap-3 justify-center items-center hidden md:flex">
                             <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">
@@ -515,10 +524,6 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                                 <span className="skew-5">{accurancyFromRecoderAudio.pronunciation_accuracy}%</span>
                                             </div>
                                             <p className="text-gray-800 leading-relaxed italic">{renderAccurancy()}</p>
-                                            <div className="">
-                                                <p>Audio detect in server:</p>
-                                                <p className="text-gray-500 mt-1">{accurancyFromRecoderAudio.real_transcript}</p>
-                                            </div>
                                         </div>
                                     )}
                                     {!accurancyFromRecoderAudio && !loadingAccurancy && <p className="text-gray-500 italic">No accuracy data available. Please try recording again.</p>}
@@ -547,7 +552,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                             )}
 
                             <Button
-                                disabled={!isFreedomMode || (currentIndex === newData.length - 1 && !recordingCompleted)}
+                                disabled={(!isFreedomMode || currentIndex === newData.length - 1) && !recordingCompleted}
                                 onClick={() => {
                                     if (currentIndex < newData.length - 1 && !loadingAccurancy) {
                                         handleFreedomModeChange(currentIndex + 1)

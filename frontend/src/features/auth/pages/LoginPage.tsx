@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ChevronLeft, Info } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useState } from 'react'
@@ -13,6 +13,11 @@ import LoadingIcon from '@/components/ui/loading-icon'
 
 export default function LoginPage() {
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const searchParams = new URLSearchParams(location.search)
+    const redirectPath = searchParams.get('redirect') || '/'
+
     const { login } = useAuth()
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -41,7 +46,7 @@ export default function LoginPage() {
             login(response.user, response.accessToken, response.refreshToken)
 
             // Navigate to dashboard or home
-            navigate('/')
+            navigate(redirectPath, { replace: true })
         } catch (error: any) {
             // Show error message
             let errorMessage = 'Email hoặc mật khẩu không đúng'

@@ -49,3 +49,24 @@ export interface IAccurancyFromRecoderAudio {
     real_transcripts_ipa: string
     start_time: string
 }
+
+export interface FeedbackCreate {
+    rating: number
+    comment: string
+}
+
+export interface UserMin {
+    _id: string
+    displayName: string
+    email: string
+}
+
+export interface FeedbackResponse {
+    userId: UserMin
+    comment: string
+    rating: number
+    helpfulCount: number
+    _id: string
+    createdAt: string
+    updatedAt: string
+}

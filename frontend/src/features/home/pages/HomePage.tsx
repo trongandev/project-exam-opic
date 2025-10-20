@@ -1,11 +1,39 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { opicInfo, sampleQuestions } from '@/config/opicData'
-import { Award, BookOpen, Check } from 'lucide-react'
+import { Award, BookOpen, Check, ChevronRight, Landmark } from 'lucide-react'
 import QuestionCard from '../components/QuestionCard'
 import { GENERIC_TIPS } from '@/config/etcConfig'
+import { Button } from '@/components/ui/button'
+import type { Category } from '@/types/etc'
+import { useEffect, useState } from 'react'
+import categoryService from '@/services/categoryService'
+import LoadingGrid from '@/components/etc/LoadingGrid'
+import { Link } from 'react-router-dom'
 
 export default function HomePage() {
+    const [loading, setLoading] = useState(false)
+    const [categories, setCategories] = useState<Category[]>([])
+    useEffect(() => {
+        const initDataFetch = async () => {
+            const initData: Category[] = []
+            const fetchAPI = async () => {
+                setLoading(true)
+                const res = await categoryService.getAllCategories()
+                setCategories(res.slice(0, 6))
+                initData.push(...res)
+                setLoading(false)
+            }
+            const getCategory = JSON.parse(sessionStorage.getItem('categories') || '[]')
+            if (getCategory) {
+                setCategories(getCategory.slice(0, 6))
+            } else {
+                await fetchAPI()
+                sessionStorage.setItem('categories', JSON.stringify(initData))
+            }
+        }
+        initDataFetch()
+    }, [])
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20">
             {/* Header */}
@@ -56,6 +84,42 @@ export default function HomePage() {
                             </div>
                         ))}
                     </div>
+                </CardContent>
+            </Card>
+            <Card className="mb-8">
+                <CardHeader>
+                    <CardTitle className="flex items-center justify-between ">
+                        <div className="flex items-center gap-3   text-primary text-xl ">
+                            <Landmark className="w-6 h-6" />
+                            <p>Tổng hợp 74 thể loại hay gặp trong đề</p>
+                        </div>
+                        <Link to="/category">
+                            <Button variant={'ghost'} size={'sm'} className="text-xs">
+                                Xem thêm... <ChevronRight />
+                            </Button>
+                        </Link>
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {categories && !loading && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {categories.map((category) => (
+                                <div key={category._id} className="p-6 border rounded-lg hover:shadow-md transition-shadow bg-white">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="text-2xl">{category.icon}</span>
+                                        <h3 className="text-lg font-semibold text-gray-900">{category.title}</h3>
+                                    </div>
+                                    <p className="text-gray-600 text-sm">{category.desc}</p>
+                                </div>
+                            ))}
+                            {loading && <LoadingGrid className="col-span-full" />}
+                            <Link to="/category" className="block text-center col-span-full">
+                                <Button variant={'ghost'} size={'sm'} className="text-xs">
+                                    Nhấn vào để xem thêm... <ChevronRight />
+                                </Button>
+                            </Link>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
             <Card className="mb-8">

@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import type { User } from '@/types/user'
 import { Link } from 'react-router-dom'
-export default function AvatarCircle({ user, className }: { user?: User; className?: string }) {
+import type { UserMin } from '@/types/etc'
+export default function AvatarCircle({ user, className }: { user?: UserMin; className?: string }) {
     return (
         <Tooltip>
             <TooltipTrigger>

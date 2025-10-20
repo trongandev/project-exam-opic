@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, FileQuestion, Info, Save } from 'lucide-react'
+import { ArrowLeft, ArrowRight, FileQuestion, Info, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { DataTopicCreate, DataTopicNoCategory, TopicCreateMin } from '@/types/topic'
@@ -13,12 +13,15 @@ import LoadingIcon from '@/components/ui/loading-icon'
 import ToastLogManyErrror from '@/components/etc/ToastLogManyErrror'
 import type { Category } from '@/types/etc'
 import categoryService from '@/services/categoryService'
+import { useAuth } from '@/contexts/AuthContext'
+import { AnimatePresence } from 'framer-motion'
 
 export default function CreateTopicPage() {
     const navigate = useNavigate()
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
     const [flatCategory, setFlatCategory] = useState<Category[]>([])
     const [randomIndex, setRandomIndex] = useState(1)
+    const { user } = useAuth()
     useEffect(() => {
         const initDataFetch = async () => {
             const initData: Category[] = []
@@ -151,6 +154,23 @@ export default function CreateTopicPage() {
             })
         }
     }
+
+    if (!user) {
+        return (
+            <div className="flex items-center justify-center h-screen flex-col gap-2 space-y-3">
+                <h1 className="text-2xl font-medium">Bạn chưa đăng nhập 😒</h1>
+                <p className="text-gray-600">Vui lòng đăng nhập để tạo chủ đề.</p>
+                <div className="flex items-center gap-3">
+                    <Button onClick={() => navigate(-1)} variant={'outline'}>
+                        <ArrowLeft /> Quay lại
+                    </Button>
+                    <Button onClick={() => navigate('/auth/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search))}>
+                        Đăng nhập <ArrowRight />
+                    </Button>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className={`px-0 max-w-7xl mx-auto my-10 text-gray-700 relative`}>
             <div className="flex justify-between items-center">
@@ -198,23 +218,25 @@ export default function CreateTopicPage() {
 
                 <div className="flex gap-10 my-5">
                     <div className="my-5 grid grid-cols-1 gap-5 flex-1 transition-all duration-200">
-                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                            <SortableContext items={questionList.map((item) => item.dateId)} strategy={verticalListSortingStrategy}>
-                                {questionList.map((item: DataTopicCreate, index: number) => (
-                                    <SortableItem
-                                        key={item.dateId}
-                                        item={item}
-                                        index={index}
-                                        flatCategory={flatCategory}
-                                        handleTopicInfoChange={handleTopicInfoChange}
-                                        removeQuestion={removeQuestion}
-                                        createQuestExample={createQuestExample}
-                                        handleQuestExampleChange={handleQuestExampleChange}
-                                        removeQuestExample={removeQuestExample}
-                                    />
-                                ))}
-                            </SortableContext>
-                        </DndContext>
+                        <AnimatePresence>
+                            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                                <SortableContext items={questionList.map((item) => item.dateId)} strategy={verticalListSortingStrategy}>
+                                    {questionList.map((item: DataTopicCreate, index: number) => (
+                                        <SortableItem
+                                            key={item.dateId}
+                                            item={item}
+                                            index={index}
+                                            flatCategory={flatCategory}
+                                            handleTopicInfoChange={handleTopicInfoChange}
+                                            removeQuestion={removeQuestion}
+                                            createQuestExample={createQuestExample}
+                                            handleQuestExampleChange={handleQuestExampleChange}
+                                            removeQuestExample={removeQuestExample}
+                                        />
+                                    ))}
+                                </SortableContext>
+                            </DndContext>
+                        </AnimatePresence>
                     </div>
                 </div>
                 <div className="mt-28"></div>

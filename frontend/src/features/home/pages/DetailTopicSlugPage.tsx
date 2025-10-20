@@ -159,7 +159,15 @@ export default function DetailTopicSlugPage() {
                             để tạo chủ đề cho riêng mình
                         </p>
                     </div>
-                    <RatingComponent score={score} setScore={setScore} comment={comment} setComment={setComment} isSubmittingReview={isSubmittingReview} handleSubmitReview={handleSubmitReview} />
+                    <RatingComponent
+                        title="Đánh giá chủ đề này"
+                        score={score}
+                        setScore={setScore}
+                        comment={comment}
+                        setComment={setComment}
+                        isSubmittingReview={isSubmittingReview}
+                        handleSubmitReview={handleSubmitReview}
+                    />
                     <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                         <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
                             <MessageCircleMore size={18} className="text-primary" /> Bình luận và đánh giá của những người khác
@@ -176,7 +184,7 @@ export default function DetailTopicSlugPage() {
                                             <div className="flex items-center gap-3">
                                                 <h4 className="font-medium">{item.userId.displayName}</h4>
                                                 <p className="ml-2 text-sm text-gray-600 flex gap-1 items-center">
-                                                    ({item.score}/5 <Star size={14} />)
+                                                    ({item.score}/5 <Star size={14} className="fill-yellow-500 stroke-yellow-500" />)
                                                 </p>
                                             </div>
                                             <div className="text-xs text-gray-500">{formatDistance(new Date(item.createdAt), new Date(), { addSuffix: true, locale: vi })}</div>

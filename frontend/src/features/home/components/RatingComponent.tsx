@@ -5,6 +5,7 @@ import { Send, Star } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
+    title: string
     score: number
     setScore: (score: number) => void
     comment: string
@@ -12,7 +13,7 @@ interface Props {
     isSubmittingReview: boolean
     handleSubmitReview: () => void
 }
-export default function RatingComponent({ score, setScore, comment, setComment, isSubmittingReview, handleSubmitReview }: Props) {
+export default function RatingComponent({ title, score, setScore, comment, setComment, isSubmittingReview, handleSubmitReview }: Props) {
     const [hoverRating, setHoverRating] = useState(0)
 
     const handleStarClick = (starValue: number) => {
@@ -30,7 +31,7 @@ export default function RatingComponent({ score, setScore, comment, setComment, 
     return (
         <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
             <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
-                <Star size={18} className="text-primary" /> Đánh giá chủ đề này
+                <Star size={18} className="text-primary" /> {title}
             </h3>
             {/* Rating Stars */}
             <div className="mb-4">
@@ -59,7 +60,7 @@ export default function RatingComponent({ score, setScore, comment, setComment, 
                 <Textarea
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    className="w-full h-24 rounded-md resize-none"
+                    className="w-full h-36 rounded-md resize-none"
                     rows={4}
                     placeholder="Chia sẻ cảm nhận của bạn về chủ đề này..."
                     maxLength={500}
