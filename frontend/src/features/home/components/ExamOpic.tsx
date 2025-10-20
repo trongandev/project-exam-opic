@@ -16,6 +16,7 @@ import { useSpeakWordContext } from '@/hooks/useSpeakWordContext'
 import axios from 'axios'
 import LoadingIcon from '@/components/ui/loading-icon'
 import type { IAccurancyFromRecoderAudio } from '@/types/etc'
+import SEO from '@/components/etc/SEO'
 
 export default function ExamOpic({ data }: { data: Topic }) {
     const dataExam: Topic = data
@@ -262,6 +263,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
     }
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto  h-screen">
+            <SEO title={dataExam.name} description={dataExam.desc} canonical={`/exam/${dataExam.slug}`} />
             <div className="py-5 md:py-20">
                 <div className="flex items-center flex-wrap justify-end gap-2 md:gap-5">
                     <VoiceSelectionModal>

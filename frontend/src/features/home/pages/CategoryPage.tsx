@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Rows2, Rows4 } from 'lucide-react'
 import CategoryItem from '../components/CategoryItem'
 import { useNavigate } from 'react-router-dom'
+import SEO from '@/components/etc/SEO'
 
 export default function CategoryPage() {
     const [categories, setCategories] = useState<Category[]>([])
@@ -37,6 +38,7 @@ export default function CategoryPage() {
 
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto my-5  min-h-screen">
+            <SEO title={`Tổng hợp ${categories?.length || 74} thể loại`} description="Danh sách các thể loại hay gặp nhất khi thi OPIc" />
             <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                 <ArrowLeft /> Quay lại
             </Button>
