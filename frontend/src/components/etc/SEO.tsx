@@ -11,7 +11,7 @@ export default function SEO({
     title = 'Ôn thi OPIC - opic.io.vn',
     description = 'Ôn thi OPIC - Luyện tập và nâng cao kỹ năng nói tiếng Anh',
     canonical,
-    image = 'https://github.com/trongandev/project-exam-opic/blob/adbc1699013e731ee4aab06aea22a99f210dba13/frontend/public/images/thumbnail.png?raw=true',
+    image = 'https://opic.io.vn/images/thumbnail.png',
     schemaMarkup = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
