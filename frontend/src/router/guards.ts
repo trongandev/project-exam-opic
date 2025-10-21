@@ -6,7 +6,7 @@ export const authGuard = async () => {
     if (!isLoggedIn()) {
         // Nếu chưa đăng nhập, chuyển hướng về trang login
         // kèm theo đường dẫn hiện tại để sau khi login có thể quay lại
-        return redirect('/auth/login?redirectTo=' + window.location.pathname)
+        return redirect('/auth/login?redirect=' + window.location.pathname)
     }
     return null // Cho phép truy cập
 }

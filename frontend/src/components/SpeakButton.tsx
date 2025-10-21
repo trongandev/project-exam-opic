@@ -9,9 +9,10 @@ interface SpeakButtonProps {
     variant?: 'default' | 'outline' | 'ghost' | 'link' | 'destructive' | 'secondary'
     size?: 'sm' | 'default' | 'lg' | 'icon'
     className?: string
+    isShowLabel?: boolean
 }
 
-function SpeakButton({ text, id, variant = 'outline', size = 'sm', className = '' }: SpeakButtonProps) {
+function SpeakButton({ text, id, variant = 'outline', size = 'sm', className = '', isShowLabel = true }: SpeakButtonProps) {
     const { toggleAudio, isPlayingAudio, isLoadingAudio } = useSpeakWordContext()
 
     const isPlaying = isPlayingAudio(text, id)
@@ -31,7 +32,7 @@ function SpeakButton({ text, id, variant = 'outline', size = 'sm', className = '
         >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPlaying ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
 
-            {size !== 'icon' && <span className="ml-2">{isLoading ? 'Loading...' : isPlaying ? 'Off' : 'Speak'}</span>}
+            {size !== 'icon' && isShowLabel && <span className="ml-2 hidden md:block">{isLoading ? 'Loading...' : isPlaying ? 'Off' : 'Speak'}</span>}
         </Button>
     )
 }

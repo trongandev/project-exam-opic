@@ -25,7 +25,7 @@ export default function HomePage() {
                 setLoading(false)
             }
             const getCategory = JSON.parse(sessionStorage.getItem('categories') || '[]')
-            if (getCategory) {
+            if (getCategory && getCategory.length > 0) {
                 setCategories(getCategory.slice(0, 6))
             } else {
                 await fetchAPI()

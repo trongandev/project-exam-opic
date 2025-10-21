@@ -1,7 +1,7 @@
 <!-- TODO: Thay thế [Tên Dự Án] và các thông tin trong ngoặc vuông -->
 
 <p align="center">
-  <a href="[LINK_REPO_CỦA_BẠN]">
+  <a href="https://github.com/trongandev/project-exam-opic">
     <img src="./images-for-README/thumbnail.png" alt="Logo" width="500" >
   </a>
 </p>
@@ -11,7 +11,7 @@
 <p align="center">
   Một dự án giúp bạn luyện tập và thi thử OPIc một cách hiệu quả. Có rất nhiều tính năng hữu ích để cải thiện kỹ năng nói của bạn.
   <br />
-  <a href="https://project-exam-opic.vercel.app/"><strong>XEM TRANG WEB »</strong></a>
+  <a href="https://opic.io.vn/"><strong>XEM TRANG WEB »</strong></a>
   <br />
   <br />
 </p>

@@ -52,7 +52,10 @@ export default function CHeader() {
                 <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm h-12 md:h-14 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
                     <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                         <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
-                        <Link to={'/'}>EXAM OPIc</Link>
+                        <Link to={'/'} className="flex items-center">
+                            <img src="/images/logo-white.png" alt="Logo" className="h-8 hidden md:block" />
+                            <span className="ml-2">OPIc</span>
+                        </Link>
                     </div>
 
                     <ul className="gap-10 h-full md:flex hidden ">

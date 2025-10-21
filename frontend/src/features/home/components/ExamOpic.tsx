@@ -1,10 +1,10 @@
 import SpeakButton from '@/components/SpeakButton'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, Eye, EyeOff, LogOut, Mic, Play, Pause, Volume2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Eye, EyeOff, LogOut, Mic, Play, Pause, Volume2, RotateCw } from 'lucide-react'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import SpeechRecognition from 'react-speech-recognition'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
@@ -17,6 +17,7 @@ import axios from 'axios'
 import LoadingIcon from '@/components/ui/loading-icon'
 import type { IAccurancyFromRecoderAudio } from '@/types/etc'
 import SEO from '@/components/etc/SEO'
+import TextToIPA from './TextToIPA'
 
 export default function ExamOpic({ data }: { data: Topic }) {
     const dataExam: Topic = data
@@ -24,12 +25,12 @@ export default function ExamOpic({ data }: { data: Topic }) {
     const [isShowSynthetic, setIsShowSynthetic] = useState<string>('')
     const [isShuffleData, setIsShuffleData] = useState(false)
     const [isFreedomMode, setIsFreedomMode] = useState(false)
-    const [confidence, setConfidence] = useState(0)
+    const [isSpeakMode, setIsSpeakMode] = useState(false)
+    // const [confidence, setConfidence] = useState(0)
     const [newData, setNewData] = useState<Quest[]>([])
     const [volume, setVolume] = useState(0)
     const [currentIndex, setCurrentIndex] = useState(0)
     const [countDown, setCountDown] = useState(60) // Thời gian ghi âm 60 giây
-    // const [showAnswer, setShowAnswer] = useState(false) // Hiển thị đáp án sau khi hết thời gian
     const [recordingCompleted, setRecordingCompleted] = useState(false) // Đánh dấu hoàn thành ghi âm
     const [recordedAudio, setRecordedAudio] = useState<string | null>(null)
     const [loadingAccurancy, setLoadingAccurancy] = useState(false)
@@ -41,7 +42,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
     const audioRef = useRef<HTMLAudioElement | null>(null)
     const { speakWord } = useSpeakWordContext()
 
-    const { transcript, interimTranscript, finalTranscript, resetTranscript } = useSpeechRecognition()
+    // const { transcript, interimTranscript, finalTranscript, resetTranscript } = useSpeechRecognition()
     const navigate = useNavigate()
     useEffect(() => {
         if (dataExam) {
@@ -193,7 +194,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
     const handleRecoding = async () => {
         if (!isRecording && !recordingCompleted) {
             // Bắt đầu ghi âm
-            resetTranscript()
+            // resetTranscript()
             setRecordedAudio(null) // Reset audio cũ
             setIsPlayingAudio(false) // Reset playing state
 
@@ -223,9 +224,11 @@ export default function ExamOpic({ data }: { data: Topic }) {
             setCurrentIndex(index)
             setRecordingCompleted(false)
             setCountDown(60)
-            setConfidence(0)
-            resetTranscript()
+            // setConfidence(0)
+            // resetTranscript()
             setAccurancyFromRecoderAudio(null)
+            if (isSpeakMode) return
+
             speakWord(newData[index]?.text || 'Unable to load question', 'custom')
         }
     }
@@ -281,6 +284,10 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         <Label htmlFor="shuffle-mode">Shuffle Mode</Label>
                     </div>
                     <div className="flex items-center space-x-2 border-2 border-primary/20 p-2 rounded-md">
+                        <Switch id="Speak-mode" checked={isSpeakMode} onCheckedChange={setIsSpeakMode} />
+                        <Label htmlFor="Speak-mode">Speak Mode</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 border-2 border-primary/20 p-2 rounded-md">
                         <Switch
                             id="freedom-mode"
                             checked={isFreedomMode}
@@ -308,54 +315,57 @@ export default function ExamOpic({ data }: { data: Topic }) {
                     Question {currentIndex + 1} or {dataExam?.data.reduce((acc, curr) => acc + curr.quests.length, 0)}
                 </h1>
                 <div className="flex gap-5 flex-col md:flex-row ">
-                    <div className="pl-5 pt-5 flex gap-5  w-[350px]">
-                        <div className="space-y-3">
-                            <img src="/images/NewEuroAvatarCaptured.png" alt="" className="w-[350px]" />
-                            <SpeakButton text={newData[currentIndex]?.text || 'Unable to load question'} id={'custom'} className=" w-full shadow-xs !h-10" />
+                    {!isSpeakMode && (
+                        <div className="pl-5 pt-5 flex gap-5  w-[350px]">
+                            <div className="space-y-3">
+                                <img src="/images/NewEuroAvatarCaptured.png" alt="" className="w-[350px]" />
+                                <SpeakButton text={newData[currentIndex]?.text || 'Unable to load question'} id={'custom'} className=" w-full shadow-xs !h-10" />
 
-                            <div className="flex gap-2">
-                                <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('script')}>
-                                    {isShowSynthetic === 'script' ? (
-                                        <>
-                                            <EyeOff /> Hide Script
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Eye /> Show Script
-                                        </>
-                                    )}
-                                </Button>
-                                <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('answer')}>
-                                    {isShowSynthetic === 'answer' ? (
-                                        <>
-                                            <EyeOff /> Hide Answer
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Eye /> Show Answer
-                                        </>
-                                    )}
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('script')}>
+                                        {isShowSynthetic === 'script' ? (
+                                            <>
+                                                <EyeOff /> Hide Script
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Eye /> Show Script
+                                            </>
+                                        )}
+                                    </Button>
+                                    <Button variant={'secondary'} className="transition-all" onClick={() => handleSyntheticChange('answer')}>
+                                        {isShowSynthetic === 'answer' ? (
+                                            <>
+                                                <EyeOff /> Hide Answer
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Eye /> Show Answer
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                                {(isShowSynthetic === 'script' || isShowSynthetic === 'answer') && (
+                                    <p className="text-gray-500 italic">{isShowSynthetic === 'script' ? newData[currentIndex]?.text : newData[currentIndex]?.answer}</p>
+                                )}
                             </div>
-                            {(isShowSynthetic === 'script' || isShowSynthetic === 'answer') && (
-                                <p className="text-gray-500 italic">{isShowSynthetic === 'script' ? newData[currentIndex]?.text : newData[currentIndex]?.answer}</p>
-                            )}
+                            <div className="flex-col gap-3 justify-center items-center hidden md:flex">
+                                <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">
+                                    <div
+                                        className={`w-1 rounded-md transition-all ${isRecording ? 'bg-gradient-to-t from-sky-600 to-purple-600' : 'bg-gray-300'}`}
+                                        style={{
+                                            height: `${isRecording ? volume : 0}%`,
+                                            transition: 'height 0.1s ease-out',
+                                        }}
+                                    />
+                                </div>
+                                <div className={`mb-1 transition-colors ${isRecording ? 'text-red-500' : 'text-gray-500'}`}>
+                                    <Mic size={20} />
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex-col gap-3 justify-center items-center hidden md:flex">
-                            <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">
-                                <div
-                                    className={`w-1 rounded-md transition-all ${isRecording ? 'bg-gradient-to-t from-sky-600 to-purple-600' : 'bg-gray-300'}`}
-                                    style={{
-                                        height: `${isRecording ? volume : 0}%`,
-                                        transition: 'height 0.1s ease-out',
-                                    }}
-                                />
-                            </div>
-                            <div className={`mb-1 transition-colors ${isRecording ? 'text-red-500' : 'text-gray-500'}`}>
-                                <Mic size={20} />
-                            </div>
-                        </div>
-                    </div>
+                    )}
+
                     <div className="flex-1 pt-5">
                         <h1 className="mb-2 text-gray-700 font-medium">Question Progress:</h1>
                         <div className="flex gap-2  flex-wrap w-full">
@@ -372,7 +382,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                     </div>
                                 ))}
                         </div>
-                        {(!recordingCompleted || isRecording) && (
+                        {(!recordingCompleted || isRecording) && !isSpeakMode && (
                             <div
                                 className={`w-full h-20 border-2 border-dashed rounded-md mt-10 flex items-center justify-center gap-4 transition-all duration-300 ${
                                     isRecording
@@ -410,53 +420,6 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         )}
 
                         {/* Transcript Display */}
-                        {(transcript || isRecording) && (
-                            <div className="mt-5">
-                                <h1 className="mb-2 text-gray-700 font-medium flex items-center gap-2">
-                                    Your Response:
-                                    {isRecording && (
-                                        <span className="text-red-500 text-sm font-normal flex items-center gap-1">
-                                            <span className="w-2 h-2 bg-red-500 rounded-full relative">
-                                                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping absolute inset-0 -z-10"></span>
-                                            </span>
-                                            Live
-                                        </span>
-                                    )}
-                                </h1>
-                                <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 relative">
-                                    {transcript ? (
-                                        <div className="text-gray-800 leading-relaxed">
-                                            {/* Hiển thị transcript đã hoàn thành */}
-                                            <span>{finalTranscript}</span>
-
-                                            {/* Hiển thị interim transcript (đang được nhận diện) với highlight */}
-                                            {interimTranscript && <span className="text-blue-600 bg-blue-100 px-1 rounded ml-1">{interimTranscript}</span>}
-
-                                            {/* Cursor khi đang recording */}
-                                            {isRecording && <span className="inline-block w-0.5 h-4 bg-gray-600 animate-pulse ml-1"></span>}
-                                        </div>
-                                    ) : isRecording ? (
-                                        <div className="text-gray-500 italic flex items-center gap-2">
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                                            Listening for your voice...
-                                        </div>
-                                    ) : (
-                                        <div className="text-gray-400 italic">No speech detected yet</div>
-                                    )}
-
-                                    {confidence > 0 && (
-                                        <div className="mt-3 pt-2 border-t border-gray-200">
-                                            <div className="text-sm text-gray-500 flex items-center justify-between">
-                                                <span>Speech Confidence: {Math.round(confidence * 100)}%</span>
-                                                <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-green-500 transition-all duration-300" style={{ width: `${confidence * 100}%` }} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
 
                         {/* Audio Playback Controls */}
                         {recordedAudio && recordingCompleted && (
@@ -491,6 +454,11 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                         className="hidden"
                                     />
                                 </div>
+                            </div>
+                        )}
+                        {isSpeakMode && (
+                            <div className="mt-5">
+                                <TextToIPA text={newData[currentIndex]?.answer} />
                             </div>
                         )}
 
@@ -548,6 +516,11 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                     }}
                                 >
                                     <ChevronLeft /> Prev
+                                </Button>
+                            )}
+                            {recordingCompleted && (
+                                <Button variant="outline" onClick={() => handleFreedomModeChange(currentIndex)}>
+                                    <RotateCw /> Làm lại
                                 </Button>
                             )}
 
