@@ -11,16 +11,17 @@ class ProfileService {
         return profile
     }
 
-    async updateProfile(id, dataProfile) {
-        const { displayName } = dataProfile
-        const profile = await UserModel.findById(id)
+    async updateProfile(req) {
+        const userId = req.user.id
+        const { displayName } = req.body
+        const profile = await UserModel.findById(userId)
         if (!profile) {
             throw new ErrorResponse('Không tìm thấy người dùng', 404)
         }
         // Cập nhật các trường
         if (displayName !== undefined) profile.displayName = displayName
         await profile.save()
-
+        delete profile.password
         return profile
     }
 }

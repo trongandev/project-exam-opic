@@ -10,8 +10,11 @@ import authService, { type ChangePasswordRequest } from '@/services/authService'
 import LoadingIcon from '@/components/ui/loading-icon'
 import { toast } from 'sonner'
 import AvatarCircle from '@/components/etc/AvatarCircle'
+import ToastLogManyErrror from '@/components/etc/ToastLogManyErrror'
+import profileService from '@/services/profileService'
 export default function ProfilePage() {
-    const { user } = useAuth()
+    const { user, setUser } = useAuth()
+    const [isEditDisplayName, setIsEditDisplayName] = useState(false)
     const [isEditPassword, setIsEditPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -27,11 +30,39 @@ export default function ProfilePage() {
                 .required('Vui lòng xác nhận mật khẩu'),
         }),
         onSubmit: (values) => {
-            handleLogin(values)
+            handleChangePassword(values)
+        },
+    })
+    const formikDisplayName = useFormik({
+        initialValues: {
+            displayName: user?.displayName || '',
+        },
+        validationSchema: Yup.object({
+            displayName: Yup.string().required('Vui lòng nhập tên hiển thị').min(2, 'Tên hiển thị phải có ít nhất 2 ký tự').max(100, 'Tên hiển thị không được vượt quá 100 ký tự'),
+        }),
+        onSubmit: (values) => {
+            handleChangeDisplayName(values)
         },
     })
 
-    const handleLogin = async (values: ChangePasswordRequest) => {
+    const handleChangeDisplayName = async (values: { displayName: string }) => {
+        try {
+            setLoading(true)
+
+            // Call login API
+            const res = await profileService.updateProfile(user?._id as string, values)
+            setErrorMessage('')
+            setIsEditDisplayName(false)
+            toast.success('Đổi tên hiển thị thành công')
+            setUser(res)
+        } catch (error: any) {
+            ToastLogManyErrror(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleChangePassword = async (values: ChangePasswordRequest) => {
         try {
             setLoading(true)
 
@@ -41,16 +72,7 @@ export default function ProfilePage() {
             setIsEditPassword(false)
             toast.success('Đổi mật khẩu thành công')
         } catch (error: any) {
-            // Show error message
-            let errorMessage = 'Có lỗi sảy ra, vui lòng thử lại'
-
-            if (error.response?.data?.message) {
-                errorMessage = error.response.data.message
-            } else if (error.message) {
-                errorMessage = error.message
-            }
-
-            setErrorMessage(errorMessage)
+            ToastLogManyErrror(error)
         } finally {
             setLoading(false)
         }
@@ -59,12 +81,50 @@ export default function ProfilePage() {
         <div className="px-4 xl:px-0 max-w-7xl mx-auto space-y-7 h-screen flex  flex-col justify-center">
             <div className="border border-gray-300  p-5 rounded-xl  flex gap-10 items-center">
                 {user && <AvatarCircle user={user} className="h-32 w-32 text-3xl" />}
-
-                <div className="">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">Xin chào, {user?.displayName}</h1>
-                    <p className="text-gray-600 flex items-center gap-1">
-                        <Mail size={20} /> {user?.email}
-                    </p>
+                <div className="flex flex-1 items-center justify-between">
+                    <div className="">
+                        {isEditDisplayName ? (
+                            <>
+                                <Label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
+                                    Tên hiển thị
+                                </Label>
+                                <Input
+                                    type="text"
+                                    id="displayName"
+                                    placeholder="Nhập tên hiển thị"
+                                    className="h-10 md:h-12"
+                                    onChange={formikDisplayName.handleChange}
+                                    onBlur={formikDisplayName.handleBlur}
+                                    value={formikDisplayName.values.displayName}
+                                />
+                                {formikDisplayName.touched.displayName && formikDisplayName.errors.displayName ? (
+                                    <div className="text-red-500 mt-1 ml-5 text-sm font-medium">{formikDisplayName.errors.displayName}</div>
+                                ) : null}
+                                <div className="flex gap-3 items-center mt-3">
+                                    <Button variant={'outline'} onClick={() => setIsEditDisplayName(false)}>
+                                        Đóng
+                                    </Button>
+                                    <Button type="submit" disabled={loading} onClick={formikDisplayName.submitForm}>
+                                        {loading ? <LoadingIcon /> : <Save />}
+                                        Lưu thay đổi
+                                    </Button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <h1 className="text-2xl font-bold text-gray-900 mb-2">Xin chào, {user?.displayName}</h1>
+                                <p className="text-gray-600 flex items-center gap-1">
+                                    <Mail size={20} /> {user?.email}
+                                </p>
+                            </>
+                        )}
+                    </div>
+                    {!isEditDisplayName && (
+                        <Button variant={'outline'} onClick={() => setIsEditDisplayName(true)}>
+                            <Edit />
+                            Chỉnh sửa
+                        </Button>
+                    )}
                 </div>
             </div>
             <div className="border border-gray-300  p-5 rounded-xl ">

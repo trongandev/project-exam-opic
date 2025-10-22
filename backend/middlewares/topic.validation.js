@@ -1,6 +1,3 @@
-const validator = require('validator')
-const mongoose = require('mongoose')
-
 const validateQuestion = (item, prefix = 'Dữ liệu') => {
     const errors = []
     if (!item || typeof item !== 'object') {
@@ -9,10 +6,20 @@ const validateQuestion = (item, prefix = 'Dữ liệu') => {
     }
     if (!item.text) {
         errors.push(`${prefix} tiêu đề không được để trống`)
+    } else if (item.text.length > 1000) {
+        errors.push(`${prefix} tiêu đề không được vượt quá 1000 ký tự`)
     }
 
     if (!item.answer) {
         errors.push(`${prefix} trả lời không được để trống`)
+    } else if (item.answer.length > 1000) {
+        errors.push(`${prefix} trả lời không được vượt quá 1000 ký tự`)
+    }
+
+    if (!item.note) {
+        errors.push(`${prefix} ghi chú không được để trống`)
+    } else if (item.note.length > 1000) {
+        errors.push(`${prefix} ghi chú không được vượt quá 1000 ký tự`)
     }
 
     return errors
@@ -55,8 +62,7 @@ const validateCreateTopic = (req, res, next) => {
 
 // Validation cho cập nhật topic
 const validateUpdateTopic = (req, res, next) => {
-    const { name, slug, data } = req.body
-    console.log(req.body)
+    const { name, data } = req.body
     const errors = []
 
     // Kiểm tra name (tùy chọn)
@@ -67,19 +73,6 @@ const validateUpdateTopic = (req, res, next) => {
             errors.push('Tên chủ đề phải có ít nhất 3 ký tự')
         } else if (name.trim().length > 100) {
             errors.push('Tên chủ đề không được quá 100 ký tự')
-        }
-    }
-
-    // Kiểm tra slug (tùy chọn)
-    if (slug !== undefined) {
-        if (!slug || slug.trim().length === 0) {
-            errors.push('Slug không được để trống')
-        } else if (slug.trim().length < 3) {
-            errors.push('Slug phải có ít nhất 3 ký tự')
-        } else if (slug.trim().length > 100) {
-            errors.push('Slug không được quá 100 ký tự')
-        } else if (!/^[a-z0-9-]+$/.test(slug.trim())) {
-            errors.push('Slug chỉ được chứa chữ thường, số và dấu gạch ngang')
         }
     }
 

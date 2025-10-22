@@ -22,7 +22,6 @@ export default function FeedbackPage() {
         const fetchFeedback = async () => {
             setLoading(true)
             const res = await feedbackService.getAllFeedbacks(1, 20)
-            console.log(res)
             setFeedback(res)
             setLoading(false)
         }
@@ -41,19 +40,13 @@ export default function FeedbackPage() {
         setIsSubmittingReview(true)
         try {
             const res = await feedbackService.createFeedback({ rating, comment })
-            console.log('Đánh giá gửi thành công:', res.data)
 
             setRating(0)
             setComment('')
             toast.success('Cảm ơn bạn đã đánh giá!')
             const newRating: FeedbackResponse = {
-                _id: Date.now().toString(),
+                ...res.data,
                 userId: user!,
-                rating,
-                comment,
-                helpfulCount: 0,
-                createdAt: Date.now().toString(),
-                updatedAt: Date.now().toString(),
             }
             setFeedback((prev) => {
                 if (!prev) return prev

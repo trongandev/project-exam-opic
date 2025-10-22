@@ -23,7 +23,6 @@ export function CategorySearch({ children, handleChooseCategory, flatCategory }:
                                 className="cursor-pointer"
                                 value={category.title}
                                 onSelect={(currentValue) => {
-                                    console.log(currentValue, 'selected')
                                     handleChooseCategory(currentValue)
                                     setOpen(false)
                                 }}

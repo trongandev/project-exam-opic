@@ -1,5 +1,6 @@
 const { TopicModel } = require('../models/topic.model')
 const ErrorResponse = require('../core/error')
+const { generateSlug } = require('../utils/generateSlug')
 
 class TopicService {
     // Lấy danh sách topics với phân trang và tìm kiếm
@@ -113,15 +114,17 @@ class TopicService {
         return topic
     }
 
-    async cloneTopic({ userId, topicId }) {
+    async cloneTopic(req) {
+        const { topicId } = req.body
+        const { user } = req
         const topic = await TopicModel.findById(topicId).lean()
         if (!topic) {
             return false
         }
         const newTopic = new TopicModel({
-            userId: userId,
-            name: topic.name + ' (Bản sao)',
-            slug: topic.slug + '-clone',
+            userId: user.id,
+            name: topic.name + ' (Bản sao) của ' + user.displayName,
+            slug: generateSlug(topic.name + '-clone-' + user.displayName),
             desc: topic.desc,
             data: topic.data,
         })

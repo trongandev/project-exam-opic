@@ -131,7 +131,6 @@ export default function ExamOpicTemplate({ data }: { data: TopicSample }) {
                     const audioBlob = new Blob(chunks, { type: 'audio/webm' })
                     const audioUrl = URL.createObjectURL(audioBlob)
                     const convertedBase64 = (await convertBlobToBase64(audioBlob)) as string
-                    console.log(convertedBase64.length)
                     if (convertedBase64.length < 6) {
                         toast.error('Không thể ghi âm, vui lòng thử lại.')
                         return

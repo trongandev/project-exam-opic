@@ -44,7 +44,7 @@ export default function TopicPage() {
         }
 
         fetchData()
-    }, [currentPage, pagination.pageSize])
+    }, [currentPage])
 
     const handlePageChange = (page: number) => {
         if (page !== currentPage && page >= 1 && page <= pagination.totalPages) {

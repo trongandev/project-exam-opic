@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { opicInfo, sampleQuestions } from '@/config/opicData'
 import { Award, BookOpen, Check, ChevronRight, Landmark } from 'lucide-react'
 import QuestionCard from '../components/QuestionCard'
-import { GENERIC_TIPS } from '@/config/etcConfig'
 import { Button } from '@/components/ui/button'
 import type { Category } from '@/types/etc'
 import { useEffect, useState } from 'react'
@@ -171,23 +170,6 @@ export default function HomePage() {
             </Card>
 
             {/* Self Introduction Section */}
-            {/* General Tips */}
-            <Card className="mt-8 bg-gradient-to-r from-sky-50 to-purple-50 ">
-                <CardHeader>
-                    <CardTitle className="text-xl text-gray-900">💡 Mẹo tổng quát khi trả lời</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                    {GENERIC_TIPS.map((tip) => (
-                        <div key={tip.id} className="flex items-start gap-3">
-                            <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">{tip.id}</span>
-                            <p className="text-gray-700">
-                                <strong>{tip.textBold}</strong>
-                                {tip.text}
-                            </p>
-                        </div>
-                    ))}
-                </CardContent>
-            </Card>
         </div>
     )
 }

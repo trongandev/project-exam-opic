@@ -132,7 +132,6 @@ export default function ExamOpic({ data }: { data: Topic }) {
                     const audioBlob = new Blob(chunks, { type: 'audio/webm' })
                     const audioUrl = URL.createObjectURL(audioBlob)
                     const convertedBase64 = (await convertBlobToBase64(audioBlob)) as string
-                    console.log(convertedBase64.length)
                     if (convertedBase64.length < 6) {
                         toast.error('Không thể ghi âm, vui lòng thử lại.')
                         return
@@ -422,7 +421,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         {/* Transcript Display */}
 
                         {/* Audio Playback Controls */}
-                        {recordedAudio && recordingCompleted && (
+                        {recordedAudio && recordingCompleted && !isSpeakMode && (
                             <div className="mt-5">
                                 <h1 className="mb-2 text-gray-700 font-medium flex items-center gap-2">
                                     <Volume2 size={18} />
@@ -478,7 +477,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                 </Button>
                             </div>
                         )}
-                        {recordingCompleted && (
+                        {recordingCompleted && !isSpeakMode && (
                             <div className="mt-5">
                                 <h1 className="mb-2 text-gray-700 font-medium">Check Answer:</h1>
                                 <div className={`p-4 border rounded-lg text-gray-800 relative ${getBgColorForAccuracy(accurancyFromRecoderAudio?.pronunciation_accuracy || '0')}`}>
@@ -519,13 +518,13 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                 </Button>
                             )}
                             {recordingCompleted && (
-                                <Button variant="outline" onClick={() => handleFreedomModeChange(currentIndex)}>
+                                <Button variant="outline" className="mr-5" onClick={() => handleFreedomModeChange(currentIndex)}>
                                     <RotateCw /> Làm lại
                                 </Button>
                             )}
 
                             <Button
-                                disabled={(!isFreedomMode || currentIndex === newData.length - 1) && !recordingCompleted && !isSpeakMode}
+                                disabled={!isFreedomMode || (currentIndex === newData.length - 1 && isSpeakMode)}
                                 onClick={() => {
                                     if (currentIndex < newData.length - 1 && !loadingAccurancy) {
                                         handleFreedomModeChange(currentIndex + 1)

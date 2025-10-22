@@ -8,7 +8,6 @@ import type { IAccurancyFromRecoderAudio } from '@/types/etc'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import SpeechRecognition from 'react-speech-recognition'
-import { Skeleton } from '@/components/ui/skeleton'
 
 interface Accuracy {
     index: number
@@ -40,9 +39,7 @@ export default function TextToIPA({ text }: { text: string }) {
     // Update ref whenever itemSelection changes
     useEffect(() => {
         itemSelectionRef.current = itemSelection
-        console.log('itemSelection updated in ref:', itemSelection)
     }, [itemSelection])
-    console.log(accuracy, 'accurancy')
     useEffect(() => {
         return () => {
             // Stop recording if component unmounts while recording
@@ -199,9 +196,9 @@ export default function TextToIPA({ text }: { text: string }) {
         })
     }
 
-    // Helper function to get accuracy data for a specific index
-    const getAccuracyForIndex = (index: number) => {
-        return accuracy.find((acc) => acc.index === index)
+    // Helper function to get accuracy data for a specific transcript
+    const getAccuracyForTranscript = (transcript: string) => {
+        return accuracy.find((acc) => acc.data.real_transcripts === transcript)
     }
     return (
         <div className="">
@@ -210,7 +207,7 @@ export default function TextToIPA({ text }: { text: string }) {
             ) : (
                 <div className="space-y-5">
                     {ipa.map((item, index) => {
-                        const accuracyData = getAccuracyForIndex(index)
+                        const accuracyData = getAccuracyForTranscript(item.text)
 
                         return (
                             <div
@@ -236,7 +233,6 @@ export default function TextToIPA({ text }: { text: string }) {
                                             <>
                                                 <p className="mb-2 text-justify text-md md:text-2xl">{renderTextSplit(item.text)}</p>
                                                 <span className="text-sm md:text-xl text-gray-400">{'/ ' + item.ipa + ' /'}</span>
-                                                {isLoading && <Skeleton className="mt-2 h-[20px] w-full rounded-full" />}
                                             </>
                                         )}
                                     </div>

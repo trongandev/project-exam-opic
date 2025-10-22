@@ -136,7 +136,6 @@ export default function CreateTopicPage() {
             toast.success(res.message)
             navigate(`/topic/${res.data.slug}`)
         } catch (error: any) {
-            console.log(error.response.data)
             ToastLogManyErrror(error)
         } finally {
             setLoadingCreateTopic(false)

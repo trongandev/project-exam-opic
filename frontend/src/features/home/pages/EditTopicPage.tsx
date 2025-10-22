@@ -65,7 +65,6 @@ export default function EditTopicPage() {
     useEffect(() => {
         const fetchTopicDetail = async () => {
             const res = await topicService.getTopicByIdToEdit(params._id as string)
-            console.log(res)
             setTopicDetailData(res.data)
             res.data.data.map((item: any) => {
                 item.title = item.categoryId.title
@@ -119,7 +118,6 @@ export default function EditTopicPage() {
     }
 
     const handleTopicInfoChange = (item: DataTopicNoCategory, index: number) => {
-        console.log(item, index)
         const newList = [...questionList]
         newList[index].title = item.title
         newList[index].desc = item.desc
@@ -141,7 +139,6 @@ export default function EditTopicPage() {
             toast.success(res.message)
             navigate(`/topic/${res.data.slug}`)
         } catch (error: any) {
-            console.log(error)
             ToastLogManyErrror(error)
         } finally {
             setLoadingCreateTopic(false)

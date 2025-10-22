@@ -3,7 +3,6 @@ const router = express.Router()
 const { generateSlug } = require('../utils/generateSlug')
 // ping check server is running
 router.use('/ping', (req, res) => {
-    console.log('test slug')
     res.status(200).json({ message: generateSlug('trời đất quỷ thần ơi, Ldfsdkjffg') })
 })
 

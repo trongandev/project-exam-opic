@@ -18,9 +18,7 @@ class ProfileController {
     })
 
     updateProfile = catchAsync(async (req, res, next) => {
-        const userId = req.user.id
-        const { displayName } = req.body
-        const result = await profileService.updateProfile(userId, { displayName })
+        const result = await profileService.updateProfile(req)
 
         return SuccessResponse.ok(res, 'Cập nhật thông tin người dùng thành công', result)
     })

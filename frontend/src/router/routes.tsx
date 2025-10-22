@@ -11,6 +11,8 @@ import ExamSlugPage from '@/features/home/pages/ExamSlugPage'
 import EditTopicPage from '@/features/home/pages/EditTopicPage'
 import CategoryPage from '@/features/home/pages/CategoryPage'
 import FeedbackPage from '@/features/home/pages/FeedbackPage'
+import TermsPage from '@/features/home/pages/TermsPage'
+import PrivacyPage from '@/features/home/pages/PrivacyPage'
 // import { authGuard } from './guards'
 
 // Lazy Loading các components
@@ -56,6 +58,14 @@ export const routes: RouteObject[] = [
                     {
                         path: 'feedback',
                         element: <FeedbackPage />,
+                    },
+                    {
+                        path: 'terms',
+                        element: <TermsPage />,
+                    },
+                    {
+                        path: 'privacy',
+                        element: <PrivacyPage />,
                     },
                 ],
                 errorElement: <div>Something went wrong!</div>,

@@ -66,11 +66,7 @@ class TopicController {
     })
 
     cloneTopic = catchAsync(async (req, res, next) => {
-        const { topicId } = req.body
-        const result = await TopicService.cloneTopic({
-            userId: req.user.id,
-            topicId,
-        })
+        const result = await TopicService.cloneTopic(req)
         if (!result) {
             return ErrorResponse.notFound(res, 'Không tìm thấy chủ đề để tạo bản sao')
         }

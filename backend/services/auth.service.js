@@ -138,7 +138,6 @@ class AuthService {
         if (!refreshToken) {
             throw new Error('Refresh token không được cung cấp')
         }
-        console.log('Refresh token:', refreshToken)
 
         try {
             const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)

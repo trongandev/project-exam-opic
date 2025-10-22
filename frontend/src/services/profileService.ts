@@ -13,8 +13,8 @@ class ProfileService {
         return response.data.data
     }
 
-    async updateProfile(data: Partial<User>) {
-        const response = await axiosInstance.put<APIResponse<User>>('/profile', data)
+    async updateProfile(userId: string, data: Partial<User>) {
+        const response = await axiosInstance.patch<APIResponse<User>>(`/profile/${userId}`, data)
         return response.data.data
     }
 }

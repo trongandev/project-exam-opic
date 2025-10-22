@@ -46,8 +46,7 @@ export default function DetailTopicSlugPage() {
 
         setIsSubmittingReview(true)
         try {
-            const res = await topicService.rateTopic(params.slug as string, { score, comment })
-            console.log('Đánh giá gửi thành công:', res.data)
+            await topicService.rateTopic(params.slug as string, { score, comment })
 
             setScore(0)
             setComment('')
@@ -116,11 +115,6 @@ export default function DetailTopicSlugPage() {
                 <div className=" px-3 md:px-0">
                     <h1 className="text-xl font-medium  px-4 xl:px-0">{topicDetailData.name}</h1>
                     <p className=" px-4 xl:px-0">{topicDetailData.desc}</p>
-                    <Link to={`/exam/${params.slug}`} className="block mt-3">
-                        <Button>
-                            <Play /> Thi thử
-                        </Button>
-                    </Link>
                 </div>
                 <div className="flex gap-10 ">
                     <div className="my-5 grid grid-cols-1  gap-5 flex-1">
@@ -128,21 +122,30 @@ export default function DetailTopicSlugPage() {
                             <OpicCategoryItem2 key={index} topic={topic} index={index} />
                         ))}
                     </div>
-                    <div className="sticky top-10 space-y-3 mt-4 w-[250px] h-full hidden md:block border-l-2 border-gray-200">
-                        {topicDetailData.data.map((topic, index) => (
-                            <a
-                                href={`#topic-${index}`}
-                                className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md  ${
-                                    location.hash === `#topic-${index}` ? 'text-primary bg-sky-100' : 'text-gray-700'
-                                }`}
-                                key={index}
-                            >
-                                {location.hash === `#topic-${index}` && <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>}
-                                <p className="flex">
-                                    {topic.categoryId.icon} <Dot /> {topic.categoryId.title}
-                                </p>
-                            </a>
-                        ))}
+                    <div className="sticky top-10  mt-4 w-[250px] h-full hidden md:block ">
+                        <div className="border-l-2 border-gray-200 space-y-3">
+                            {topicDetailData.data.map((topic, index) => (
+                                <a
+                                    href={`#topic-${index}`}
+                                    className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md  ${
+                                        location.hash === `#topic-${index}` ? 'text-primary bg-sky-100' : 'text-gray-700'
+                                    }`}
+                                    key={index}
+                                >
+                                    {location.hash === `#topic-${index}` && (
+                                        <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>
+                                    )}
+                                    <p className="flex">
+                                        {topic.categoryId.icon} <Dot /> {topic.categoryId.title}
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                        <Link to={`/exam/${params.slug}`} className="block mt-3">
+                            <Button className="w-full h-14 mt-10">
+                                <Play /> Thi thử bộ đề này
+                            </Button>
+                        </Link>
                     </div>
                 </div>
                 <div className="mx-3 md:mx-0">
