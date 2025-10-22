@@ -525,7 +525,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                             )}
 
                             <Button
-                                disabled={(!isFreedomMode || currentIndex === newData.length - 1) && !recordingCompleted}
+                                disabled={(!isFreedomMode || currentIndex === newData.length - 1) && !recordingCompleted && !isSpeakMode}
                                 onClick={() => {
                                     if (currentIndex < newData.length - 1 && !loadingAccurancy) {
                                         handleFreedomModeChange(currentIndex + 1)
