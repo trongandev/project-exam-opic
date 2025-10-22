@@ -1,6 +1,6 @@
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ChevronLeft, Copy, Dot, Mic, Play } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, Copy, Dot, Mic, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -65,7 +65,7 @@ export default function ExamPage() {
 
     if (!isStartExam && dataExam) {
         return (
-            <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
+            <div className=" max-w-7xl mx-auto my-10 text-gray-700 ">
                 <div className="flex justify-between items-center px-3 md:px-0">
                     <Button variant={'ghost'} onClick={() => navigate(-1)}>
                         <ArrowLeft /> Quay lại
@@ -84,11 +84,13 @@ export default function ExamPage() {
                     </div>
                 </div>
 
-                <div className="flex-1 mt-8">
+                <div className="px-3 flex-1 mt-8">
                     <h1 className="text-xl font-semibold text-gray-900 flex-1 ">{dataExam.name}</h1>
                     <p className="text-gray-500 text-sm line-clamp-3 mt-1">{dataExam.desc}</p>
+                    <Button className="mt-5" onClick={() => setIsStartExam(true)}>
+                        Thi thử <ChevronRight />
+                    </Button>
                 </div>
-
                 <div className="flex gap-10 ">
                     <div className="my-5 grid grid-cols-1  gap-5 flex-1">
                         {dataExam.data.map((topic, index) => (

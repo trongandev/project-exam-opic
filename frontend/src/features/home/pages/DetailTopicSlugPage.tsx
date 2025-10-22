@@ -89,11 +89,11 @@ export default function DetailTopicSlugPage() {
     return (
         <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
             <SEO title={topicDetailData.name} description={topicDetailData.desc} canonical={`/${topicDetailData.slug}`} />
-            <div className="flex justify-between items-center px-3 md:px-0">
+            <div className="flex justify-between  items-center px-3 md:px-0">
                 <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại
                 </Button>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center flex-wrap gap-2">
                     {user?._id === topicDetailData.userId._id && (
                         <Button variant={'outline'} onClick={() => navigate(`/topic/edit-topic/${topicDetailData._id}`)}>
                             <Edit /> Chỉnh sửa

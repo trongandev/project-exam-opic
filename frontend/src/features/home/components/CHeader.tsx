@@ -53,7 +53,7 @@ export default function CHeader() {
                     <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                         <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
                         <Link to={'/'} className="flex items-center">
-                            <img src="/images/logo-white.png" alt="Logo" className="h-8 hidden md:block" />
+                            <img src="/images/logo-white.png" alt="Logo" className="h-8 " />
                             <span className="ml-2">OPIc</span>
                         </Link>
                     </div>

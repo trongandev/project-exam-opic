@@ -36,30 +36,29 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
         }
     }
     return (
-        <motion.div
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            initial={{ opacity: 0, y: -20 }} // bắt đầu ở trên, mờ
-            animate={{ opacity: 1, y: 0 }} // trượt xuống và hiện ra
-            exit={{ opacity: 0, y: -20 }} // trượt lên khi xóa
-            transition={{ duration: 0.3 }}
-        >
-            <div key={item.dateId} className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200  select-none">
+        <div ref={setNodeRef} style={style} {...attributes}>
+            <motion.div
+                key={item.dateId}
+                className="border border-gray-200 rounded-lg overflow-hidden transition-shadow bg-gray-200  select-none"
+                initial={{ opacity: 0, y: -20 }} // bắt đầu ở trên, mờ
+                animate={{ opacity: 1, y: 0 }} // trượt xuống và hiện ra
+                exit={{ opacity: 0, y: -20 }} // trượt lên khi xóa
+                transition={{ duration: 0.3 }}
+            >
                 {/* Question Header */}
-                <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-5">
+                <div className="flex items-center gap-4 shadow sticky top-0 bg-gray-50/50 backdrop-blur-sm px-2 md:px-5">
                     <GripVertical {...listeners} className="cursor-grab hover:text-primary" />
-                    <p className="cursor-grab" {...listeners}>
+                    <p className="cursor-grab hidden md:block" {...listeners}>
                         {index + 1}
                     </p>
-                    <div className="w-[80px] flex items-center justify-center text-2xl">{item?.icon}</div>
+                    <div className="w-[40px] md:w-[80px] flex items-center justify-center text-2xl">{item?.icon}</div>
 
                     <div className="flex gap-5 items-center justify-between flex-1">
                         <CategorySearch flatCategory={flatCategory} handleChooseCategory={handleChooseCategory}>
                             <div className="py-2.5  w-full space-y-2 hover:bg-gray-200 flex items-center gap-3 group cursor-pointer">
                                 <div className="">
                                     <h3 className="font-medium text-lg text-primary ">{item?.title || 'Không có tiêu đề (*)'}</h3>
-                                    <p className="text-sm text-gray-500  ">{item?.desc || 'Không có mô tả...'}</p>
+                                    <p className="text-sm text-gray-500 line-clamp-2 ">{item?.desc || 'Không có mô tả...'}</p>
                                 </div>
                                 <div className="group-hover:block hidden">
                                     <Edit size={14} />
@@ -105,7 +104,14 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
 
                         <div className="space-y-3 mt-2">
                             {item.quests?.map((quest, questIndex) => (
-                                <div key={quest._id} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4">
+                                <motion.div
+                                    key={quest._id}
+                                    className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-4"
+                                    initial={{ opacity: 0, y: -20 }} // bắt đầu ở trên, mờ
+                                    animate={{ opacity: 1, y: 0 }} // trượt xuống và hiện ra
+                                    exit={{ opacity: 0, y: -20 }} // trượt lên khi xóa
+                                    transition={{ duration: 0.3 }}
+                                >
                                     {/* Question Text */}
                                     <div className="flex  gap-3 items-center">
                                         <div className="w-10 h-10 hidden md:flex items-center justify-center text-gray-600 font-medium bg-gray-100 border text-sm rounded-lg">{questIndex + 1}</div>
@@ -146,12 +152,12 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
                                     >
                                         <div className="text-justify border-l-4 border-gray-300 text-gray-500 pl-3 cursor-pointer">{quest.answer || 'Chưa có câu trả lời... (*)'}</div>
                                     </InlineEdit>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
                 </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </div>
     )
 }

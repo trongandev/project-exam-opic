@@ -57,9 +57,9 @@ export default function HomePage() {
             <Card className="mb-8">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between ">
-                        <div className="flex items-center gap-3   text-primary text-xl ">
+                        <div className="flex items-center gap-3   text-primary text-md md:text-xl ">
                             <Landmark className="w-6 h-6" />
-                            <p>Tổng hợp 74 thể loại hay gặp trong đề</p>
+                            <p className="flex-1">Tổng hợp 74 thể loại hay gặp trong đề</p>
                         </div>
                         <Link to="/category">
                             <Button variant={'ghost'} size={'sm'} className="text-xs">
@@ -92,7 +92,7 @@ export default function HomePage() {
             </Card>
             <Card className="mb-8">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2  text-primary text-xl">
+                    <CardTitle className="flex items-center gap-2  text-primary text-md md:text-xl">
                         <Award className="w-6 h-6" />
                         Các level trong OPIc và mức thưởng tại TKG
                     </CardTitle>

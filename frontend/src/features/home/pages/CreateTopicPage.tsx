@@ -242,7 +242,9 @@ export default function CreateTopicPage() {
                 <div className="fixed bottom-0 bg-sky-50/50 backdrop-blur-xs h-20 w-full max-w-7xl border-t-2 md:border-2 border-sky-700/20  border flex items-center justify-between px-5 md:px-5 pt-3 rounded-t-3xl">
                     <div className="font-medium text-gray-700">Tổng số câu: {questionList.reduce((acc, curr) => acc + (curr.quests ? curr.quests.length : 0), 0)}</div>
                     <div className="flex items-center gap-3">
-                        <Button variant={'outline'}>Hủy</Button>
+                        <Button variant={'outline'} onClick={() => navigate(-1)}>
+                            Hủy
+                        </Button>
                         <Button onClick={handleSaveTopic}>
                             {loadingCreateTopic ? (
                                 <>

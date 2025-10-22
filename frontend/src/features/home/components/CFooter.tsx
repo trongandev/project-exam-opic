@@ -30,7 +30,7 @@ export default function CFooter() {
     ]
     return (
         <footer className="bg-gradient-to-r from-primary/10 to-purple-500/10 py-6 mt-20 ">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3  xl:grid-cols-4 gap-5 text-gray-500 ">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3  xl:grid-cols-4 gap-5 text-gray-500 px-3 md:px-0">
                 <div className="space-y-2 text-sm ">
                     <div className="flex items-center gap-3">
                         <img src="/images/logo.png" alt="" className="h-7" />
