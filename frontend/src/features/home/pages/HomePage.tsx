@@ -36,55 +36,24 @@ export default function HomePage() {
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20">
             {/* Header */}
-            <div className="text-center mb-12 text-primary">
+            <div className="text-center text-primary">
                 <h1 className="text-4xl font-bold  mb-4">{opicInfo.title}</h1>
                 <p className="text-xl text-gray-600 mb-6">{opicInfo.subtitle}</p>
                 <div className="bg-sky-50 rounded-xl p-6">
                     <p className="text-gray-700 leading-relaxed max-w-4xl mx-auto">{opicInfo.description}</p>
                 </div>
             </div>
-            {/* Score Range */}
-            <Card className="mb-8">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2  text-primary text-xl">
-                        <Award className="w-6 h-6" />
-                        {opicInfo.scoreRange.title}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <img src="https://josephenglishyhc.wordpress.com/wp-content/uploads/2019/11/opic-fi.jpg" alt="" className="mx-auto mb-3" />
-                </CardContent>
-            </Card>
-            <Card className="mb-8">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2  text-primary text-xl">
-                        <Award className="w-6 h-6" />
-                        Các level trong OPIc và mức thưởng tại TKG
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-600 ">
-                        {opicInfo.scoreRange.levels.map((level, index) => (
-                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary/20 bg-sky-50 relative' : 'border-gray-300/50'}`}>
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm  text-gray-700 font-medium">Level: {level.level}</span>
-                                    {level.isPopular && <Badge className=" bg-sky-200 text-primary">Phổ biến</Badge>}
-                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.claim}</Badge>
-                                </div>
-                                <p className="text-sm font-medium ">{level.description}</p>
-                                <p className="text-sm text-gray-500 italic ">{level.explain}</p>
-                                <div className="mt-3 italic">
-                                    {level.descArr.map((desc, idx) => (
-                                        <p key={idx} className="text-xs  flex items-center gap-1">
-                                            <Check size={14} /> {desc}
-                                        </p>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
+            <div style={{ position: 'relative', paddingBottom: 'calc(49.21875% + 41px)', height: '0', width: '100%' }} className="mb-8">
+                <iframe
+                    src="https://demo.arcade.software/jpGUojlRveRNLIgb3vAg?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true"
+                    title="Thực hành trả lời phỏng vấn OPIc với các chế độ luyện tập"
+                    loading="lazy"
+                    allowFullScreen
+                    allow="clipboard-write"
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', colorScheme: 'light' }}
+                />
+            </div>
+
             <Card className="mb-8">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between ">
@@ -119,6 +88,36 @@ export default function HomePage() {
                             </Link>
                         </div>
                     )}
+                </CardContent>
+            </Card>
+            <Card className="mb-8">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2  text-primary text-xl">
+                        <Award className="w-6 h-6" />
+                        Các level trong OPIc và mức thưởng tại TKG
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-600 ">
+                        {opicInfo.scoreRange.levels.map((level, index) => (
+                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary/20 bg-sky-50 relative' : 'border-gray-300/50'}`}>
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm  text-gray-700 font-medium">Level: {level.level}</span>
+                                    {level.isPopular && <Badge className=" bg-sky-200 text-primary">Phổ biến</Badge>}
+                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.claim}</Badge>
+                                </div>
+                                <p className="text-sm font-medium ">{level.description}</p>
+                                <p className="text-sm text-gray-500 italic ">{level.explain}</p>
+                                <div className="mt-3 italic">
+                                    {level.descArr.map((desc, idx) => (
+                                        <p key={idx} className="text-xs  flex items-center gap-1">
+                                            <Check size={14} /> {desc}
+                                        </p>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
             <Card className="mb-8">
