@@ -8,6 +8,7 @@ import type { IAccurancyFromRecoderAudio } from '@/types/etc'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import SpeechRecognition from 'react-speech-recognition'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface Accuracy {
     index: number
@@ -235,6 +236,7 @@ export default function TextToIPA({ text }: { text: string }) {
                                             <>
                                                 <p className="mb-2 text-justify text-md md:text-2xl">{renderTextSplit(item.text)}</p>
                                                 <span className="text-sm md:text-xl text-gray-400">{'/ ' + item.ipa + ' /'}</span>
+                                                {isLoading && <Skeleton className="mt-2 h-[20px] w-full rounded-full" />}
                                             </>
                                         )}
                                     </div>
