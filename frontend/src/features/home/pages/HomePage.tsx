@@ -45,7 +45,7 @@ export default function HomePage() {
             </div>
             <div style={{ position: 'relative', paddingBottom: 'calc(49.21875% + 41px)', height: '0', width: '100%' }} className="mb-8">
                 <iframe
-                    src="https://demo.arcade.software/jpGUojlRveRNLIgb3vAg?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true"
+                    src="https://demo.arcade.software/8Mi4F61oSvuPRDLqDJyU?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true"
                     title="Thực hành trả lời phỏng vấn OPIc với các chế độ luyện tập"
                     loading="lazy"
                     allowFullScreen
