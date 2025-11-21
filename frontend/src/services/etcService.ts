@@ -1,4 +1,5 @@
 import { convertBlobToBase64 } from '@/lib/utils'
+import type { DataTopic } from '@/types/topic'
 import axios from 'axios'
 import { toast } from 'sonner'
 
@@ -73,6 +74,17 @@ class etcService {
         link.click()
         document.body.removeChild(link)
         URL.revokeObjectURL(url)
+    }
+
+    async downloadPartAudioFromText(tts: any, topic: DataTopic[]) {
+        for (const part of topic) {
+            const title = part.categoryId.title
+            let combinedText = ''
+            part.quests.forEach((quest) => {
+                combinedText += quest.text + '. '
+            })
+            await this.downloadAudioFromText(tts, combinedText, title)
+        }
     }
 }
 

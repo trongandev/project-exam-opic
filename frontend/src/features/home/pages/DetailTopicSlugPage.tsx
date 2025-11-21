@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ChevronRight, Copy, Dot, Download, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Copy, Dot, Download, Edit, EllipsisVertical, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -17,6 +17,8 @@ import SEO from '@/components/etc/SEO'
 import etcService from '@/services/etcService'
 import { EdgeSpeechTTS } from '@lobehub/tts'
 import LoadingIcon from '@/components/ui/loading-icon'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
 export default function DetailTopicSlugPage() {
     const navigate = useNavigate()
     const location = useLocation()
@@ -111,7 +113,9 @@ export default function DetailTopicSlugPage() {
     const handleDownloadFullAudio = async (topic: DataTopic[]) => {
         try {
             setLoadingDownload(true)
-            toast.loading('Đang tải audio, quá trình này có thể mất vài phút...')
+            toast.loading('Đang tải full audio', {
+                description: 'Quá trình này có thể mất vài phút...',
+            })
             const newConnectWords: any = []
             topic.forEach((tp) => {
                 tp.quests.forEach((quest) => {
@@ -120,6 +124,30 @@ export default function DetailTopicSlugPage() {
             })
 
             await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), 'full-audio ' + topicDetailData?.name)
+
+            toast.success('Tải thành công!')
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoadingDownload(false)
+            toast.dismiss('')
+        }
+    }
+
+    const handleDownloadPartAudio = async (topic: DataTopic[]) => {
+        try {
+            setLoadingDownload(true)
+            toast.loading('Đang tải từng phần audio', {
+                description: 'Quá trình này có thể mất vài phút...',
+            })
+            const newConnectWords: any = []
+            topic.forEach((tp) => {
+                tp.quests.forEach((quest) => {
+                    newConnectWords.push(quest.text + '. ' + quest.answer)
+                })
+            })
+
+            await etcService.downloadPartAudioFromText(tts, topic)
 
             toast.success('Tải thành công!')
         } catch (error: any) {
@@ -140,26 +168,41 @@ export default function DetailTopicSlugPage() {
                 <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại
                 </Button>
-                <div className="flex items-center flex-wrap gap-2">
-                    {user?._id === topicDetailData.userId._id && (
-                        <Button variant={'outline'} onClick={() => navigate(`/topic/edit-topic/${topicDetailData._id}`)}>
-                            <Edit /> Sửa
-                        </Button>
-                    )}
-                    <Button variant={'outline'} disabled={loadingClone} onClick={() => handleCloneTopic()}>
-                        <Copy />
-                        Bản sao
-                    </Button>
-                    <Button variant={'outline'} disabled={loadingDownload} onClick={() => handleDownloadFullAudio(topicDetailData.data)} className="md:mr-5">
-                        {loadingDownload ? <LoadingIcon /> : <Download />}
-                        <span className="hidden md:block"> Tải Full Audio</span>
-                    </Button>
 
+                <div className="flex items-center flex-wrap gap-2">
                     <VoiceSelectionModal>
                         <Button variant={'outline'}>
                             <Mic /> Giọng nói
                         </Button>
                     </VoiceSelectionModal>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="font-semibold hover:underline cursor-pointer">
+                            <Button variant={'outline'} className="rounded-full w-8 h-8">
+                                <EllipsisVertical />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="bottom" align="end">
+                            <DropdownMenuLabel>Chọn tính năng</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            {user?._id === topicDetailData.userId._id && (
+                                <DropdownMenuItem className="h-10" onClick={() => navigate(`/topic/edit-topic/${topicDetailData._id}`)}>
+                                    <Edit /> Sửa
+                                </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem className="h-10" onClick={() => handleCloneTopic()} disabled={loadingClone}>
+                                {loadingClone ? <LoadingIcon /> : <Copy />}
+                                <span className="hidden md:block"> Tạo bản sao</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="h-10" onClick={() => handleDownloadFullAudio(topicDetailData.data)} disabled={loadingDownload}>
+                                {loadingDownload ? <LoadingIcon /> : <Download />}
+                                <span className="hidden md:block"> Tải Full Audio</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="h-10" onClick={() => handleDownloadPartAudio(topicDetailData.data)} disabled={loadingDownload}>
+                                {loadingDownload ? <LoadingIcon /> : <Download />}
+                                <span className="hidden md:block"> Tải Từng phần Audio</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
             <div className="space-y-2 mt-5">
