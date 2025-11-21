@@ -97,7 +97,7 @@ export default function DetailTopicSlugPage() {
                 newConnectWords.push(quest.text + '. ' + quest.answer)
             })
 
-            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), topicDetailData?.name || 'full-audio')
+            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), topic.categoryId.title)
 
             toast.success('Tải thành công!')
         } catch (error: any) {
@@ -119,7 +119,7 @@ export default function DetailTopicSlugPage() {
                 })
             })
 
-            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), topicDetailData?.name || 'full-audio')
+            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), 'full-audio ' + topicDetailData?.name)
 
             toast.success('Tải thành công!')
         } catch (error: any) {
