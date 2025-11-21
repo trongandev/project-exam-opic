@@ -29,7 +29,7 @@ class etcService {
         return res.data
     }
 
-    async downloadAudioFromText(tts: any, text: string) {
+    async downloadAudioFromText(tts: any, text: string, title: string) {
         const savedVoices = localStorage.getItem('defaultVoices') || ''
 
         // Split text into chunks of 1000 words if needed
@@ -68,7 +68,7 @@ class etcService {
         const url = URL.createObjectURL(blob)
         const link = document.createElement('a')
         link.href = url
-        link.download = 'audio.mp3'
+        link.download = `${title || 'audio'}.mp3`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
