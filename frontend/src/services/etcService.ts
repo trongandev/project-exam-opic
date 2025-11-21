@@ -81,7 +81,7 @@ class etcService {
             const title = part.categoryId.title
             let combinedText = ''
             part.quests.forEach((quest) => {
-                combinedText += quest.text + '. '
+                combinedText += quest.text + ' .' + ' ' + quest.answer + ' '
             })
             await this.downloadAudioFromText(tts, combinedText, title)
         }
