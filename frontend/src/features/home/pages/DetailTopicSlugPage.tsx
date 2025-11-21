@@ -91,7 +91,7 @@ export default function DetailTopicSlugPage() {
     const handleDownloadAudio = async (topic: DataTopic) => {
         try {
             setLoadingDownload(true)
-            toast.loading('Đang tải audio, quá trình này có thể mất vài phút...')
+            toast.loading('Đang tải audio, quá trình này có thể mất vài giây...')
             const newConnectWords: any = []
             topic.quests.forEach((quest) => {
                 newConnectWords.push(quest.text + '. ' + quest.answer)
@@ -152,7 +152,7 @@ export default function DetailTopicSlugPage() {
                     </Button>
                     <Button variant={'outline'} disabled={loadingDownload} onClick={() => handleDownloadFullAudio(topicDetailData.data)} className="md:mr-5">
                         {loadingDownload ? <LoadingIcon /> : <Download />}
-                        <span className="hidden md:block"> Tải Audio</span>
+                        <span className="hidden md:block"> Tải Full Audio</span>
                     </Button>
 
                     <VoiceSelectionModal>

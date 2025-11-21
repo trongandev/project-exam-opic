@@ -31,17 +31,41 @@ class etcService {
 
     async downloadAudioFromText(tts: any, text: string) {
         const savedVoices = localStorage.getItem('defaultVoices') || ''
-        const response = await tts.create({
-            input: text,
-            options: {
-                voice: savedVoices || 'en-US-JennyNeural',
-            },
-        })
 
-        const audioBuffer = await response.arrayBuffer()
-        const blob = new Blob([audioBuffer], { type: 'audio/mpeg' })
+        // Split text into chunks of 1000 words if needed
+        const words = text.split(' ')
+        const chunkSize = 1000
+        const chunks: string[] = []
+
+        for (let i = 0; i < words.length; i += chunkSize) {
+            chunks.push(words.slice(i, i + chunkSize).join(' '))
+        }
+
+        // Generate audio for each chunk
+        const audioBuffers: ArrayBuffer[] = []
+        for (const chunk of chunks) {
+            const response = await tts.create({
+                input: chunk,
+                options: {
+                    voice: savedVoices || 'en-US-JennyNeural',
+                },
+            })
+            const audioBuffer = await response.arrayBuffer()
+            audioBuffers.push(audioBuffer)
+        }
+
+        // Merge all audio buffers
+        const totalLength = audioBuffers.reduce((acc, buffer) => acc + buffer.byteLength, 0)
+        const mergedBuffer = new Uint8Array(totalLength)
+        let offset = 0
+        for (const buffer of audioBuffers) {
+            mergedBuffer.set(new Uint8Array(buffer), offset)
+            offset += buffer.byteLength
+        }
+
+        // Create blob and download
+        const blob = new Blob([mergedBuffer], { type: 'audio/mpeg' })
         const url = URL.createObjectURL(blob)
-        //download audio
         const link = document.createElement('a')
         link.href = url
         link.download = 'audio.mp3'
