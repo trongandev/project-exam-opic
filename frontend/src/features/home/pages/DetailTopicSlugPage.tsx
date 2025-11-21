@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ChevronRight, Copy, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Copy, Dot, Download, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
@@ -16,6 +16,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import SEO from '@/components/etc/SEO'
 import etcService from '@/services/etcService'
 import { EdgeSpeechTTS } from '@lobehub/tts'
+import LoadingIcon from '@/components/ui/loading-icon'
 export default function DetailTopicSlugPage() {
     const navigate = useNavigate()
     const location = useLocation()
@@ -97,8 +98,29 @@ export default function DetailTopicSlugPage() {
             })
 
             await etcService.downloadAudioFromText(tts, newConnectWords.join(' '))
-            // toast.success('Tạo bản sao chủ đề thành công!')
-            // navigate(`/topic/edit-topic/${res.data._id}`)
+
+            toast.success('Tải thành công!')
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoadingDownload(false)
+            toast.dismiss('')
+        }
+    }
+
+    const handleDownloadFullAudio = async (topic: DataTopic[]) => {
+        try {
+            setLoadingDownload(true)
+            toast.loading('Đang tải audio, quá trình này có thể mất vài phút...')
+            const newConnectWords: any = []
+            topic.forEach((tp) => {
+                tp.quests.forEach((quest) => {
+                    newConnectWords.push(quest.text + '. ' + quest.answer)
+                })
+            })
+
+            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '))
+
             toast.success('Tải thành công!')
         } catch (error: any) {
             toast.error(error)
@@ -127,6 +149,10 @@ export default function DetailTopicSlugPage() {
                     <Button variant={'outline'} disabled={loadingClone} onClick={() => handleCloneTopic()}>
                         <Copy />
                         Bản sao
+                    </Button>
+                    <Button variant={'outline'} disabled={loadingDownload} onClick={() => handleDownloadFullAudio(topicDetailData.data)} className="md:mr-5">
+                        {loadingDownload ? <LoadingIcon /> : <Download />}
+                        <span className="hidden md:block"> Tải Audio</span>
                     </Button>
 
                     <VoiceSelectionModal>
