@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Copy, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Copy, Dot, Edit, Info, MessageCircleMore, Mic, Play, Star } from 'lucide-react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import VoiceSelectionModal from '@/components/etc/VoiceSelectionModal'
 import OpicCategoryItem2 from '../components/OpicCategoryItem2'
 import { useEffect, useState } from 'react'
-import type { Topic } from '@/types/topic'
+import type { DataTopic, Topic } from '@/types/topic'
 import topicService from '@/services/topicService'
 import LoadingScreen from '@/components/etc/LoadingScreen'
 import RatingComponent from '../components/RatingComponent'
@@ -14,17 +14,21 @@ import { vi } from 'date-fns/locale/vi'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import SEO from '@/components/etc/SEO'
+import etcService from '@/services/etcService'
+import { EdgeSpeechTTS } from '@lobehub/tts'
 export default function DetailTopicSlugPage() {
     const navigate = useNavigate()
     const location = useLocation()
     const params = useParams()
     const [topicDetailData, setTopicDetailData] = useState<Topic>()
     const [loading, setLoading] = useState(false)
+    const [loadingDownload, setLoadingDownload] = useState(false)
     const [loadingClone, setLoadingClone] = useState(false)
     const [score, setScore] = useState(0)
     const [comment, setComment] = useState('')
     const [isSubmittingReview, setIsSubmittingReview] = useState(false)
     const { user } = useAuth()
+    const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' }))
     useEffect(() => {
         const fetchTopicDetail = async () => {
             setLoading(true)
@@ -83,6 +87,27 @@ export default function DetailTopicSlugPage() {
         }
     }
 
+    const handleDownloadAudio = async (topic: DataTopic) => {
+        try {
+            setLoadingDownload(true)
+            toast.loading('Đang tải audio, quá trình này có thể mất vài phút...')
+            const newConnectWords: any = []
+            topic.quests.forEach((quest) => {
+                newConnectWords.push(quest.text + '. ' + quest.answer)
+            })
+
+            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '))
+            // toast.success('Tạo bản sao chủ đề thành công!')
+            // navigate(`/topic/edit-topic/${res.data._id}`)
+            toast.success('Tải thành công!')
+        } catch (error: any) {
+            toast.error(error)
+        } finally {
+            setLoadingDownload(false)
+            toast.dismiss('')
+        }
+    }
+
     if (loading || !topicDetailData) {
         return <LoadingScreen />
     }
@@ -96,17 +121,17 @@ export default function DetailTopicSlugPage() {
                 <div className="flex items-center flex-wrap gap-2">
                     {user?._id === topicDetailData.userId._id && (
                         <Button variant={'outline'} onClick={() => navigate(`/topic/edit-topic/${topicDetailData._id}`)}>
-                            <Edit /> Chỉnh sửa
+                            <Edit /> Sửa
                         </Button>
                     )}
                     <Button variant={'outline'} disabled={loadingClone} onClick={() => handleCloneTopic()}>
                         <Copy />
-                        Tạo bản sao
+                        Bản sao
                     </Button>
 
                     <VoiceSelectionModal>
                         <Button variant={'outline'}>
-                            <Mic /> Chọn giọng nói
+                            <Mic /> Giọng nói
                         </Button>
                     </VoiceSelectionModal>
                 </div>
@@ -115,11 +140,16 @@ export default function DetailTopicSlugPage() {
                 <div className=" px-3 md:px-0">
                     <h1 className="text-xl font-medium  px-4 xl:px-0">{topicDetailData.name}</h1>
                     <p className=" px-4 xl:px-0">{topicDetailData.desc}</p>
+                    <Link to={`/exam/${params.slug}`} className="md:hidden block">
+                        <Button className="w-full h-12 mt-10">
+                            Thi thử bộ đề này <ChevronRight />
+                        </Button>
+                    </Link>
                 </div>
                 <div className="flex gap-10 ">
                     <div className="my-5 grid grid-cols-1  gap-5 flex-1">
                         {topicDetailData.data.map((topic, index) => (
-                            <OpicCategoryItem2 key={index} topic={topic} index={index} />
+                            <OpicCategoryItem2 key={index} topic={topic} index={index} loadingDownload={loadingDownload} handleDownloadAudio={handleDownloadAudio} />
                         ))}
                     </div>
                     <div className="sticky top-10  mt-4 w-[250px] h-full hidden md:block ">
