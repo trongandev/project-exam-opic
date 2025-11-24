@@ -1,6 +1,7 @@
 import SpeakButton from '@/components/SpeakButton'
 import { Button } from '@/components/ui/button'
 import LoadingIcon from '@/components/ui/loading-icon'
+import { useSpeakWordContext } from '@/hooks/useSpeakWordContext'
 import type { DataTopic } from '@/types/topic'
 import { Download, MoveDown } from 'lucide-react'
 
@@ -15,6 +16,8 @@ export default function OpicCategoryItem2({
     loadingDownload?: boolean
     handleDownloadAudio?: (topic: DataTopic) => void
 }) {
+    const { toggleAudio, isPlayingAudio, isLoadingAudio } = useSpeakWordContext()
+
     return (
         <div key={index} id={`topic-${index}`} className="border border-gray-200 rounded-lg  transition-shadow  bg-gray-200">
             <div className="flex gap-4 shadow sticky top-0 bg-gray-200/20 backdrop-blur-sm px-5 md:px-0">
@@ -39,13 +42,39 @@ export default function OpicCategoryItem2({
                                     <div className="flex gap-3 items-center">
                                         <div className="w-10 h-10  hidden md:flex items-center justify-center text-gray-600 font-medium bg-gray-100 border text-sm rounded-lg">{index + 1}</div>
                                         <div className="flex-1 text-justify  font-medium text-xl">
-                                            {quest?.text} <SpeakButton text={quest.text} id={'custom'} variant="ghost" isShowLabel={false} className="ml-3" />
+                                            {quest?.text.split(' ').map((word: string, idx: number) => {
+                                                const isPlaying = isPlayingAudio(word, idx)
+                                                const isLoading = isLoadingAudio(word, idx)
+                                                return (
+                                                    <span
+                                                        key={idx}
+                                                        className={`inline-flex hover:text-primary/80 cursor-pointer items-center gap-1 mr-2 ${isPlaying && 'text-red-700'}`}
+                                                        onClick={() => toggleAudio(word, idx)}
+                                                    >
+                                                        {word} {isLoading && <LoadingIcon className="w-4 h-4" />}
+                                                    </span>
+                                                )
+                                            })}
+                                            <SpeakButton text={quest.text} id={'custom'} variant="ghost" isShowLabel={false} className="ml-3" />
                                         </div>
                                     </div>
                                     <div className="text-justify">{quest?.note}</div>
                                     <MoveDown className="mx-auto my-2 " />
                                     <div className="text-justify mt-5 border-l-4 border-gray-300 text-gray-500 pl-3">
-                                        {quest?.answer} <SpeakButton isShowLabel={false} variant="ghost" text={quest.answer} id={'custom'} />
+                                        {quest?.answer.split(' ').map((word: string, idx: number) => {
+                                            const isPlaying = isPlayingAudio(word, idx)
+                                            const isLoading = isLoadingAudio(word, idx)
+                                            return (
+                                                <span
+                                                    key={idx}
+                                                    className={`inline-flex hover:text-primary/80 cursor-pointer items-center gap-1 px-1 ${isPlaying && 'text-red-700'}`}
+                                                    onClick={() => toggleAudio(word, idx)}
+                                                >
+                                                    {word} {isLoading && <LoadingIcon className="w-4 h-4" />}
+                                                </span>
+                                            )
+                                        })}
+                                        <SpeakButton isShowLabel={false} variant="ghost" text={quest.answer} id={'custom'} />
                                     </div>
                                 </div>
                             ))}
