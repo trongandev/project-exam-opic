@@ -38,12 +38,15 @@ export default function OpicCategoryItem2({
                                 <div key={index} className="bg-white text-gray-500 border border-gray-200 p-3 md:p-5 rounded-lg space-y-2">
                                     <div className="flex gap-3 items-center">
                                         <div className="w-10 h-10  hidden md:flex items-center justify-center text-gray-600 font-medium bg-gray-100 border text-sm rounded-lg">{index + 1}</div>
-                                        <div className="flex-1 text-justify  font-medium text-xl">{quest?.text}</div>
-                                        <SpeakButton text={quest.text} id={'custom'} />
+                                        <div className="flex-1 text-justify  font-medium text-xl">
+                                            {quest?.text} <SpeakButton text={quest.text} id={'custom'} variant="ghost" isShowLabel={false} className="ml-3" />
+                                        </div>
                                     </div>
                                     <div className="text-justify">{quest?.note}</div>
                                     <MoveDown className="mx-auto my-2 " />
-                                    <div className="text-justify mt-5 border-l-4 border-gray-300 text-gray-500 pl-3">{quest?.answer}</div>
+                                    <div className="text-justify mt-5 border-l-4 border-gray-300 text-gray-500 pl-3">
+                                        {quest?.answer} <SpeakButton isShowLabel={false} variant="ghost" text={quest.answer} id={'custom'} />
+                                    </div>
                                 </div>
                             ))}
                         </div>

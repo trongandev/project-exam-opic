@@ -11,14 +11,12 @@ import TopicCardItem from '../components/TopicCardItem'
 import LoadingIcon from '@/components/ui/loading-icon'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
-import SEO from '@/components/etc/SEO'
 export default function TopicPage() {
     const [topicData, setTopicData] = useState<Topic[]>([])
     const [loading, setLoading] = useState(false)
     const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, pageSize: 6, totalItems: 0 })
     const [currentPage, setCurrentPage] = useState(1)
     const [loadingDelete, setLoadingDelete] = useState(false)
-    const [SEOTopic, setSEOTopic] = useState('')
     const { user } = useAuth()
 
     useEffect(() => {
@@ -27,8 +25,6 @@ export default function TopicPage() {
             try {
                 const response = await topicService.getAllTopics(currentPage, pagination.pageSize)
                 setTopicData(response.data.data)
-                const flatSEOTOPIC = response.data.data.map((topic) => topic.name).join(', ')
-                setSEOTopic(flatSEOTOPIC)
                 setPagination({
                     currentPage: response.data.pagination.currentPage,
                     totalPages: response.data.pagination.totalPages,
@@ -67,7 +63,6 @@ export default function TopicPage() {
     }
     return (
         <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20 min-h-screen">
-            <SEO title="Tổng hợp topic" description={`Danh sách các topic đã được tạo: ${SEOTopic}`} />
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
                     Tổng hợp topic

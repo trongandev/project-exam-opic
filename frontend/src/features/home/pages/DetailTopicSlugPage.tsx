@@ -13,7 +13,6 @@ import { formatDistance } from 'date-fns'
 import { vi } from 'date-fns/locale/vi'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
-import SEO from '@/components/etc/SEO'
 import etcService from '@/services/etcService'
 import { EdgeSpeechTTS } from '@lobehub/tts'
 import LoadingIcon from '@/components/ui/loading-icon'
@@ -163,7 +162,6 @@ export default function DetailTopicSlugPage() {
     }
     return (
         <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
-            <SEO title={topicDetailData.name} description={topicDetailData.desc} canonical={`/${topicDetailData.slug}`} />
             <div className="flex justify-between  items-center px-3 md:px-0">
                 <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại

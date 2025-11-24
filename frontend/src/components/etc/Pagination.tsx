@@ -34,7 +34,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: { 
                 </Button>
             </div>
             <div className="text-sm text-gray-600">
-                Trang {currentPage} / {totalPages}
+                Trang {currentPage} / {totalPages || 1}
             </div>
         </div>
     )
