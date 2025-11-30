@@ -33,7 +33,7 @@ const processQueue = (error: any = null) => {
 // Request Interceptor - Thêm access token vào header
 axiosInstance.interceptors.request.use(
     (config) => {
-        const accessToken = TokenStorage.getAccessToken()
+        const accessToken = TokenStorage.getCookieToken()
         if (accessToken && config.headers) {
             config.headers.Authorization = `Bearer ${accessToken}`
         }
@@ -86,7 +86,7 @@ axiosInstance.interceptors.response.use(
                 const { accessToken: newAccessToken } = response.data.data
 
                 // Lưu access token mới
-                TokenStorage.setAccessToken(newAccessToken)
+                TokenStorage.setCookieToken(newAccessToken)
 
                 // Cập nhật authorization header
                 if (originalRequest.headers) {
@@ -104,7 +104,7 @@ axiosInstance.interceptors.response.use(
 
                 // Redirect to login page
                 if (typeof window !== 'undefined') {
-                    window.location.href = '/auth/login?redirect=' + window.location.pathname
+                    window.location.href = '/auth?redirect=' + window.location.pathname
                 }
 
                 return Promise.reject(refreshError)

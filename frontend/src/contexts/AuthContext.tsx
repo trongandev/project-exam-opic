@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
+import type { User } from '@/types/user'
+import axios from 'axios'
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import type { User } from '@/types/user'
 
 interface AuthState {
     user: User | null
@@ -14,8 +15,9 @@ interface AuthContextType extends AuthState {
     logout: () => void
     setUser: (user: User | null) => void
     setLoading: (loading: boolean) => void
-    getAccessToken: () => string | null
+    getCookieToken: () => string | null
     getRefreshToken: () => string | null
+    loginWithoutUser: (accessToken: string, refreshToken: string) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -23,11 +25,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 // Token storage utilities với bảo mật cao
 const TokenStorage = {
     // Sử dụng sessionStorage cho accessToken (tự động xóa khi đóng tab)
-    setAccessToken: (token: string) => {
-        sessionStorage.setItem('accessToken', token)
+
+    getCookieToken: () => {
+        const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'))
+        if (match) {
+            return match[2]
+        }
+        return null
     },
-    getAccessToken: (): string | null => {
-        return sessionStorage.getItem('accessToken')
+    setCookieToken: (token: string) => {
+        document.cookie = `token=${token}; path=/;expires=${new Date(Date.now() + 3600 * 1000 * 24 * 7).toUTCString()}` // 7 day expiry
     },
     removeAccessToken: () => {
         sessionStorage.removeItem('accessToken')
@@ -55,12 +62,16 @@ const TokenStorage = {
     removeUser: () => {
         localStorage.removeItem('user')
     },
+    removeCookieToken: () => {
+        document.cookie = 'token=; Max-Age=0; path=/;'
+    },
 
     // Clear all tokens và user data
     clearAll: () => {
         TokenStorage.removeAccessToken()
         TokenStorage.removeRefreshToken()
         TokenStorage.removeUser()
+        TokenStorage.removeCookieToken()
     },
 }
 
@@ -78,7 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Initialize auth state từ stored tokens
     useEffect(() => {
         const initializeAuth = () => {
-            const accessToken = TokenStorage.getAccessToken()
+            const accessToken = TokenStorage.getCookieToken()
             const refreshToken = TokenStorage.getRefreshToken()
             const user = TokenStorage.getUser()
 
@@ -104,7 +115,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const login = (user: User, accessToken: string, refreshToken: string) => {
         // Lưu tokens và user data
-        TokenStorage.setAccessToken(accessToken)
+        TokenStorage.getCookieToken()
+        TokenStorage.setCookieToken(accessToken)
         TokenStorage.setRefreshToken(refreshToken)
         TokenStorage.setUser(user)
 
@@ -113,6 +125,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             isAuthenticated: true,
             isLoading: false,
         })
+    }
+
+    const loginWithoutUser = async (accessToken: string, refreshToken: string) => {
+        const req: any = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/auth/me`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        if (req.status === 200 && req.data.user) {
+            TokenStorage.getCookieToken()
+            TokenStorage.setRefreshToken(refreshToken)
+            TokenStorage.setCookieToken(accessToken)
+            TokenStorage.setUser(req.data.user)
+
+            setAuthState({
+                user: req.data.user,
+                isAuthenticated: true,
+                isLoading: false,
+            })
+        }
     }
 
     const logout = () => {
@@ -145,11 +177,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             isLoading: loading,
         }))
     }
-
-    const getAccessToken = (): string | null => {
-        return TokenStorage.getAccessToken()
+    const getCookieToken = (): string | null => {
+        return TokenStorage.getCookieToken()
     }
-
     const getRefreshToken = (): string | null => {
         return TokenStorage.getRefreshToken()
     }
@@ -160,8 +190,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         logout,
         setUser,
         setLoading,
-        getAccessToken,
         getRefreshToken,
+        loginWithoutUser,
+        getCookieToken,
     }
 
     return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
