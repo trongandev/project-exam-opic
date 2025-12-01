@@ -59,7 +59,8 @@ export default function CreateTopicPage() {
         icon: '👤',
         title: 'Introduce yourself',
         desc: 'Thông tin cá nhân, sở thích, công việc, học vấn.',
-        categoryId: '68f1a1f097c7b03a50ad61f5',
+        categoryId: '68f1f12b7f79bc4e7569018f',
+
         dateId: Date.now().toString(),
         quests: [
             {

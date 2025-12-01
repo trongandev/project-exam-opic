@@ -16,12 +16,6 @@ const validateQuestion = (item, prefix = 'Dữ liệu') => {
         errors.push(`${prefix} trả lời không được vượt quá 1000 ký tự`)
     }
 
-    if (!item.note) {
-        errors.push(`${prefix} ghi chú không được để trống`)
-    } else if (item.note.length > 1000) {
-        errors.push(`${prefix} ghi chú không được vượt quá 1000 ký tự`)
-    }
-
     return errors
 }
 

@@ -90,19 +90,7 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
                 {/* Question Content */}
                 <div className={`bg-gray-50 transition-all duration-500 ease-in-out  overflow-hidden ${!collapse ? 'max-h-[2000px] ' : 'max-h-0'}`}>
                     <div className="p-3 md:p-5 border-t border-gray-200">
-                        <Button
-                            variant={'outline'}
-                            size={'sm'}
-                            className="text-xs"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                createQuestExample(index)
-                            }}
-                        >
-                            <PlusCircle size={12} /> Thêm ví dụ
-                        </Button>
-
-                        <div className="space-y-3 mt-2">
+                        <div className="space-y-3">
                             {item.quests?.map((quest, questIndex) => (
                                 <motion.div
                                     key={quest._id}
@@ -155,6 +143,17 @@ export default function SortableItem({ item, index, flatCategory, handleTopicInf
                                 </motion.div>
                             ))}
                         </div>
+                        <Button
+                            variant={'outline'}
+                            size={'sm'}
+                            className="text-xs  mt-3"
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                createQuestExample(index)
+                            }}
+                        >
+                            <PlusCircle size={12} /> Thêm ví dụ
+                        </Button>
                     </div>
                 </div>
             </motion.div>

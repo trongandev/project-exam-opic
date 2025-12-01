@@ -233,7 +233,7 @@ export default function DetailTopicSlugPage() {
                                         <div className="absolute w-0.5 h-8 bg-primary rounded-sm -translate-x-3.5 -translate-y-1 transition-all duration-300"></div>
                                     )}
                                     <p className="flex">
-                                        {topic.categoryId.icon} <Dot /> {topic.categoryId.title}
+                                        {topic.categoryId?.icon} <Dot /> {topic.categoryId?.title}
                                     </p>
                                 </a>
                             ))}

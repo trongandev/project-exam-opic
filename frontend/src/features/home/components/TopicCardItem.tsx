@@ -31,7 +31,7 @@ export default function TopicCardItem({ topic, idUser, loadingDelete, handleDele
                     <div className="flex flex-wrap gap-1 mt-1">
                         {topic.data.map((item) => (
                             <Badge variant={'secondary'} key={item._id} className="mr-2 mb-2">
-                                {item.categoryId.title}
+                                {item.categoryId?.title}
                             </Badge>
                         ))}
                     </div>

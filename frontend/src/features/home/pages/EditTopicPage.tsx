@@ -133,6 +133,7 @@ export default function EditTopicPage() {
             desc: topicDetailData.desc,
             data: questionList,
         }
+
         try {
             setLoadingCreateTopic(true)
             const res = await topicService.updateTopic(params._id as string, newDataTopic)
