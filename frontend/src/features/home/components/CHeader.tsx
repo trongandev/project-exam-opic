@@ -1,10 +1,11 @@
-import { GalleryVerticalEnd, Home, LogOut, Menu, MessageCircleQuestion, PhoneCall, TestTubes, User } from 'lucide-react'
+import { GalleryVerticalEnd, Home, LogOut, Menu, MessageCircleQuestion, Moon, PhoneCall, Sun, TestTubes, User } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
+import { useTheme } from '@/hooks/useTheme'
 export default function CHeader() {
     const { user, logout } = useAuth()
     const [isOpenNavBar, setIsOpenNavBar] = useState(false)
@@ -17,6 +18,7 @@ export default function CHeader() {
         { name: 'Thi thử', icon: TestTubes, href: '/exam' },
         { name: 'Góp ý', icon: MessageCircleQuestion, href: '/feedback' },
     ]
+    const { theme, setTheme } = useTheme()
     return (
         <>
             <div className="sticky top-2 md:top-3  z-50 px-3 md:px-0">
@@ -49,7 +51,7 @@ export default function CHeader() {
                         ))}
                     </nav>
                 </div>
-                <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 backdrop-blur-sm h-12 md:h-14 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-xl shadow-primary/20  ">
+                <div className="w-full xl:max-w-7xl bg-gradient-to-r from-primary/80 to-purple-700/80 dark:from-gray-700/50 dark:to-gray-800 backdrop-blur-sm h-12 md:h-14 mx-auto rounded-full flex items-center px-5 md:px-10 text-gray-300 justify-between shadow-lg shadow-primary/20 dark:shadow-gray-600/50  ">
                     <div className="font-extrabold text-md md:text-2xl  text-white flex items-center gap-2 ">
                         <Menu className="block md:hidden cursor-pointer hover:opacity-60" onClick={() => setIsOpenNavBar(true)} />
                         <Link to={'/'} className="flex items-center">
@@ -69,7 +71,18 @@ export default function CHeader() {
                     </ul>
                     <div className="">
                         {user ? (
-                            <div>
+                            <div className="flex items-center gap-4">
+                                <div className="">
+                                    {theme === 'dark' ? (
+                                        <Button variant={'link'} className="text-white/80" onClick={() => setTheme('light')}>
+                                            <Sun size={22} className="" />
+                                        </Button>
+                                    ) : (
+                                        <Button variant={'link'} className="text-white/80" onClick={() => setTheme('dark')}>
+                                            <Moon size={22} className="" />
+                                        </Button>
+                                    )}
+                                </div>
                                 <div className="hidden md:block">
                                     <span className="text-sm md:text-base text-white mr-3">
                                         Xin chào,{' '}
@@ -127,13 +140,13 @@ export default function CHeader() {
                     </div>
                 </div>
             </div>
-            <div className="fixed bottom-0  z-10 px-3 md:px-0 h-12 w-full bg-gray-100  negative-shadow-md flex md:hidden items-center justify-around">
+            <div className="fixed bottom-0  z-10 px-3 md:px-0 h-12 w-full bg-gray-100 dark:bg-gray-800/50 backdrop-blur-xl   negative-shadow-md flex md:hidden items-center justify-around">
                 {linkData.map((item) => (
                     <Link
                         key={item.href}
                         to={item.href}
                         className={`flex flex-col items-center justify-center gap-1  h-full hover:text-primary transition-colors border-t-2 ${
-                            pathname === item.href ? 'text-primary  border-primary font-medium' : 'text-gray-500 border-transparent'
+                            pathname === item.href ? 'text-primary  border-primary dark:border-gray-600 font-medium dark:text-gray-50' : 'text-gray-500 dark:text-gray-300 border-transparent'
                         } `}
                     >
                         {React.createElement(item.icon, { size: 16 })}

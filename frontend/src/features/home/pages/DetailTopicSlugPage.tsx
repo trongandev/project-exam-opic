@@ -161,7 +161,7 @@ export default function DetailTopicSlugPage() {
         return <LoadingScreen />
     }
     return (
-        <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 ">
+        <div className="px-0 max-w-7xl mx-auto my-10 text-gray-700 dark:text-gray-400">
             <div className="flex justify-between  items-center px-3 md:px-0">
                 <Button variant={'ghost'} onClick={() => navigate('/topic')}>
                     <ArrowLeft /> Quay lại
@@ -220,12 +220,12 @@ export default function DetailTopicSlugPage() {
                         ))}
                     </div>
                     <div className="sticky top-10  mt-4 w-[250px] h-full hidden md:block ">
-                        <div className="border-l-2 border-gray-200 space-y-3">
+                        <div className="border-l-2 border-gray-200 dark:border-white/10 space-y-3">
                             {topicDetailData.data.map((topic, index) => (
                                 <a
                                     href={`#topic-${index}`}
                                     className={`block relative transition-all  hover:bg-gray-200 hover:text-primary  px-3 py-1 rounded-r-md  ${
-                                        location.hash === `#topic-${index}` ? 'text-primary bg-sky-100' : 'text-gray-700'
+                                        location.hash === `#topic-${index}` ? 'text-primary bg-sky-100 dark:bg-sky-700' : 'text-gray-700 dark:text-gray-400'
                                     }`}
                                     key={index}
                                 >

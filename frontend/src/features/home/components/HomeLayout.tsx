@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 
 export default function HomeLayout() {
     return (
-        <div className="">
+        <div className="dark:bg-background">
             <CHeader />
             <main className="">
                 <Outlet />

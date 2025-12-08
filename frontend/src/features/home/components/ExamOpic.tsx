@@ -308,7 +308,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         <LogOut /> Leave
                     </Button>
                 </div>
-                <h1 className="w-full border-b-2 pb-2 border-gray-100 text-2xl font-medium mt-5 md:mt-0">
+                <h1 className="w-full border-b-2 pb-2 border-gray-100 dark:border-white/20 text-2xl font-medium mt-5 md:mt-0">
                     Question {currentIndex + 1} or {dataExam?.data.reduce((acc, curr) => acc + curr.quests.length, 0)}
                 </h1>
                 <div className="flex gap-5 flex-col md:flex-row ">
@@ -347,7 +347,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                 )}
                             </div>
                             <div className="flex-col gap-3 justify-center items-center hidden md:flex">
-                                <div className="w-1 h-full bg-gray-100 rounded-md flex items-end">
+                                <div className="w-1 h-full bg-gray-100 dark:bg-white/20 rounded-md flex items-end">
                                     <div
                                         className={`w-1 rounded-md transition-all ${isRecording ? 'bg-gradient-to-t from-sky-600 to-purple-600' : 'bg-gray-300'}`}
                                         style={{
@@ -371,7 +371,9 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                     <div
                                         key={index}
                                         onClick={() => handleFreedomModeChange(index)}
-                                        className={`w-10 h-10  rounded-md flex items-center justify-center text-xs font-medium ${currentIndex === index ? 'bg-primary text-white' : ' bg-gray-200'}
+                                        className={`w-10 h-10  rounded-md flex items-center justify-center text-xs font-medium ${
+                                            currentIndex === index ? 'bg-primary text-white' : ' bg-gray-200 dark:bg-gray-700/50'
+                                        }
                                                  ${isFreedomMode ? 'cursor-pointer hover:bg-primary/50 hover:text-white' : 'cursor-not-allowed'}
                                                 `}
                                     >
@@ -381,7 +383,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         </div>
                         {(!recordingCompleted || isRecording) && !isSpeakMode && (
                             <div
-                                className={`w-full h-20 border-2 border-dashed rounded-md mt-10 flex items-center justify-center gap-4 transition-all duration-300 ${
+                                className={`w-full h-20 border-2 border-dashed dark:border-white/20 rounded-md mt-10 flex items-center justify-center gap-4 transition-all duration-300 ${
                                     isRecording
                                         ? 'border-red-500/50 text-red-600 bg-red-50'
                                         : recordingCompleted
@@ -425,7 +427,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                                     <Volume2 size={18} />
                                     Your Recording:
                                 </h1>
-                                <div className="p-4 border rounded-lg bg-green-50 border-green-200">
+                                <div className="p-4 border rounded-lg bg-green-50 border-green-200 dark:border-white/20">
                                     <div className="flex items-center gap-3">
                                         <Button variant="outline" size="sm" onClick={toggleAudioPlayback} className="flex items-center gap-2">
                                             {isPlayingAudio ? (
@@ -478,7 +480,7 @@ export default function ExamOpic({ data }: { data: Topic }) {
                         {recordingCompleted && !isSpeakMode && (
                             <div className="mt-5">
                                 <h1 className="mb-2 text-gray-700 font-medium">Check Answer:</h1>
-                                <div className={`p-4 border rounded-lg text-gray-800 relative ${getBgColorForAccuracy(accurancyFromRecoderAudio?.pronunciation_accuracy || '0')}`}>
+                                <div className={`p-4 border dark:border-white/20 rounded-lg text-gray-800 relative ${getBgColorForAccuracy(accurancyFromRecoderAudio?.pronunciation_accuracy || '0')}`}>
                                     {accurancyFromRecoderAudio && (
                                         <div className="space-y-5">
                                             <div

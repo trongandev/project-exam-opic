@@ -30,7 +30,7 @@ function SpeakButton({ text, id, variant = 'outline', size = 'sm', className = '
             onClick={handleClick}
             disabled={isLoading}
         >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPlaying ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPlaying ? <VolumeX className="h-4 w-4 dark:text-gray-400" /> : <Volume2 className="h-4 w-4 dark:text-gray-400" />}
 
             {size !== 'icon' && isShowLabel && <span className="ml-2 hidden md:block">{isLoading ? 'Loading...' : isPlaying ? 'Off' : 'Speak'}</span>}
         </Button>

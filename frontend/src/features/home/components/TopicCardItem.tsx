@@ -18,8 +18,8 @@ export default function TopicCardItem({ topic, idUser, loadingDelete, handleDele
             <CardHeader className="">
                 <div className="flex items-center gap-3 justify-between">
                     <div className="">
-                        <CardTitle className="text-xl font-semibold text-gray-900 flex-1">{topic.name}</CardTitle>
-                        <p className="text-gray-500 text-sm line-clamp-3">{topic.desc}</p>
+                        <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-200 flex-1">{topic.name}</CardTitle>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-3">{topic.desc}</p>
                     </div>
                 </div>
             </CardHeader>
@@ -30,7 +30,7 @@ export default function TopicCardItem({ topic, idUser, loadingDelete, handleDele
                     <p>Các chủ đề có trong topic:</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                         {topic.data.map((item) => (
-                            <Badge variant={'secondary'} key={item._id} className="mr-2 mb-2">
+                            <Badge variant={'secondary'} key={item._id} className="dark:bg-gray-800/50 mr-2 mb-2">
                                 {item.categoryId?.title}
                             </Badge>
                         ))}
@@ -40,9 +40,9 @@ export default function TopicCardItem({ topic, idUser, loadingDelete, handleDele
                     <Link to={`/profile/${topic.userId._id}`}>
                         <AvatarCircle user={topic.userId} />
                     </Link>
-                    <div className="flex items-center justify-between gap-5 w-full text-gray-500">
+                    <div className="flex items-center justify-between gap-5 w-full text-gray-500 dark:text-gray-400 ">
                         <div className="w-full  ">
-                            <h1 className="font-medium text-gray-700">{topic.userId.displayName}</h1>
+                            <h1 className="font-medium text-gray-700 dark:text-gray-300">{topic.userId.displayName}</h1>
                             <div className="flex gap-2 items-center text-xs" title={`Ngày tạo: ${formatDate(new Date(topic.createdAt), 'PPPP', { locale: vi })}`}>
                                 <Clock size={14} /> {formatDistance(new Date(topic.createdAt), new Date(), { addSuffix: true, locale: vi })}
                             </div>

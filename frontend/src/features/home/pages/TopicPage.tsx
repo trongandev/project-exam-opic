@@ -62,17 +62,17 @@ export default function TopicPage() {
         }
     }
     return (
-        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20 min-h-screen">
+        <div className="px-4 xl:px-0 max-w-7xl mx-auto my-20 min-h-screen dark:text-gray-400">
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-2">
                     Tổng hợp topic
                     {pagination.totalItems > 0 && (
-                        <span className="text-lg font-normal text-gray-600">
+                        <span className="text-lg font-normal ">
                             ({pagination.totalItems} topic{pagination.totalItems > 1 ? 's' : ''})
                         </span>
                     )}
                 </h1>
-                <p className="text-gray-600">Tham khảo các topic mà người dùng đóng góp hoặc bấm vào nút ở dưới để</p>
+                <p className="">Tham khảo các topic mà người dùng đóng góp hoặc bấm vào nút ở dưới để</p>
                 <Link to={'/topic/create-topic'}>
                     <Button className="mt-2">
                         <PlusCircle /> Đóng góp topic

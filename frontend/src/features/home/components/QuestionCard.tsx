@@ -6,17 +6,17 @@ export default function QuestionCard({ question, index }: { question: any; index
     const getTypeColor = (type: string) => {
         switch (type) {
             case 'introduction':
-                return 'bg-blue-100 text-blue-600'
+                return 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300'
             case 'description':
-                return 'bg-green-100 text-green-600'
+                return 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300'
             case 'experience':
-                return 'bg-purple-100 text-purple-600'
+                return 'bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300'
             case 'comparison':
-                return 'bg-orange-100 text-orange-600'
+                return 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300'
             case 'role-play':
-                return 'bg-red-100 text-red-600'
+                return 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300'
             default:
-                return 'bg-gray-100 text-gray-600'
+                return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
         }
     }
 
@@ -47,21 +47,21 @@ export default function QuestionCard({ question, index }: { question: any; index
                     </CardTitle>
                     <Badge className={getTypeColor(question.type)}>{getTypeText(question.type)}</Badge>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-primary font-medium leading-relaxed">"{question.questionText}"</p>
+                <div className="bg-blue-50 dark:bg-gray-800/50  p-4 rounded-lg">
+                    <p className="text-primary dark:text-gray-400 font-medium leading-relaxed">"{question.questionText}"</p>
                 </div>
             </CardHeader>
 
             <CardContent className="space-y-4">
                 {/* Hints */}
                 <div>
-                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                    <h4 className="font-medium text-gray-900 dark:text-gray-200 mb-2 flex items-center gap-2">
                         <Lightbulb className="w-4 h-4 text-primary" />
                         Gợi ý trả lời
                     </h4>
                     <ul className="space-y-1">
                         {question.hints.map((hint: any, idx: any) => (
-                            <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
+                            <li key={idx} className="text-sm text-gray-600 dark:text-gray-400 lex items-start gap-2">
                                 <span className="w-1 h-1 bg-gray-400 rounded-full mt-2 flex-shrink-0"></span>
                                 {hint}
                             </li>
@@ -69,19 +69,19 @@ export default function QuestionCard({ question, index }: { question: any; index
                     </ul>
                 </div>
                 <div className="">
-                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                    <h4 className="font-medium text-gray-900 dark:text-gray-200 mb-2 flex items-center gap-2">
                         <BookOpenCheck className="w-4 h-4 text-primary" />
                         Tham khảo trả lời
                     </h4>
-                    <div className={`bg-blue-50 p-4 rounded-lg `}>
-                        <p className={`text-gray-600 text-justify leading-relaxed `}>"{question.answer_text_example}"</p>
+                    <div className={`bg-blue-50 dark:bg-gray-800/50 p-4 rounded-lg `}>
+                        <p className={`text-gray-600 dark:text-gray-400 text-justify leading-relaxed `}>"{question.answer_text_example}"</p>
                     </div>
                 </div>
 
                 {/* Keywords */}
                 <div>
-                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                        <Tag className="w-4 h-4 text-primary" />
+                    <h4 className="font-medium text-gray-900 dark:text-gray-200 mb-2 flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-primary dark:text-gray-400" />
                         Từ khóa quan trọng
                     </h4>
                     <div className="flex flex-wrap gap-2">

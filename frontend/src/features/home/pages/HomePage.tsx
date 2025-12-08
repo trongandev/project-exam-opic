@@ -38,9 +38,9 @@ export default function HomePage() {
             {/* Header */}
             <div className="text-center text-primary">
                 <h1 className="text-4xl font-bold  mb-4">{opicInfo.title}</h1>
-                <p className="text-xl text-gray-600 mb-6">{opicInfo.subtitle}</p>
-                <div className="bg-sky-50 rounded-xl p-6">
-                    <p className="text-gray-700 leading-relaxed max-w-4xl mx-auto">{opicInfo.description}</p>
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">{opicInfo.subtitle}</p>
+                <div className="bg-sky-50 dark:bg-gray-800/50 rounded-xl p-6">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-4xl mx-auto">{opicInfo.description}</p>
                 </div>
             </div>
             <div style={{ position: 'relative', paddingBottom: 'calc(49.21875% + 41px)', height: '0', width: '100%' }} className="mb-8">
@@ -72,12 +72,12 @@ export default function HomePage() {
                     {categories && !loading && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {categories.map((category) => (
-                                <div key={category._id} className="p-6 border rounded-lg hover:shadow-md transition-shadow bg-white">
+                                <div key={category._id} className="p-6 border dark:border-white/10 rounded-lg hover:shadow-md transition-shadow bg-white dark:bg-gray-800/50">
                                     <div className="flex items-center gap-3 mb-3">
                                         <span className="text-2xl">{category.icon}</span>
-                                        <h3 className="text-lg font-semibold text-gray-900">{category.title}</h3>
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{category.title}</h3>
                                     </div>
-                                    <p className="text-gray-600 text-sm">{category.desc}</p>
+                                    <p className="text-gray-600 dark:text-gray-300 text-sm">{category.desc}</p>
                                 </div>
                             ))}
                             {loading && <LoadingGrid className="col-span-full" />}
@@ -100,11 +100,22 @@ export default function HomePage() {
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-600 ">
                         {opicInfo.scoreRange.levels.map((level, index) => (
-                            <div key={index} className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${level.isPopular ? 'border-primary/20 bg-sky-50 relative' : 'border-gray-300/50'}`}>
+                            <div
+                                key={index}
+                                className={`border dark:border-white/10 rounded-lg p-4 hover:shadow-md transition-shadow ${
+                                    level.isPopular ? 'border-primary/20 bg-sky-50 dark:bg-gray-700/50 relative' : 'border-gray-300/50'
+                                }`}
+                            >
                                 <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm  text-gray-700 font-medium">Level: {level.level}</span>
-                                    {level.isPopular && <Badge className=" bg-sky-200 text-primary">Phổ biến</Badge>}
-                                    <Badge className={`font-semibold ${level.isPopular ? 'bg-sky-200 text-primary' : 'bg-gray-200 text-gray-500'}`}>{level.claim}</Badge>
+                                    <span className="text-sm  text-gray-700 dark:text-gray-300 font-medium">Level: {level.level}</span>
+                                    {level.isPopular && <Badge className=" bg-sky-200 text-primary dark:bg-primary dark:text-white/80">Phổ biến</Badge>}
+                                    <Badge
+                                        className={`font-semibold ${
+                                            level.isPopular ? 'bg-sky-200 text-primary dark:bg-primary dark:text-white/80' : 'bg-gray-200 text-gray-500 dark:bg-gray-700/50 dark:text-gray-400 '
+                                        }`}
+                                    >
+                                        {level.claim}
+                                    </Badge>
                                 </div>
                                 <p className="text-sm font-medium ">{level.description}</p>
                                 <p className="text-sm text-gray-500 italic ">{level.explain}</p>
@@ -128,24 +139,24 @@ export default function HomePage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-600 mb-6">{opicInfo.strategies.description}</p>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6">{opicInfo.strategies.description}</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {opicInfo.strategies.list.map((strategy, index) => (
-                            <div key={index} className="border-l-4 border-primary px-6 py-4 bg-sky-50 rounded-r-lg">
-                                <h3 className="font-semibold text-gray-900 mb-2">
+                            <div key={index} className="border-l-4 border-primary px-6 py-4 bg-sky-50 dark:bg-gray-700/50 rounded-r-lg">
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                                     {index + 1}. {strategy.name}
                                 </h3>
-                                <p className="text-gray-600 mb-3">{strategy.description}</p>
-                                <div className="bg-white rounded-md p-3 border">
-                                    <span className="text-xs text-gray-500 font-medium block mb-1">Ví dụ:</span>
-                                    <code className="text-sm text-primary font-mono">{strategy.example}</code>
+                                <p className="text-gray-600 dark:text-gray-400 mb-3">{strategy.description}</p>
+                                <div className="bg-white dark:bg-gray-800/50 rounded-md p-3 border dark:border-white/10">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium block mb-1">Ví dụ:</span>
+                                    <code className="text-sm text-primary dark:text-white font-mono">{strategy.example}</code>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-8 p-6 bg-gradient-to-r from-sky-50 to-purple-50 rounded-lg text-primary">
+                    <div className="mt-8 p-6 bg-gradient-to-r from-sky-50 to-purple-50 dark:from-gray-700/50 dark:to-gray-800 rounded-lg text-primary dark:text-gray-400">
                         <h3 className="font-semibold text-lg mb-2 ">💡 Lời khuyên quan trọng</h3>
                         <p className="">
                             Hãy luyện tập kết hợp nhiều chiến lược trong một câu trả lời để tạo ra đoạn văn liên kết tự nhiên và ấn tượng. Điều này sẽ giúp bạn đạt được điểm số cao trong bài thi OPIc.
@@ -156,7 +167,7 @@ export default function HomePage() {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                        <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">🪖 Thực chiến</h2>
+                        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2">🪖 Thực chiến</h2>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>

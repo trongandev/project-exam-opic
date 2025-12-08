@@ -6,7 +6,12 @@ export default function AvatarCircle({ user, className }: { user?: UserMin; clas
     return (
         <Tooltip>
             <TooltipTrigger>
-                <div className={cn(`w-12 h-12 bg-gradient-to-br from-sky-200 to-purple-200 rounded-full flex items-center justify-center cursor-pointer`, className)}>
+                <div
+                    className={cn(
+                        `w-12 h-12 bg-gradient-to-br from-sky-200 to-purple-200 dark:from-sky-800 dark:to-purple-800 rounded-full flex items-center justify-center cursor-pointer`,
+                        className
+                    )}
+                >
                     {user
                         ? user.displayName
                               .split(' ')
