@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button'
 import LoadingIcon from '@/components/ui/loading-icon'
 import { useSpeakWordContext } from '@/hooks/useSpeakWordContext'
 import type { DataTopic } from '@/types/topic'
-import { Download, MoveDown } from 'lucide-react'
+import { Copy, Download, MoveDown } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function OpicCategoryItem2({
     topic,
@@ -27,7 +28,8 @@ export default function OpicCategoryItem2({
                         <h3 className="font-medium text-lg mb-1 text-primary">{topic.categoryId?.title}</h3>
                         <p className="text-sm text-gray-500">{topic.categoryId?.desc || 'Không có mô tả'}</p>
                     </div>
-                    <Button variant={'outline'} disabled={loadingDownload} onClick={() => handleDownloadAudio && handleDownloadAudio(topic)} className="dark:border-white/10 dark:bg-gray-800 md:mr-5">
+
+                    <Button disabled={loadingDownload} onClick={() => handleDownloadAudio && handleDownloadAudio(topic)} className="dark:border-white/10 dark:bg-gray-800 md:mr-5">
                         {loadingDownload ? <LoadingIcon /> : <Download />}
                         <span className="hidden md:block"> Tải Audio</span>
                     </Button>
@@ -57,7 +59,17 @@ export default function OpicCategoryItem2({
                                                     </span>
                                                 )
                                             })}
-                                            <SpeakButton text={quest.text} id={'custom'} variant="ghost" isShowLabel={false} className="ml-3" />
+                                            <Button
+                                                variant={'ghost'}
+                                                className="ml-3 dark:text-gray-400"
+                                                onClick={() => {
+                                                    window.navigator.clipboard.writeText(quest.text)
+                                                    toast.success('Sao chép thành công')
+                                                }}
+                                            >
+                                                <Copy />
+                                            </Button>
+                                            <SpeakButton text={quest.text} id={'custom'} variant="ghost" isShowLabel={false} className="" />
                                         </div>
                                     </div>
                                     <div className="text-justify">{quest?.note}</div>
@@ -76,6 +88,16 @@ export default function OpicCategoryItem2({
                                                 </span>
                                             )
                                         })}
+                                        <Button
+                                            variant={'ghost'}
+                                            className="ml-3 dark:text-gray-400"
+                                            onClick={() => {
+                                                window.navigator.clipboard.writeText(quest.answer)
+                                                toast.success('Sao chép thành công')
+                                            }}
+                                        >
+                                            <Copy />
+                                        </Button>
                                         <SpeakButton isShowLabel={false} variant="ghost" text={quest.answer} id={'custom'} />
                                     </div>
                                 </div>
