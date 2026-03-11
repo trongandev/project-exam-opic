@@ -1,6 +1,8 @@
 import { redirect } from 'react-router-dom'
-import { isLoggedIn } from '../lib/authService'
 
+export const isLoggedIn = () => {
+    return localStorage.getItem('local_TOKEN:') !== null
+}
 // Loader để bảo vệ các route cần xác thực
 export const authGuard = async () => {
     if (!isLoggedIn()) {
@@ -9,15 +11,4 @@ export const authGuard = async () => {
         return redirect('/auth/login?redirect=' + window.location.pathname)
     }
     return null // Cho phép truy cập
-}
-
-// Loader để fetch dữ liệu user
-export const userLoader = async ({ params }: { params: any }) => {
-    // Giả lập gọi API
-    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${params.userId}`)
-    if (!response.ok) {
-        throw new Response('User not found', { status: 404 })
-    }
-    const user = await response.json()
-    return user
 }

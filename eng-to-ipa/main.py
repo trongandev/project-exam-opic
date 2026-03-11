@@ -12,6 +12,8 @@ app.add_middleware(
     allow_headers=["*"],  # Cho phép tất cả headers
 )
 
+
+# chuyển toàn bộ logic lên quizzet project ai-python rồi, cái này không sử dụng nữa
 class TextInput(BaseModel):
     text: str
 
