@@ -1,5 +1,5 @@
+import etcService from '@/services/etcService'
 import { useCallback, useState, useRef, useMemo, useEffect } from 'react'
-import { EdgeSpeechTTS } from '@lobehub/tts'
 import { toast } from 'sonner'
 
 export interface SpeakWordState {
@@ -21,7 +21,6 @@ export default function useSpeakWord() {
 
     const currentAudioRef = useRef<HTMLAudioElement | null>(null)
     const [selectedVoice, setSelectedVoice] = useState<string | null>(null)
-    const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' }))
 
     useEffect(() => {
         try {
@@ -86,12 +85,7 @@ export default function useSpeakWord() {
                     error: null,
                 }))
 
-                const response = await tts.create({
-                    input: text,
-                    options: {
-                        voice: savedVoices || 'en-US-JennyNeural',
-                    },
-                })
+                const response = await etcService.textToSpeech(text, savedVoices)
 
                 const audioBuffer = await response.arrayBuffer()
                 const blob = new Blob([audioBuffer], { type: 'audio/mpeg' })
@@ -159,7 +153,7 @@ export default function useSpeakWord() {
                 })
             }
         },
-        [state.isPlaying, state.currentText, state.currentId, tts, stopCurrentAudio]
+        [state.isPlaying, state.currentText, state.currentId, stopCurrentAudio],
     )
 
     // Toggle phát/dừng audio
@@ -171,7 +165,7 @@ export default function useSpeakWord() {
                 speakWord(text, id)
             }
         },
-        [state.isPlaying, state.currentText, state.currentId, speakWord, stopCurrentAudio]
+        [state.isPlaying, state.currentText, state.currentId, speakWord, stopCurrentAudio],
     )
 
     // Check xem có đang phát audio này không
@@ -180,7 +174,7 @@ export default function useSpeakWord() {
             if (!text) return state.isPlaying
             return state.isPlaying && state.currentText === text && state.currentId === id
         },
-        [state.isPlaying, state.currentText, state.currentId]
+        [state.isPlaying, state.currentText, state.currentId],
     )
 
     // Check xem có đang loading audio này không
@@ -189,7 +183,7 @@ export default function useSpeakWord() {
             if (!text) return state.isLoading
             return state.isLoading && state.currentText === text && state.currentId === id
         },
-        [state.isLoading, state.currentText, state.currentId]
+        [state.isLoading, state.currentText, state.currentId],
     )
 
     return useMemo(
@@ -208,6 +202,6 @@ export default function useSpeakWord() {
             isPlayingAudio,
             isLoadingAudio,
         }),
-        [state, selectedVoice, speakWord, stopCurrentAudio, toggleAudio, updateSelectedVoice, isPlayingAudio, isLoadingAudio]
+        [state, selectedVoice, speakWord, stopCurrentAudio, toggleAudio, updateSelectedVoice, isPlayingAudio, isLoadingAudio],
     )
 }

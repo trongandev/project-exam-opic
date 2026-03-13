@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,8 +9,8 @@ import { Volume2, Check, Star, Users, Globe, Loader2, VolumeX } from 'lucide-rea
 import { toast } from 'sonner'
 import { VOICE_OPTIONS } from '@/config/voiceOptions'
 import type { Voice } from '@/types/etc'
-import { EdgeSpeechTTS } from '@lobehub/tts'
 import useSpeakWord from '@/hooks/useSpeakWord'
+import etcService from '@/services/etcService'
 
 interface VoiceSelectionModalProps {
     children: React.ReactNode
@@ -25,7 +23,6 @@ export default function VoiceSelectionModal({ children }: VoiceSelectionModalPro
     const [playingVoice, setPlayingVoice] = useState<string | null>(null)
     const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null) // Thêm state để track audio hiện tại
     const [isLoading, setIsLoading] = useState(false)
-    const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' })) // Đổi locale thành zh-CN cho phù hợp
     const { selectedVoice, setSelectedVoice } = useSpeakWord()
 
     const handlePlaySample = (text: string, voiceId: string) => {
@@ -60,13 +57,7 @@ export default function VoiceSelectionModal({ children }: VoiceSelectionModalPro
                 URL.revokeObjectURL(currentAudio.src)
                 setCurrentAudio(null)
             }
-            const response = await tts.create({
-                input: text,
-                options: {
-                    voice: voiceId,
-                },
-            })
-
+            const response = await etcService.textToSpeech(text, voiceId)
             const audioBuffer = await response.arrayBuffer()
             const blob = new Blob([audioBuffer], { type: 'audio/mpeg' })
             const url = URL.createObjectURL(blob)

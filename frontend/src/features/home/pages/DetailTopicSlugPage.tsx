@@ -14,7 +14,6 @@ import { vi } from 'date-fns/locale/vi'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import etcService from '@/services/etcService'
-import { EdgeSpeechTTS } from '@lobehub/tts'
 import LoadingIcon from '@/components/ui/loading-icon'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
@@ -30,7 +29,6 @@ export default function DetailTopicSlugPage() {
     const [comment, setComment] = useState('')
     const [isSubmittingReview, setIsSubmittingReview] = useState(false)
     const { user } = useAuth()
-    const [tts] = useState(() => new EdgeSpeechTTS({ locale: 'en-US' }))
     useEffect(() => {
         const fetchTopicDetail = async () => {
             setLoading(true)
@@ -98,7 +96,7 @@ export default function DetailTopicSlugPage() {
                 newConnectWords.push(quest.text + '. ' + quest.answer)
             })
 
-            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), topic.categoryId.title)
+            await etcService.downloadAudioFromText(newConnectWords.join(' '), topic.categoryId.title)
 
             toast.success('Tải thành công!')
         } catch (error: any) {
@@ -122,7 +120,7 @@ export default function DetailTopicSlugPage() {
                 })
             })
 
-            await etcService.downloadAudioFromText(tts, newConnectWords.join(' '), 'full-audio ' + topicDetailData?.name)
+            await etcService.downloadAudioFromText(newConnectWords.join(' '), 'full-audio ' + topicDetailData?.name)
 
             toast.success('Tải thành công!')
         } catch (error: any) {
@@ -146,7 +144,7 @@ export default function DetailTopicSlugPage() {
                 })
             })
 
-            await etcService.downloadPartAudioFromText(tts, topic)
+            await etcService.downloadPartAudioFromText(topic)
 
             toast.success('Tải thành công!')
         } catch (error: any) {

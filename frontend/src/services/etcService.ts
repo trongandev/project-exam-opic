@@ -25,12 +25,26 @@ class etcService {
             },
             {
                 headers: { 'X-Api-Key': import.meta.env.VITE_STS_KEY },
-            }
+            },
         )
         return res.data
     }
 
-    async downloadAudioFromText(tts: any, text: string, title: string) {
+    async textToSpeech(text: string, voice?: string) {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_ENG_TO_IPA}/edge-tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice || 'en-US-JennyNeural')}`)
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            return response
+        } catch (error) {
+            console.error('TTS Error:', error)
+            throw error
+        }
+    }
+    async downloadAudioFromText(text: string, title: string) {
         const savedVoices = localStorage.getItem('defaultVoices') || ''
 
         // Split text into chunks of 1000 words if needed
@@ -45,12 +59,7 @@ class etcService {
         // Generate audio for each chunk
         const audioBuffers: ArrayBuffer[] = []
         for (const chunk of chunks) {
-            const response = await tts.create({
-                input: chunk,
-                options: {
-                    voice: savedVoices || 'en-US-JennyNeural',
-                },
-            })
+            const response = await fetch(`${import.meta.env.VITE_ENG_TO_IPA}/edge-tts?text=${encodeURIComponent(chunk)}&voice=${encodeURIComponent(savedVoices || 'en-US-JennyNeural')}`)
             const audioBuffer = await response.arrayBuffer()
             audioBuffers.push(audioBuffer)
         }
@@ -76,14 +85,14 @@ class etcService {
         URL.revokeObjectURL(url)
     }
 
-    async downloadPartAudioFromText(tts: any, topic: DataTopic[]) {
+    async downloadPartAudioFromText(topic: DataTopic[]) {
         for (const part of topic) {
             const title = part.categoryId.title
             let combinedText = ''
             part.quests.forEach((quest) => {
                 combinedText += quest.text + ' .' + ' ' + quest.answer + ' '
             })
-            await this.downloadAudioFromText(tts, combinedText, title)
+            await this.downloadAudioFromText(combinedText, title)
         }
     }
 }
